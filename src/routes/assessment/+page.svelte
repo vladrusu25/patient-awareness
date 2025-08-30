@@ -2,40 +2,29 @@
   import ChatWindow from '$lib/components/chat/ChatWindow.svelte';
   import AssessmentIntro from '$lib/components/chat/AssessmentIntro.svelte';
   import { onMount } from 'svelte';
-  import type { PageData } from './$types';
+	import ValueProps from '../../lib/components/ValueProps.svelte';
+	import Testimonials from '$lib/components/Testimonials.svelte';
+	import Footer from '$lib/components/Footer.svelte';
+  export let data: { token: string | null };
 
-  // Use the generated SvelteKit type so TS matches your load result
-  export let data: PageData;
-
-  // If a session token is present but the URL doesn't have #chat,
-  // scroll to the chat block when the page mounts.
   onMount(() => {
     if (data.token && location.hash !== '#chat') {
-      requestAnimationFrame(() => {
-        document.getElementById('chat')?.scrollIntoView({
-          behavior: 'smooth',   // "auto" or "smooth" are valid
-          block: 'start'
-        });
-        // Keep the URL consistent without reloading:
-        history.replaceState(null, '', '#chat');
-      });
+      document.getElementById('chat')?.scrollIntoView({ behavior: 'instant' as any });
     }
   });
 </script>
 
 {#if !data.token}
-  <!-- Intro (no session) -->
-  <section class="py-12 px-4">
-    <div class="mx-auto max-w-[1280px]">
-      <AssessmentIntro />
-    </div>
+  <section class="bg-neutral-25 py-10 px-4">
+    <AssessmentIntro />
   </section>
 {:else}
-  <!-- Chat (active session) -->
-  <section id="chat" class="py-12 px-4">
-    <div class="mx-auto max-w-[1280px]">
-      <!-- If ChatWindow expects a non-null string, use the non-null assertion: token={data.token!} -->
-      <ChatWindow token={data.token} />
-    </div>
+  <section id="chat" class="bg-neutral-25 py-10 px-4">
+    <ChatWindow />
   </section>
-{/if}
+{/if} 
+<div class="border-t border-neutral-100">
+  <ValueProps />
+</div>
+<Testimonials />
+<Footer />

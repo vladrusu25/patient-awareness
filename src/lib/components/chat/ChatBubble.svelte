@@ -7,11 +7,23 @@
 
 <div class="flex items-start gap-3" class:justify-end={side === 'right'}>
   {#if side === 'left'}
-    <!-- Doctor avatar -->
-    <div class="h-10 w-10 shrink-0 rounded-full bg-primary/15 grid place-items-center ring-1 ring-black/5">
-      <span class="text-lg">🩺</span>
-    </div>
-  {/if}
+  <!-- Doctor avatar (40x40) -->
+  <div
+    class="h-10 w-10 shrink-0 rounded-full ring-1 ring-black/5 overflow-hidden bg-primary/15"
+    aria-hidden="true"
+  >
+    <img
+      src="/images/doctor_avatar.png"
+      alt="Doctor avatar"
+      class="h-full w-full object-cover"
+      width="40"
+      height="40"
+      loading="lazy"
+      decoding="async"
+    />
+  </div>
+{/if}
+
 
   <!-- Bubble -->
   <div
@@ -28,9 +40,10 @@
   </div>
 
   {#if side === 'right'}
-    <!-- User avatar -->
-    <div class="h-10 w-10 shrink-0 rounded-full bg-primary/15 grid place-items-center ring-1 ring-black/5">
-      <span class="text-lg">🙂</span>
-    </div>
-  {/if}
+  <img
+    src="/images/user_icon.png"  
+    alt="You"
+    class="h-10 w-10 shrink-0 rounded-full ring-1 ring-black/5 object-cover"
+  />
+{/if}
 </div>

@@ -5,19 +5,19 @@
 <section
   class="relative overflow-hidden"
   style="
-    height: 480px; /* keep your chosen size */
-    /* base gradient - your current palette */
+    height: 480px;
     background: linear-gradient(90deg, #1B5E20 0%, #95C892 100%);
   "
 >
   <!-- Figma-style waves overlay -->
-  <HeroWaves
-    topOpacity={0.07}
-    midOpacity={0.06}
-    bottomOpacity={0.08}
-  />
+  <div class="pointer-events-none">
+    <HeroWaves
+      topOpacity={0.07}
+      midOpacity={0.06}
+      bottomOpacity={0.08}
+    />
+  </div>
 
-  <!-- Content -->
   <div class="relative z-10 max-w-[1200px] mx-auto h-full px-6 grid grid-cols-12">
     <div class="col-span-7 flex flex-col justify-center">
       <h1 class="text-white font-heading font-extrabold leading-tight text-[56px] md:text-[72px]">
@@ -38,11 +38,11 @@
       </form>
     </div>
 
-    <!-- Doctor image - same placement & size as you had -->
     <div class="col-span-5 relative">
       <img
         src="/images/doctor.webp"
-        alt="Friendly doctor"
+        alt=""
+        role="presentation"
         class="absolute bottom-[-8px] right-[-32px] max-h-[480px] w-auto pointer-events-none select-none drop-shadow-sm"
         loading="eager"
         decoding="async"
