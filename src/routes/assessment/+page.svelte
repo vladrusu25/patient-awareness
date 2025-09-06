@@ -20,7 +20,7 @@
   </section>
 {:else}
   <section id="chat" class="bg-neutral-25 py-10 px-4">
-    <ChatWindow />
+    <ChatWindow token={data.token}/>
   </section>
 {/if} 
 <div class="border-t border-neutral-100">

@@ -5,7 +5,8 @@
     { href: '/', label: 'Home' },
     { href: '/about', label: 'About' },
     { href: '/assessment', label: 'Assessment' },
-    { href: '/contact', label: 'Contact' }
+    { href: '/contact', label: 'Contact' },
+    { href: '/api/pdf-search', label: 'PDF Search' }  // <-- Add this line
   ];
 
   $: pathname = $page.url.pathname;

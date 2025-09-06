@@ -13,7 +13,7 @@
     aria-hidden="true"
   >
     <img
-      src="/images/doctor_avatar.png"
+      src="/images/assessment_page/doctor_avatar.png"
       alt="Doctor avatar"
       class="h-full w-full object-cover"
       width="40"
@@ -41,7 +41,7 @@
 
   {#if side === 'right'}
   <img
-    src="/images/user_icon.png"  
+    src="/images/assessment_page/user_icon.png"  
     alt="You"
     class="h-10 w-10 shrink-0 rounded-full ring-1 ring-black/5 object-cover"
   />

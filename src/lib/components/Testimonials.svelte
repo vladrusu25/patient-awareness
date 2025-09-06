@@ -16,21 +16,21 @@
       text:
         'The assessment was so easy to use and gave me valuable insights about my health. Highly recommend!',
       rating: 5,
-      avatar: '/images/user_icon.png'
+      avatar: '/images/assessment_page/user_icon.png'
     },
     {
       name: 'Michael Chen',
       text:
         'Quick, private, and the recommendations were spot on. This tool is a game-changer.',
       rating: 5,
-      avatar: '/images/user_icon.png'
+      avatar: '/images/assessment_page/user_icon.png'
     },
     {
       name: 'Emma Davis',
       text:
         'I love how comprehensive yet simple the assessment is. Great user experience!',
       rating: 5,
-      avatar: '/images/user_icon.png'
+      avatar: '/images/assessment_page/user_icon.png'
     }
   ];
 
