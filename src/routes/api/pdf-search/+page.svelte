@@ -1,4 +1,6 @@
 <script lang="ts">
+	import Footer from "$lib/components/Footer.svelte";
+
   let token = '';
   let loading = false;
   let errorMsg = '';
@@ -99,3 +101,4 @@
     </div>
   {/if}
 </section>
+<Footer></Footer>
