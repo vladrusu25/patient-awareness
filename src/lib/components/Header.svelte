@@ -3,10 +3,11 @@
 
   const links = [
     { href: '/', label: 'Home' },
-    { href: '/about', label: 'About' },
+    //{ href: '/about', label: 'About' },
     { href: '/assessment', label: 'Assessment' },
-    { href: '/contact', label: 'Contact' },
-    { href: '/api/pdf-search', label: 'PDF Search' }  // <-- Add this line
+    //{ href: '/contact', label: 'Contact' },
+    { href: '/api/pdf-search', label: 'PDF Search' },
+    { href: '/admin', label: 'Dashboard' }  // <-- Add this line
   ];
 
   $: pathname = $page.url.pathname;

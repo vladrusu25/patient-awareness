@@ -2,7 +2,7 @@
   import ChatWindow from '$lib/components/chat/ChatWindow.svelte';
   import AssessmentIntro from '$lib/components/chat/AssessmentIntro.svelte';
   import { onMount } from 'svelte';
-	import ValueProps from '../../lib/components/ValueProps.svelte';
+  import ValueProps from '$lib/components/ValueProps.svelte';
 	import Testimonials from '$lib/components/Testimonials.svelte';
 	import Footer from '$lib/components/Footer.svelte';
   export let data: { token: string | null };
