@@ -1,0 +1,35 @@
+[
+  { "type": "text", "key": "pcs_intro",
+    "bot": [
+      "Part 2 is a quick 5-question screen for pelvic vein involvement (PCS).",
+      "It only takes a minute and helps doctors spot patterns early."
+    ]
+  },
+  { "type": "single", "key": "q22_pain_worse_standing",
+    "prompt": "Pain worsens when standing/walking long periods?",
+    "options": [ { "label": "Yes", "value": "yes" }, { "label": "No", "value": "no" } ],
+    "progress": true
+  },
+  { "type": "single", "key": "q23_pain_improves_lying",
+    "prompt": "Pain improves when lying down?",
+    "options": [ { "label": "Yes", "value": "yes" }, { "label": "No", "value": "no" } ],
+    "progress": true
+  },
+  { "type": "single", "key": "q24_pelvic_heaviness_end_day",
+    "prompt": "Pelvic heaviness/pressure at end of day?",
+    "options": [ { "label": "Yes", "value": "yes" }, { "label": "No", "value": "no" } ],
+    "progress": true
+  },
+  { "type": "single", "key": "q25_varicose_vulva_buttocks_thighs",
+    "prompt": "Varicose veins in vulva/buttocks/thighs?",
+    "options": [
+      { "label": "Yes", "value": "yes" }, { "label": "No", "value": "no" }, { "label": "Unsure", "value": "unsure" }
+    ],
+    "progress": true
+  },
+  { "type": "single", "key": "q26_pelvic_pain_6months",
+    "prompt": "Pelvic pain > 6 months?",
+    "options": [ { "label": "Yes", "value": "yes" }, { "label": "No", "value": "no" } ],
+    "progress": true
+  }
+]

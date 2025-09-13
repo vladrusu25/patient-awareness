@@ -1,29 +1,24 @@
 export type Severity = 'low' | 'medium' | 'high';
-export type ReviewStatus = 'new' | 'pending' | 'reviewed';
+export type ReviewStatus = 'new' | 'reviewed' | 'pending';
 
-export interface Patient {
+export type PatientLike = {
   id: string;
-  initials: string;            // “S.J.”
-  lastAssessmentAt: Date | null;
-  severity: Severity | null;
-  status: ReviewStatus;        // new | pending | reviewed
-}
+  initials: string;
+  name: string;
+  // allow ISO string or Date (or null) from the DB/join
+  lastAssessmentAt: string | Date | null;
+  severity: 'low' | 'medium' | 'high';
+  status: 'new' | 'pending' | 'reviewed';
+  flags?: string[];
+};
 
-export interface CohortMetrics {
+export type MetricsSummary = {
   completedAll: number;
   part1Only: number;
   pvvqContinued: number;
-  conversionRatePct: number;   // 0…100
-}
+  conversionRatePct: number;
+};
 
-export interface DateRange {
-  label: string;               // e.g. "Last 30 days"
-  from?: Date;
-  to?: Date;
-}
+export type TrendPoint = { x: number; y: number; series: 'pre' | 'post' };
 
-export interface ChartPoint {
-  x: number; // ENDOPAIN global 0..100
-  y: number; // PVVQ 0..100
-  series: 'pre' | 'post';
-}
+export type DateRange = { label: string; days: number };

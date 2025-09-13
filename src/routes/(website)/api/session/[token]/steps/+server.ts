@@ -1,28 +1,30 @@
+// src/routes/api/session/[token]/steps/+server.ts
 import type { RequestHandler } from './$types';
-import { json } from '@sveltejs/kit';
+import { error, json } from '@sveltejs/kit';
 import { supa } from '$lib/server/supabase';
+import { composeSteps } from '$lib/assessment/composer';
 
 export const GET: RequestHandler = async ({ params }) => {
-  const { token } = params;
+  const token = params.token;
+  if (!token) throw error(400, 'Missing token');
 
-  // Find template for the session
-  const { data: sess, error: sErr } = await supa
+  const { data: session } = await supa
     .from('sessions')
-    .select('template_id')
+    .select('id, created_at')
     .eq('public_token', token)
     .maybeSingle();
 
-  if (sErr || !sess) return json({ steps: [] });
+  if (!session) throw error(404, 'Session not found');
 
-  const { data: tmpl, error: tErr } = await supa
-    .from('questionnaire_templates')
-    .select('steps_json')
-    .eq('id', sess.template_id)
-    .maybeSingle();
+  const { data: rows } = await supa
+    .from('answers')
+    .select('step_key, value_json')
+    .eq('session_id', session.id)
+    .order('created_at', { ascending: true });
 
-  if (tErr || !tmpl?.steps_json || !Array.isArray(tmpl.steps_json)) {
-    return json({ steps: [] });
-  }
+  const answers: Record<string, unknown> = {};
+  for (const r of rows ?? []) answers[r.step_key] = r.value_json;
 
-  return json({ steps: tmpl.steps_json });
+  const steps = composeSteps(answers);
+  return json({ steps, answers });
 };

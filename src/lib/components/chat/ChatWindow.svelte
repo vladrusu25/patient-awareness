@@ -67,18 +67,27 @@
     return pick?.label ?? String(value ?? '');
   }
 
-  function resolveNextIndex(current: Step, pickedValue: string, fromIndex: number) {
-    const nextKey = (current as Partial<SingleStep>)?.nextIf?.[pickedValue];
-    if (nextKey) {
-      const i = steps.findIndex((s) => s.key === nextKey);
-      if (i !== -1) return i;
-    }
-    // Fallback: next question linearly
-    for (let i = fromIndex + 1; i < steps.length; i++) {
-      if (steps[i].type !== 'text') return i;
-    }
-    return steps.length; // finished
+  const END = '__END__';
+
+function resolveNextIndex(current: Step, pickedValue: string, fromIndex: number) {
+  const nextKey = (current as Partial<SingleStep>)?.nextIf?.[pickedValue];
+
+  // Respect explicit end sentinels
+  if (nextKey === END || nextKey === 'END' || nextKey === '__end__') {
+    return steps.length; // finish immediately
   }
+
+  if (nextKey) {
+    const i = steps.findIndex((s) => s.key === nextKey);
+    if (i !== -1) return i;
+  }
+
+  // Fallback: next question linearly
+  for (let i = fromIndex + 1; i < steps.length; i++) {
+    if (steps[i].type !== 'text') return i;
+  }
+  return steps.length; // finished
+}
 
   /**
    * Build the transcript by walking steps and following branches until
@@ -207,33 +216,50 @@
     return false;
   }
 
-  /** Persist an answer, then rebuild transcript */
-  async function selectOption(value: string) {
-    if (!currentQ) return;
+  const CONTINUE_GATES = new Set(['c1_continue_part2', 'c2_continue_part3']);
 
-    // optimistic bubble
-    const preview = labelFor(currentQ, value);
-    history.push({ side: 'right', text: preview });
-    await tick();
-    scrollToBottom();
+async function selectOption(value: string) {
+  if (!currentQ) return;
 
-    // persist
-    try {
-      await fetch(`/api/session/${token}/answer`, {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ step_key: currentQ.key, value })
-      });
-      answers[currentQ.key] = value;
-    } catch {
-      // TODO: toast/error UI if desired
-    }
+  // optimistic bubble
+  const preview = labelFor(currentQ, value);
+  history.push({ side: 'right', text: preview });
+  await tick();
+  scrollToBottom();
 
-    // refresh transcript
-    rebuildTranscript();
-    await tick();
-    scrollToBottom();
+  // persist
+  try {
+    await fetch(`/api/session/${token}/answer`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ step_key: currentQ.key, value })
+    });
+    answers[currentQ.key] = value;
+  } catch {
+    // optionally show a toast
   }
+
+  // ❗ If it was a continue gate, re-fetch the freshly composed steps & answers
+  if (CONTINUE_GATES.has(currentQ.key)) {
+    try {
+      const res = await fetch(`/api/session/${token}/steps?ts=${Date.now()}`, {
+        headers: { 'cache-control': 'no-store' }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        steps = (data?.steps ?? steps) as Step[];
+        answers = (data?.answers ?? answers) as Record<string, unknown>;
+      }
+    } catch {
+      // ignore transient errors; rebuild will still work but might finish
+    }
+  }
+
+  // rebuild from authoritative state
+  rebuildTranscript();
+  await tick();
+  scrollToBottom();
+}
 
   onMount(async () => {
     const res = await fetch(`/api/session/${token}/steps`);
@@ -311,7 +337,7 @@
         </div>
       {/if}
 
-      <!-- Choices -->
+      <!-- Choices --> 
       {#if currentQ}
         {#each normalizeOptions(currentQ.options) as opt}
           <button

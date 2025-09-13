@@ -1,0 +1,120 @@
+[
+  {
+    "type": "text",
+    "key": "pvvq_intro",
+    "bot": [
+      "Part 3 is the PVVQ (20 items). It shows how pain affects daily life.",
+      "It takes ~2–3 minutes and really strengthens your report."
+    ]
+  },
+
+  { "type": "single", "key": "q27_lower_abdominal_pain",
+    "prompt": "Lower abdominal pain (second half of cycle): 1-5",
+    "options": [ {"label":"1","value":"1"},{"label":"2","value":"2"},{"label":"3","value":"3"},{"label":"4","value":"4"},{"label":"5","value":"5"} ],
+    "progress": true
+  },
+  { "type": "single", "key": "q28_pain_during_intercourse",
+    "prompt": "Pain during/after sexual intercourse: 1-5",
+    "options": [ {"label":"1","value":"1"},{"label":"2","value":"2"},{"label":"3","value":"3"},{"label":"4","value":"4"},{"label":"5","value":"5"} ],
+    "progress": true
+  },
+  { "type": "single", "key": "q29_sitting_pain",
+    "prompt": "Pain during prolonged sitting: 1-5",
+    "options": [ {"label":"1","value":"1"},{"label":"2","value":"2"},{"label":"3","value":"3"},{"label":"4","value":"4"},{"label":"5","value":"5"} ],
+    "progress": true
+  },
+  { "type": "single", "key": "q30_lumbosacral_inguinal_exertion_pain",
+    "prompt": "Pain in lumbar/sacral/inguinal area after exertion: 1-5",
+    "options": [ {"label":"1","value":"1"},{"label":"2","value":"2"},{"label":"3","value":"3"},{"label":"4","value":"4"},{"label":"5","value":"5"} ],
+    "progress": true
+  },
+  { "type": "single", "key": "q31_perineum_vulvar_tenderness",
+    "prompt": "Tenderness in perineum/vulvar region: 1-5",
+    "options": [ {"label":"1","value":"1"},{"label":"2","value":"2"},{"label":"3","value":"3"},{"label":"4","value":"4"},{"label":"5","value":"5"} ],
+    "progress": true
+  },
+
+  { "type": "single", "key": "q32_household_activities_limit",
+    "prompt": "Household activities limited by pain: 1-5",
+    "options": [ {"label":"1","value":"1"},{"label":"2","value":"2"},{"label":"3","value":"3"},{"label":"4","value":"4"},{"label":"5","value":"5"} ],
+    "progress": true
+  },
+  { "type": "single", "key": "q33_work_activities_limit",
+    "prompt": "Work/professional activities limited: 1-5",
+    "options": [ {"label":"1","value":"1"},{"label":"2","value":"2"},{"label":"3","value":"3"},{"label":"4","value":"4"},{"label":"5","value":"5"} ],
+    "progress": true
+  },
+  { "type": "single", "key": "q34_reduced_physical_activity",
+    "prompt": "Reduced ability to perform daily physical activity: 1-5",
+    "options": [ {"label":"1","value":"1"},{"label":"2","value":"2"},{"label":"3","value":"3"},{"label":"4","value":"4"},{"label":"5","value":"5"} ],
+    "progress": true
+  },
+  { "type": "single", "key": "q35_avoid_sport_exercise",
+    "prompt": "Avoidance of sport/exercise due to pain: 1-5",
+    "options": [ {"label":"1","value":"1"},{"label":"2","value":"2"},{"label":"3","value":"3"},{"label":"4","value":"4"},{"label":"5","value":"5"} ],
+    "progress": true
+  },
+  { "type": "single", "key": "q36_need_frequent_rest",
+    "prompt": "Need for frequent rest periods: 1-5",
+    "options": [ {"label":"1","value":"1"},{"label":"2","value":"2"},{"label":"3","value":"3"},{"label":"4","value":"4"},{"label":"5","value":"5"} ],
+    "progress": true
+  },
+
+  { "type": "single", "key": "q37_avoid_social_events",
+    "prompt": "Avoidance of social events: 1-5",
+    "options": [ {"label":"1","value":"1"},{"label":"2","value":"2"},{"label":"3","value":"3"},{"label":"4","value":"4"},{"label":"5","value":"5"} ],
+    "progress": true
+  },
+  { "type": "single", "key": "q38_family_responsibilities_difficult",
+    "prompt": "Difficulty with family responsibilities: 1-5",
+    "options": [ {"label":"1","value":"1"},{"label":"2","value":"2"},{"label":"3","value":"3"},{"label":"4","value":"4"},{"label":"5","value":"5"} ],
+    "progress": true
+  },
+  { "type": "single", "key": "q39_limitation_of_sexual_life",
+    "prompt": "Limitation of sexual life: 1-5",
+    "options": [ {"label":"1","value":"1"},{"label":"2","value":"2"},{"label":"3","value":"3"},{"label":"4","value":"4"},{"label":"5","value":"5"} ],
+    "progress": true
+  },
+  { "type": "single", "key": "q40_feeling_socially_isolated",
+    "prompt": "Feeling socially isolated: 1-5",
+    "options": [ {"label":"1","value":"1"},{"label":"2","value":"2"},{"label":"3","value":"3"},{"label":"4","value":"4"},{"label":"5","value":"5"} ],
+    "progress": true
+  },
+  { "type": "single", "key": "q41_strain_personal_relationships",
+    "prompt": "Strain in personal relationships: 1-5",
+    "options": [ {"label":"1","value":"1"},{"label":"2","value":"2"},{"label":"3","value":"3"},{"label":"4","value":"4"},{"label":"5","value":"5"} ],
+    "progress": true
+  },
+
+  { "type": "single", "key": "q42_feeling_anxious_due_to_pain",
+    "prompt": "Feeling anxious/nervous due to pain: 1-5",
+    "options": [ {"label":"1","value":"1"},{"label":"2","value":"2"},{"label":"3","value":"3"},{"label":"4","value":"4"},{"label":"5","value":"5"} ],
+    "progress": true
+  },
+  { "type": "single", "key": "q43_feeling_depressed_symptoms",
+    "prompt": "Feeling depressed/low due to symptoms: 1-5",
+    "options": [ {"label":"1","value":"1"},{"label":"2","value":"2"},{"label":"3","value":"3"},{"label":"4","value":"4"},{"label":"5","value":"5"} ],
+    "progress": true
+  },
+  { "type": "single", "key": "q44_concern_about_future_health",
+    "prompt": "Concern/fear about future health: 1-5",
+    "options": [ {"label":"1","value":"1"},{"label":"2","value":"2"},{"label":"3","value":"3"},{"label":"4","value":"4"},{"label":"5","value":"5"} ],
+    "progress": true
+  },
+  { "type": "single", "key": "q45_feeling_irritable_short_tempered",
+    "prompt": "Feeling irritable/short-tempered: 1-5",
+    "options": [ {"label":"1","value":"1"},{"label":"2","value":"2"},{"label":"3","value":"3"},{"label":"4","value":"4"},{"label":"5","value":"5"} ],
+    "progress": true
+  },
+  { "type": "single", "key": "q46_reduced_self_esteem",
+    "prompt": "Reduced self-esteem/confidence: 1-5",
+    "options": [ {"label":"1","value":"1"},{"label":"2","value":"2"},{"label":"3","value":"3"},{"label":"4","value":"4"},{"label":"5","value":"5"} ],
+    "progress": true
+  },
+
+  {
+    "type": "text",
+    "key": "pvvq_outro",
+    "bot": ["Great job — Part 3 complete! We’re preparing your full report."]
+  }
+]
