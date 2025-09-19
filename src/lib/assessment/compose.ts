@@ -1,4 +1,4 @@
-import type { Step } from '$lib/types';
+import type { Step } from '$libtypes';
 
 async function loadJson(path: string): Promise<Step[]> {
   const mod = await import(/* @vite-ignore */ path);

@@ -6,7 +6,7 @@
   export let items: NavItem[] = [];
 </script>
 
-<aside class="h-full w-[240px] shrink-0 border-r border-neutral-100 bg-white">
+<aside class="h-full w-[260px] shrink-0 border-r border-neutral-100 bg-white overflow-y-auto">
   <div class="px-4 py-4 flex items-center gap-3">
     <div class="h-9 w-9 rounded-lg bg-primary grid place-items-center">
       <svg viewBox="0 0 24 24" class="h-5 w-5 text-white" fill="none" stroke="currentColor" stroke-width="2">
@@ -20,14 +20,12 @@
     {#each items as it}
       <a
         href={it.href}
-        class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm"
+        class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors"
         class:bg-neutral-25={it.active}
         class:text-neutral-900={it.active}
         class:text-neutral-600={!it.active}
       >
-        {#if it.icon}
-          <span class="h-4 w-4">{@html it.icon}</span>
-        {/if}
+        {#if it.icon}<span class="h-4 w-4">{@html it.icon}</span>{/if}
         {it.label}
       </a>
     {/each}

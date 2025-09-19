@@ -1,8 +1,8 @@
 <script lang="ts">
   import type { PatientLike } from '$lib/types/admin';
 
-  export let patients: PatientLike[] = [];
-  export let onViewAll: () => void = () => {};
+  export const patients: PatientLike[] = [];
+  export const onViewAll: () => void = () => {};
 
   // Accepts Date, ISO string, or null and returns a small "when" label
   function fmtWhen(d: string | Date | null | undefined): string {

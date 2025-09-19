@@ -1,42 +1,83 @@
 <script lang="ts">
-  import Button from '$lib/components/ui/Button.svelte';
-  import type { ChartPoint } from '$lib/types/admin';
+  import { onMount, onDestroy } from 'svelte';
+  import type { TrendPoint } from '$lib/types/admin';
+  import Chart from 'chart.js/auto';
 
-  export let points: ChartPoint[] = [];
-  export let onViewAll: () => void = () => {};
+  export let points: TrendPoint[] = [];
+  export let title = 'Analytics';
+  export let onViewAll: (() => void) | undefined;
 
-  // simple linear scales for demo
-  const W = 520, H = 220, PAD = 28;
-  const XMIN = 0, XMAX = 100, YMIN = 0, YMAX = 100;
+  let canvas: HTMLCanvasElement;
+  let chart: Chart | null = null;
 
-  const sx = (x: number) => PAD + ((x - XMIN) / (XMAX - XMIN)) * (W - 2 * PAD);
-  const sy = (y: number) => H - PAD - ((y - YMIN) / (YMAX - YMIN)) * (H - 2 * PAD);
+  function splitData(src: TrendPoint[]) {
+    const scatter = src.filter((p) => p.series === 'data').map(({ x, y }) => ({ x, y }));
+    const fit = src.filter((p) => p.series === 'fit').map(({ x, y }) => ({ x, y })).sort((a, b) => a.x - b.x);
+    return { scatter, fit };
+  }
+
+  function buildChart() {
+    const { scatter, fit } = splitData(points);
+    chart?.destroy();
+
+    chart = new Chart(canvas, {
+      type: 'scatter',
+      data: {
+        datasets: [
+          { type: 'scatter', label: 'Sessions', data: scatter, pointRadius: 3, pointHoverRadius: 5 },
+          ...(fit.length === 2
+            ? [{
+                type: 'line',
+                label: 'Normal line',
+                data: fit,
+                pointRadius: 0,
+                borderWidth: 2,
+                borderDash: [6, 6] as number[],
+                tension: 0,
+                fill: false
+              } as const]
+            : [])
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        animation: false,
+        plugins: {
+          legend: { display: true },
+          tooltip: {
+            callbacks: {
+              label: (ctx) => {
+                const p = ctx.parsed;
+                return `${ctx.dataset.label}: Endopain ${p.x}, PVVQ ${p.y}`;
+              }
+            }
+          }
+        },
+        scales: {
+          x: { type: 'linear', min: 0, max: 100, title: { display: true, text: 'ENDOPAIN-4D Global Score (0–100)' } },
+          y: { type: 'linear', min: 20, max: 100, title: { display: true, text: 'PVVQ Total Score (20–100)' } }
+        }
+      }
+    });
+  }
+
+  onMount(buildChart);
+  onDestroy(() => chart?.destroy());
+  $: if (canvas && points) buildChart();
 </script>
 
-<section class="rounded-xl bg-white shadow-sm ring-1 ring-black/5 p-4 flex flex-col">
-  <div class="mb-3 text-neutral-900 font-semibold">Analytics</div>
-
-  <div class="overflow-x-auto">
-    <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`} class="max-w-full">
-      <!-- axes -->
-      <line x1={PAD} y1={H-PAD} x2={W-PAD} y2={H-PAD} stroke="#ddd" />
-      <line x1={PAD} y1={PAD}   x2={PAD}   y2={H-PAD} stroke="#ddd" />
-
-      {#each points as p, i}
-        <circle cx={sx(p.x)} cy={sy(p.y)} r="3.2" fill={p.series === 'pre' ? '#60a5fa' : '#22c55e'} opacity="0.9">
-          <title>{`${p.series.toUpperCase()}  ENDOPAIN ${p.x} | PVVQ ${p.y}`}</title>
-        </circle>
-      {/each}
-
-      <!-- labels -->
-      <text x={W/2} y={H-6} text-anchor="middle" class="fill-neutral-400 text-[10px]">ENDOPAIN-4D Global Score (0–100)</text>
-      <text x="12" y={H/2} transform={`rotate(-90 12 ${H/2})`} class="fill-neutral-400 text-[10px]">
-        PVVQ Total Score (0–100)
-      </text>
-    </svg>
+<div class="rounded-2xl bg-white ring-1 ring-black/5 p-5 md:p-6 flex flex-col w-full">
+  <div class="flex items-center justify-between mb-4">
+    <h2 class="text-lg font-semibold">{title}</h2>
+    <button
+      class="px-4 py-2 rounded-lg bg-primary text-white hover:bg-primary-700"
+      on:click={() => onViewAll?.()}
+    >View all</button>
   </div>
 
-  <div class="mt-4 flex justify-end">
-    <Button on:click={() => onViewAll()}>View all</Button>
+  <!-- taller canvas -->
+  <div class="relative h-[340px] md:h-[400px]">
+    <canvas bind:this={canvas} aria-label="Endopain vs PVVQ trend"></canvas>
   </div>
-</section>
+</div>

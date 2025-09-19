@@ -3,282 +3,127 @@
   import ChatHeader from './ChatHeader.svelte';
   import ChatBubble from './ChatBubble.svelte';
 
+  import {
+    type Step,
+    type SingleStep,
+    type Message,
+    rebuildTranscript,
+    normalizeOptions,
+    labelFor,
+    isProgress
+  } from '../assessment/chat/transcript';
+
+  import { generateReportAndGetUrls } from '../assessment/report';
+
   export let title = 'Health Assessment';
   export let token: string;
 
-  /** ---------- Types ---------- */
-  type BotStep = { type: 'text'; key: string; bot: string[] };
-  type Branching = { nextIf?: Record<string, string> };
-  type Option = { label: string; value: string };
-
-  type SingleStep = {
-    type: 'single' | 'multi';
-    key: string;
-    prompt: string;
-    options: Array<Option> | string[];
-    progress?: boolean; // default true unless explicitly false
-  } & Branching;
-
-  type Step = BotStep | SingleStep;
-  type Message = { side: 'left' | 'right'; text: string };
-
-  /** ---------- State ---------- */
   let steps: Step[] = [];
-  let answers: Record<string, unknown> = {}; // from server
+  let answers: Record<string, unknown> = {};
   let history: Message[] = [];
 
-  let totalQuestions = 0;  // only progress steps
-  let answeredCount = 0;   // answered progress steps along the path
+  let totalQuestions = 0;
+  let answeredCount = 0;
   let currentQ: SingleStep | null = null;
 
-  // PDF generation state
-  let pdfUrl: string | null = null;
+  // PDF state
+  let pdfUrl: string | null = null; // signed download URL
   type PdfStatus = 'idle' | 'generating' | 'ready' | 'error';
   let pdfStatus: PdfStatus = 'idle';
   let pdfError = '';
-  let pdfRequested = false; // prevent duplicate flows
+  let pdfRequested = false;
 
-  // anchor for auto-scroll
   let bottomEl: HTMLDivElement | null = null;
-  function scrollToBottom() {
-    bottomEl?.scrollIntoView({ behavior: 'smooth', block: 'end' });
-  }
+  const scrollToBottom = () => bottomEl?.scrollIntoView({ behavior: 'smooth', block: 'end' });
 
-  /** Helpers */
-  const isProgress = (s: Step) => s.type !== 'text' && (s as SingleStep).progress !== false;
+  const CONTINUE_GATES = new Set(['c1_continue_part2', 'c2_continue_part3']);
 
-  function normalizeOptions(opts: SingleStep['options']): Option[] {
-    if (Array.isArray(opts) && typeof opts[0] === 'string') {
-      return (opts as string[]).map((v) => ({ label: String(v), value: String(v) }));
-    }
-    return (opts as Option[]) ?? [];
-  }
+  function syncTranscript() {
+    const snap = rebuildTranscript(steps, answers);
+    history = snap.history;
+    currentQ = snap.currentQ;
+    answeredCount = snap.answeredCount;
 
-  function labelFor(step: SingleStep, value: unknown): string {
-    const opts = normalizeOptions(step.options);
-    if (Array.isArray(value)) {
-      const vs = value as string[];
-      return opts
-        .filter((o) => vs.includes(o.value))
-        .map((o) => o.label)
-        .join(', ');
-    }
-    const pick = opts.find((o) => o.value === value);
-    return pick?.label ?? String(value ?? '');
-  }
-
-  const END = '__END__';
-
-function resolveNextIndex(current: Step, pickedValue: string, fromIndex: number) {
-  const nextKey = (current as Partial<SingleStep>)?.nextIf?.[pickedValue];
-
-  // Respect explicit end sentinels
-  if (nextKey === END || nextKey === 'END' || nextKey === '__end__') {
-    return steps.length; // finish immediately
-  }
-
-  if (nextKey) {
-    const i = steps.findIndex((s) => s.key === nextKey);
-    if (i !== -1) return i;
-  }
-
-  // Fallback: next question linearly
-  for (let i = fromIndex + 1; i < steps.length; i++) {
-    if (steps[i].type !== 'text') return i;
-  }
-  return steps.length; // finished
-}
-
-  /**
-   * Build the transcript by walking steps and following branches until
-   * the first unanswered question. Counts only "progress" questions.
-   */
-  function rebuildTranscript() {
-    history = [];
-    answeredCount = 0;
-    currentQ = null;
-
-    let idx = 0;
-    while (idx < steps.length) {
-      const step = steps[idx];
-
-      if (step.type === 'text') {
-        for (const line of step.bot) history.push({ side: 'left', text: line });
-        idx += 1;
-        continue;
-      }
-
-      // question
-      history.push({ side: 'left', text: step.prompt });
-
-      const ans = answers[step.key];
-      const hasAnswer =
-        ans !== undefined && ans !== null && !(Array.isArray(ans) && ans.length === 0);
-
-      if (!hasAnswer) {
-        currentQ = step;
-        break; // stop at first unanswered
-      }
-
-      // user answer bubble
-      history.push({ side: 'right', text: labelFor(step, ans) });
-
-      // count only progress questions
-      if (isProgress(step)) answeredCount += 1;
-
-      // follow branch or next question
-      const pickedValue = Array.isArray(ans) ? String(ans[0]) : String(ans);
-      idx = resolveNextIndex(step, pickedValue, idx);
-    }
-
-    // Finished all steps
-    if (!currentQ && idx >= steps.length) {
+    if (snap.finished && !pdfRequested) {
+      pdfRequested = true;
       history.push({
         side: 'left',
         text: 'Thanks! You’ve completed the questions for now. Your assessment is complete.'
       });
-
-      if (!pdfRequested) {
-        pdfRequested = true;
-        startReportFlow(); // robust generation + polling
-      }
+      // kick off report
+      startReportFlow();
     }
   }
 
-  /** Robust report flow: show "generating", call generator, then poll for presence */
   async function startReportFlow() {
-    pdfStatus = 'generating';
-    pdfError = '';
-    pdfUrl = null;
+    pdfStatus = 'generating'; pdfError = ''; pdfUrl = null;
+    history.push({ side: 'left', text: 'Preparing your PDF report… this usually takes a few seconds.' });
+    await tick(); scrollToBottom();
 
-    // Immediately show a bot hint
-    history.push({
-      side: 'left',
-      text: 'Preparing your PDF report… this usually takes a few seconds.'
-    });
-    await tick();
-    scrollToBottom();
-
-    // Kick off generation (JSON result)
-    try {
-      const gen = await fetch(`/api/session/${token}/pdf`, { method: 'GET', headers: { 'cache-control': 'no-store' } });
-      if (!gen.ok) {
-        pdfStatus = 'error';
-        pdfError = `Could not generate report (${gen.status}).`;
-        history.push({ side: 'left', text: 'We had trouble generating your PDF. You can try again below.' });
-        await tick();
-        scrollToBottom();
-        return;
-      }
-      // We don't *need* the returned URL here; we'll still poll to be safe.
-      // const { publicUrl } = await gen.json();
-    } catch (e) {
-      pdfStatus = 'error';
-      pdfError = 'Network error while generating the report.';
-      history.push({ side: 'left', text: 'We had trouble generating your PDF. You can try again below.' });
-      await tick();
-      scrollToBottom();
+    const res = await generateReportAndGetUrls(token);
+    if (res.ok) {
+      pdfUrl = res.downloadUrl;
+      pdfStatus = 'ready';
+      history.push({ side: 'left', text: 'Your PDF report is ready. Use the button below to download it.' });
+      await tick(); scrollToBottom();
       return;
     }
 
-    // Poll for existence via /api/pdf-search/[token]
-    const found = await pollForPdf(15, 1500); // up to ~22s
-    if (found) {
-      pdfStatus = 'ready';
-      history.push({ side: 'left', text: 'Your PDF report is ready. Use the button below to download it.' });
-      await tick();
-      scrollToBottom();
-    } else {
-      pdfStatus = 'error';
-      pdfError = 'Your report is taking longer than expected. Please try again.';
-      history.push({ side: 'left', text: 'Your report is taking longer than expected. You can try again below.' });
-      await tick();
-      scrollToBottom();
-    }
+    pdfStatus = 'error';
+    pdfError = res.status === 0 ? 'Network error while generating the report.' : `Could not generate report (${res.status}).`;
+    history.push({ side: 'left', text: 'We had trouble generating your PDF. You can try again below.' });
+    await tick(); scrollToBottom();
   }
 
-  async function pollForPdf(maxTries: number, delayMs: number): Promise<boolean> {
-    for (let i = 0; i < maxTries; i++) {
+  async function selectOption(value: string) {
+    if (!currentQ) return;
+
+    // optimistic bubble
+    const preview = labelFor(currentQ, value);
+    history.push({ side: 'right', text: preview });
+    await tick(); scrollToBottom();
+
+    // persist
+    try {
+      await fetch(`/api/session/${encodeURIComponent(token)}/answer`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ step_key: currentQ.key, value })
+      });
+      answers[currentQ.key] = value;
+    } catch {
+      // could add a toast later
+    }
+
+    // If continue gate, re-fetch authoritative steps+answers
+    if (CONTINUE_GATES.has(currentQ.key)) {
       try {
-        const res = await fetch(`/api/pdf-search/${token}`, { headers: { 'cache-control': 'no-store' } });
+        const res = await fetch(`/api/session/${encodeURIComponent(token)}/steps?ts=${Date.now()}`, {
+          headers: { 'cache-control': 'no-store' }
+        });
         if (res.ok) {
           const data = await res.json();
-          if (data?.pdfFound && data?.pdfUrl) {
-            pdfUrl = data.pdfUrl;
-            return true;
-          }
+          steps = (data?.steps ?? steps) as Step[];
+          answers = (data?.answers ?? answers) as Record<string, unknown>;
         }
-      } catch {
-        // ignore transient failures and keep polling
-      }
-      await new Promise((r) => setTimeout(r, delayMs));
+      } catch {}
     }
-    return false;
+
+    syncTranscript();
+    await tick(); scrollToBottom();
   }
-
-  const CONTINUE_GATES = new Set(['c1_continue_part2', 'c2_continue_part3']);
-
-async function selectOption(value: string) {
-  if (!currentQ) return;
-
-  // optimistic bubble
-  const preview = labelFor(currentQ, value);
-  history.push({ side: 'right', text: preview });
-  await tick();
-  scrollToBottom();
-
-  // persist
-  try {
-    await fetch(`/api/session/${token}/answer`, {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ step_key: currentQ.key, value })
-    });
-    answers[currentQ.key] = value;
-  } catch {
-    // optionally show a toast
-  }
-
-  // ❗ If it was a continue gate, re-fetch the freshly composed steps & answers
-  if (CONTINUE_GATES.has(currentQ.key)) {
-    try {
-      const res = await fetch(`/api/session/${token}/steps?ts=${Date.now()}`, {
-        headers: { 'cache-control': 'no-store' }
-      });
-      if (res.ok) {
-        const data = await res.json();
-        steps = (data?.steps ?? steps) as Step[];
-        answers = (data?.answers ?? answers) as Record<string, unknown>;
-      }
-    } catch {
-      // ignore transient errors; rebuild will still work but might finish
-    }
-  }
-
-  // rebuild from authoritative state
-  rebuildTranscript();
-  await tick();
-  scrollToBottom();
-}
 
   onMount(async () => {
-    const res = await fetch(`/api/session/${token}/steps`);
+    const res = await fetch(`/api/session/${encodeURIComponent(token)}/steps`);
     const data = await res.json();
-
     steps = (data?.steps ?? []) as Step[];
     answers = (data?.answers ?? {}) as Record<string, unknown>;
-
-    // total progress questions
     totalQuestions = steps.filter(isProgress).length;
-
-    rebuildTranscript();
-    await tick();
-    scrollToBottom();
+    syncTranscript();
+    await tick(); scrollToBottom();
   });
 
-  function handleRestart() {
-    location.reload();
-  }
+  function handleRestart() { location.reload(); }
 </script>
 
 <section class="mx-auto max-w-[1024px]">
@@ -291,13 +136,11 @@ async function selectOption(value: string) {
       on:restart={handleRestart}
     />
 
-    <!-- Transcript -->
     <div class="flex-1 overflow-y-auto p-4 md:p-6 space-y-6 bg-white">
       {#each history as m}
         <ChatBubble side={m.side} text={m.text} />
       {/each}
 
-      <!-- PDF area -->
       {#if pdfStatus === 'generating'}
         <div class="text-sm text-neutral-600">
           <div class="inline-flex items-center gap-2 rounded-lg border border-neutral-200 px-3 py-2 bg-neutral-25">
@@ -337,7 +180,6 @@ async function selectOption(value: string) {
         </div>
       {/if}
 
-      <!-- Choices --> 
       {#if currentQ}
         {#each normalizeOptions(currentQ.options) as opt}
           <button

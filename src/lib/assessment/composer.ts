@@ -31,14 +31,14 @@ const P2_FIRST = 'q22_pain_worse_standing';
 const P3_FIRST = 'q27_lower_abdominal_pain';
 const END = '__END__';
 
-function keysOf(steps: any[]): Set<string> {
+function keysOf(steps: Array<{ key?: string }>): Set<string> {
   const s = new Set<string>();
   for (const st of steps) if (st?.key) s.add(st.key);
   return s;
 }
 
-const P2_KEYS = keysOf(part2 as any[]);
-const P3_KEYS = keysOf(part3 as any[]);
+const P2_KEYS = keysOf(part2 as Step[]);
+const P3_KEYS = keysOf(part3 as Step[]);
 
 export function composeSteps(answers: Record<string, unknown>): Step[] {
   const out: Step[] = [...(part1 as Step[])];

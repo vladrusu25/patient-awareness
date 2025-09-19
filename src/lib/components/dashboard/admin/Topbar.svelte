@@ -1,33 +1,47 @@
+<!-- src/lib/components/dashboard/admin/Topbar.svelte -->
 <script lang="ts">
-  import Button from '$lib/components/ui/Button.svelte';
-
-  export let dateLabel = 'Last 30 days';
+  export let rangeLabel: string = 'Last 30 days';
   export let onExport: () => void = () => {};
-  export let onLogout: () => void = () => {};
 </script>
 
-<header class="h-14 border-b border-neutral-100 bg-white px-4 flex items-center gap-3">
-  <div class="ml-auto flex items-center gap-3">
-    <!-- Date range -->
-    <div class="relative">
-      <button class="rounded-lg border border-neutral-200 bg-white px-3 py-1.5 text-sm text-neutral-700 hover:bg-neutral-50">
-        {dateLabel}
-        <svg class="ml-1 inline h-4 w-4 opacity-70" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5"/></svg>
-      </button>
-    </div>
+<div class="mb-4 flex flex-wrap items-center gap-3">
+  <!-- Range selector (static for now; wire later) -->
+  <button
+    class="inline-flex items-center gap-2 rounded-lg border border-neutral-200 bg-white px-3 py-2 text-sm hover:bg-neutral-50"
+    type="button"
+    aria-label="Change range"
+  >
+    {rangeLabel}
+    <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="m6 9 6 6 6-6" />
+    </svg>
+  </button>
 
-    <!-- Search -->
-    <label class="relative">
-      <span class="absolute left-3 top-2.5 opacity-50">
-        <svg class="h-4 w-4" viewBox="0 0 24 24"><path d="M21 21l-4.3-4.3M10 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16z" fill="none" stroke="currentColor" stroke-width="2"/></svg>
-      </span>
-      <input
-        placeholder="Search patients..."
-        class="h-9 w-[260px] rounded-lg border border-neutral-200 bg-white pl-9 pr-3 text-sm text-neutral-800 placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-mint-400"
-      />
-    </label>
-
-    <Button variant="soft" on:click={() => onExport()}>Export cohort PDF</Button>
-    <Button variant="primary" on:click={() => onLogout()}>Logout</Button>
+  <!-- Search -->
+  <div class="relative">
+    <input
+      class="w-[220px] rounded-lg border border-neutral-200 bg-white px-3 py-2 pl-9 text-sm outline-none focus:ring-2 focus:ring-mint-400"
+      placeholder="Search patients..."
+      type="search"
+    />
+    <svg viewBox="0 0 24 24" class="pointer-events-none absolute left-2 top-2.5 h-4 w-4 opacity-60" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="11" cy="11" r="7" />
+      <path d="M21 21 16.65 16.65" />
+    </svg>
   </div>
-</header>
+
+  <div class="ml-auto"></div>
+
+  <!-- Export -->
+  <button
+    class="inline-flex items-center gap-2 rounded-lg bg-primary px-3 py-2 text-sm font-medium text-white hover:bg-primary-700"
+    on:click={onExport}
+    type="button"
+  >
+    Export cohort PDF
+  </button>
+
+  {#if false}
+    <!-- intentionally removed logout button from the toolbar -->
+  {/if}
+</div>

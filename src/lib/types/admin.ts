@@ -19,6 +19,7 @@ export type MetricsSummary = {
   conversionRatePct: number;
 };
 
-export type TrendPoint = { x: number; y: number; series: 'pre' | 'post' };
+
+export type TrendPoint = { x: number; y: number; series: 'data' | 'fit'; };
 
 export type DateRange = { label: string; days: number };

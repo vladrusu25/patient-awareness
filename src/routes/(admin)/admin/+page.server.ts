@@ -1,10 +1,12 @@
-import type { PageServerLoad } from './$types';
+// src/routes/(admin)/admin/+page.server.ts
+import type { PageServerLoad } from './$types.js';
+import { requireRole } from '$lib/server/guard.server';
 import { getDoctorDataSource } from '$lib/services/admin.server';
 
-export const load: PageServerLoad = async () => {
-  const ds = getDoctorDataSource();
+export const load: PageServerLoad = async (event) => {
+  requireRole(event.locals, 'admin');
 
-  // You can wire the range selector later
+  const ds = getDoctorDataSource();
   const range = { label: 'Last 30 days', days: 30 as const };
 
   const [metrics, patients, points] = await Promise.all([
@@ -13,10 +15,5 @@ export const load: PageServerLoad = async () => {
     ds.getPainQoLTrend(range)
   ]);
 
-  return {
-    metrics,
-    patients,         // <- PatientsPanel remains unchanged
-    points,
-    rangeLabel: range.label
-  };
+  return { metrics, patients, points, rangeLabel: range.label };
 };

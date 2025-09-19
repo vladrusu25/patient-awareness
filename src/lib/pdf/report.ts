@@ -44,7 +44,7 @@ export async function renderSummaryPdf(opts: {
     const page = doc.addPage([pageW, pageH]);
 
     // header
-    let x = margin;
+    const x = margin;
     let y = pageH - margin;
 
     if (idx === 0) {

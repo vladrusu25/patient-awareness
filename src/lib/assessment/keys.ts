@@ -6,7 +6,12 @@ import part2 from '$lib/data/pcs.part2.v1.json';
 import part3 from '$lib/data/pvvq.part3.v1.json';
 
 // Helper to extract all question keys of type 'single'/'multi' from a template
-function keysFrom(steps: any[]): string[] {
+interface Step {
+  type: string;
+  key: string;
+}
+
+function keysFrom(steps: Step[]): string[] {
   return steps
     .filter((s) => s.type === 'single' || s.type === 'multi')
     .map((s) => s.key);

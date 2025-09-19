@@ -1,21 +1,24 @@
 <script lang="ts">
-	import Footer from "$lib/components/Footer.svelte";
+  import Footer from "$lib/components/Footer.svelte";
 
   let token = '';
   let loading = false;
   let errorMsg = '';
-  let pdfUrl: string | null = null;
+  let foundMsg = '';
+  let viewUrl: string | null = null;
+  let downloadUrl: string | null = null;
 
   async function onSearch(e: SubmitEvent) {
-    e.preventDefault(); // IMPORTANT: prevent full page reload
+    e.preventDefault();
     errorMsg = '';
-    pdfUrl = null;
+    foundMsg = '';
+    viewUrl = null;
+    downloadUrl = null;
 
     const t = token.trim().toUpperCase();
 
-    // simple guidance: your tokens are 16-char A–Z/2–9
     if (!/^[A-Z0-9]{16}$/.test(t)) {
-      errorMsg = 'Please enter the 16-character token shown on your report.';
+      errorMsg = 'Token must be 16 characters (A–Z, 0–9).';
       return;
     }
 
@@ -25,24 +28,34 @@
         headers: { 'cache-control': 'no-store' }
       });
 
+      const data = await res.json().catch(() => null);
+
       if (!res.ok) {
-        if (res.status === 404) {
-          errorMsg = 'No PDF found for that token.';
+        if (data?.code === 'invalid_format') {
+          errorMsg = 'Token must be 16 characters (A–Z, 0–9).';
+        } else if (data?.code === 'not_found') {
+          errorMsg = 'Invalid token — this token doesn’t exist.';
+        } else if (data?.code === 'rate_limited') {
+          const s = typeof data?.retryAfter === 'number' ? data.retryAfter : 60;
+          errorMsg = `Too many attempts. Try again in ${s} seconds.`;
+        } else if (data?.code === 'no_pdf') {
+          errorMsg = 'Report not available yet. Please try again later.';
         } else {
-          errorMsg = `Something went wrong (${res.status}). Please try again.`;
+          errorMsg = 'An error occurred — please try again.';
         }
         return;
       }
 
-      const data = await res.json();
-      if (data?.pdfFound && data?.pdfUrl) {
-        pdfUrl = data.pdfUrl;
+      if (data?.ok && data?.viewUrl && data?.downloadUrl) {
+        viewUrl = data.viewUrl;           // same-origin inline preview
+        downloadUrl = data.downloadUrl;   // signed URL (attachment)
+        foundMsg = 'Found PDF — ready to download.';
       } else {
-        errorMsg = 'No PDF found for that token.';
+        errorMsg = 'An error occurred — please try again.';
       }
     } catch (err) {
       console.error(err);
-      errorMsg = 'Network error. Please try again.';
+      errorMsg = 'An error occurred — please try again.';
     } finally {
       loading = false;
     }
@@ -78,12 +91,16 @@
     <div class="mt-3 text-sm text-red-600">{errorMsg}</div>
   {/if}
 
-  {#if pdfUrl}
+  {#if foundMsg}
+    <div class="mt-3 text-sm text-emerald-700">{foundMsg}</div>
+  {/if}
+
+  {#if viewUrl}
     <div class="mt-8 space-y-4">
       <a
-        href={pdfUrl}
+        href={downloadUrl ?? '#'}
         target="_blank"
-        rel="noopener"
+        rel="noopener noreferrer"
         class="inline-flex items-center gap-2 px-5 py-3 rounded-lg bg-primary text-white hover:bg-primary-700"
       >
         Download PDF
@@ -94,11 +111,12 @@
         </svg>
       </a>
 
-      <!-- quick inline preview (optional) -->
+      <!-- Inline preview via same-origin streaming route (always inline) -->
       <div class="rounded-lg border border-neutral-200 overflow-hidden">
-        <iframe src={pdfUrl} class="w-full h-[600px]" title="PDF preview"></iframe>
+        <iframe src={viewUrl} class="w-full h-[600px]" title="PDF preview"></iframe>
       </div>
     </div>
   {/if}
 </section>
-<Footer></Footer>
+
+<Footer />
