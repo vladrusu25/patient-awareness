@@ -33,8 +33,28 @@
   let pdfError = '';
   let pdfRequested = false;
 
+  let chatBodyEl: HTMLDivElement | null = null;
   let bottomEl: HTMLDivElement | null = null;
-  const scrollToBottom = () => bottomEl?.scrollIntoView({ behavior: 'smooth', block: 'end' });
+
+  const scrollToLatestPrompt = () => {
+    if (chatBodyEl) {
+      const prompts = chatBodyEl.querySelectorAll('[data-role="chat-bubble"][data-side="left"]');
+      const target = prompts.item(prompts.length - 1) as HTMLElement | null;
+      if (target) {
+        const parent = chatBodyEl;
+        const parentRect = parent.getBoundingClientRect();
+        const targetRect = target.getBoundingClientRect();
+        const currentTop = targetRect.top - parentRect.top + parent.scrollTop;
+        const margin = 32;
+        const maxScroll = parent.scrollHeight - parent.clientHeight;
+        const desiredTop = Math.min(Math.max(currentTop - margin, 0), Math.max(maxScroll, 0));
+        parent.scrollTo({ top: desiredTop, behavior: 'smooth' });
+        return;
+      }
+    }
+
+    bottomEl?.scrollIntoView({ behavior: 'smooth', block: 'end' });
+  };
 
   const CONTINUE_GATES = new Set(['c1_continue_part2', 'c2_continue_part3']);
 
@@ -58,21 +78,21 @@
   async function startReportFlow() {
     pdfStatus = 'generating'; pdfError = ''; pdfUrl = null;
     history.push({ side: 'left', text: 'Preparing your PDF report… this usually takes a few seconds.' });
-    await tick(); scrollToBottom();
+    await tick(); scrollToLatestPrompt();
 
     const res = await generateReportAndGetUrls(token);
     if (res.ok) {
       pdfUrl = res.downloadUrl;
       pdfStatus = 'ready';
       history.push({ side: 'left', text: 'Your PDF report is ready. Use the button below to download it.' });
-      await tick(); scrollToBottom();
+      await tick(); scrollToLatestPrompt();
       return;
     }
 
     pdfStatus = 'error';
     pdfError = res.status === 0 ? 'Network error while generating the report.' : `Could not generate report (${res.status}).`;
     history.push({ side: 'left', text: 'We had trouble generating your PDF. You can try again below.' });
-    await tick(); scrollToBottom();
+    await tick(); scrollToLatestPrompt();
   }
 
   async function selectOption(value: string) {
@@ -81,7 +101,7 @@
     // optimistic bubble
     const preview = labelFor(currentQ, value);
     history.push({ side: 'right', text: preview });
-    await tick(); scrollToBottom();
+    await tick(); scrollToLatestPrompt();
 
     // persist
     try {
@@ -110,7 +130,7 @@
     }
 
     syncTranscript();
-    await tick(); scrollToBottom();
+    await tick(); scrollToLatestPrompt();
   }
 
   onMount(async () => {
@@ -120,7 +140,7 @@
     answers = (data?.answers ?? {}) as Record<string, unknown>;
     totalQuestions = steps.filter(isProgress).length;
     syncTranscript();
-    await tick(); scrollToBottom();
+    await tick(); scrollToLatestPrompt();
   });
 
   function handleRestart() { location.reload(); }
@@ -136,7 +156,7 @@
       on:restart={handleRestart}
     />
 
-    <div class="flex-1 overflow-y-auto p-4 md:p-6 space-y-6 bg-white">
+    <div bind:this={chatBodyEl} class="flex-1 overflow-y-auto p-4 md:p-6 space-y-6 bg-white">
       {#each history as m}
         <ChatBubble side={m.side} text={m.text} />
       {/each}

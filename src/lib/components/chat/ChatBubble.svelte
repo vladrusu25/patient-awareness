@@ -5,7 +5,7 @@
   export let text = '';
 </script>
 
-<div class="flex items-start gap-3" class:justify-end={side === 'right'}>
+<div class="flex items-start gap-3" class:justify-end={side === 'right'} data-role="chat-bubble" data-side={side}>
   {#if side === 'left'}
   <!-- Doctor avatar (40x40) -->
   <div

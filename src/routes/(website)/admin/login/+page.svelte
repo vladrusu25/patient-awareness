@@ -5,7 +5,6 @@
 <section class="mx-auto max-w-[420px] px-6 py-16">
   <div class="rounded-2xl bg-white ring-1 ring-black/5 shadow-sm p-6 md:p-8">
     <div class="mb-6">
-      <div class="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-white">🏥</div>
       <h1 class="mt-3 text-xl font-semibold text-neutral-900">Admin login</h1>
       <p class="mt-1 text-sm text-neutral-600">Sign in to access the dashboard.</p>
     </div>
@@ -35,6 +34,4 @@
       </button>
     </form>
   </div>
-
-  <p class="mt-6 text-center text-xs text-neutral-500">Protected area — authorized personnel only.</p>
 </section>
