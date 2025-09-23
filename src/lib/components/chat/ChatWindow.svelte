@@ -5,12 +5,12 @@
 
   import {
     type Step,
-    type SingleStep,
+    type QuestionStep,
     type Message,
+    type ProgressSnapshot,
     rebuildTranscript,
     normalizeOptions,
-    labelFor,
-    isProgress
+    labelFor
   } from '../assessment/chat/transcript';
 
   import { generateReportAndGetUrls } from '../assessment/report';
@@ -22,16 +22,34 @@
   let answers: Record<string, unknown> = {};
   let history: Message[] = [];
 
-  let totalQuestions = 0;
-  let answeredCount = 0;
-  let currentQ: SingleStep | null = null;
+  const INITIAL_PROGRESS: ProgressSnapshot = {
+    bySegment: {
+      part1: { answered: 0, total: 0 },
+      part2: { answered: 0, total: 0 },
+      part3: { answered: 0, total: 0 }
+    },
+    active: { id: 'part1', answered: 0, total: 0, includesCurrent: false }
+  };
 
-  // PDF state
-  let pdfUrl: string | null = null; // signed download URL
+  let progress: ProgressSnapshot = INITIAL_PROGRESS;
+  let currentQ: QuestionStep | null = null;
+
+  let headerQuestion = 0;
+  let headerTotal = 0;
+
+  let inputValue = '';
+  let inputError = '';
+  let inputSubmitting = false;
+
+  let pdfUrl: string | null = null;
   type PdfStatus = 'idle' | 'generating' | 'ready' | 'error';
   let pdfStatus: PdfStatus = 'idle';
   let pdfError = '';
   let pdfRequested = false;
+
+  let showRestartConfirm = false;
+  let restartSubmitting = false;
+  let restartError = '';
 
   let chatBodyEl: HTMLDivElement | null = null;
   let bottomEl: HTMLDivElement | null = null;
@@ -56,28 +74,40 @@
     bottomEl?.scrollIntoView({ behavior: 'smooth', block: 'end' });
   };
 
-  const CONTINUE_GATES = new Set(['c1_continue_part2', 'c2_continue_part3']);
+  const REFETCH_KEYS = new Set(['p0_patient_status', 'p0_patient_id_entry', 'c1_continue_part2', 'c2_continue_part3']);
+
+  $: headerTotal = progress.active.total;
+  $: headerQuestion = headerTotal
+    ? Math.min(progress.active.answered + (progress.active.includesCurrent ? 1 : 0), headerTotal)
+    : 0;
+
+  $: if (currentQ?.type === 'input') {
+    const stored = answers[currentQ.key];
+    inputValue = typeof stored === 'string' ? stored : '';
+    inputError = '';
+  }
 
   function syncTranscript() {
     const snap = rebuildTranscript(steps, answers);
     history = snap.history;
     currentQ = snap.currentQ;
-    answeredCount = snap.answeredCount;
+    progress = snap.progress;
 
-    if (snap.finished && !pdfRequested) {
+    const hasQuestionSteps = steps.some((s) => s.type !== 'text');
+
+    if (snap.finished && hasQuestionSteps && !pdfRequested) {
       pdfRequested = true;
       history.push({
         side: 'left',
-        text: 'Thanks! You’ve completed the questions for now. Your assessment is complete.'
+        text: "Thanks! You've completed the questions for now. Your assessment is complete."
       });
-      // kick off report
       startReportFlow();
     }
   }
 
   async function startReportFlow() {
     pdfStatus = 'generating'; pdfError = ''; pdfUrl = null;
-    history.push({ side: 'left', text: 'Preparing your PDF report… this usually takes a few seconds.' });
+    history.push({ side: 'left', text: 'Preparing your PDF report... this usually takes a few seconds.' });
     await tick(); scrollToLatestPrompt();
 
     const res = await generateReportAndGetUrls(token);
@@ -95,42 +125,90 @@
     await tick(); scrollToLatestPrompt();
   }
 
-  async function selectOption(value: string) {
+  async function refetchSteps(): Promise<boolean> {
+    try {
+      const res = await fetch(`/api/session/${encodeURIComponent(token)}/steps?ts=${Date.now()}`, {
+        headers: { 'cache-control': 'no-store' }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        steps = (data?.steps ?? steps) as Step[];
+        answers = (data?.answers ?? answers) as Record<string, unknown>;
+        return true;
+      }
+    } catch {
+      // ignore network failures
+    }
+    return false;
+  }
+
+  async function submitAnswer(value: string, options: { optimistic?: boolean } = {}) {
     if (!currentQ) return;
 
-    // optimistic bubble
-    const preview = labelFor(currentQ, value);
-    history.push({ side: 'right', text: preview });
-    await tick(); scrollToLatestPrompt();
+    const step = currentQ;
+    const optimistic = options.optimistic ?? step.type !== 'input';
+    const preview = labelFor(step, value);
 
-    // persist
-    try {
-      await fetch(`/api/session/${encodeURIComponent(token)}/answer`, {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ step_key: currentQ.key, value })
-      });
-      answers[currentQ.key] = value;
-    } catch {
-      // could add a toast later
+    let previewIndex = -1;
+    if (optimistic) {
+      previewIndex = history.length;
+      history = [...history, { side: 'right', text: preview }];
+      await tick(); scrollToLatestPrompt();
     }
 
-    // If continue gate, re-fetch authoritative steps+answers
-    if (CONTINUE_GATES.has(currentQ.key)) {
-      try {
-        const res = await fetch(`/api/session/${encodeURIComponent(token)}/steps?ts=${Date.now()}`, {
-          headers: { 'cache-control': 'no-store' }
-        });
-        if (res.ok) {
-          const data = await res.json();
-          steps = (data?.steps ?? steps) as Step[];
-          answers = (data?.answers ?? answers) as Record<string, unknown>;
-        }
-      } catch {}
+    let payload: any = null;
+    try {
+      const res = await fetch(`/api/session/${encodeURIComponent(token)}/answer`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ step_key: step.key, value })
+      });
+      payload = await res.json().catch(() => ({}));
+      if (!res.ok || payload?.ok !== true) {
+        throw new Error(payload?.message ?? payload?.error ?? 'Answer failed');
+      }
+    } catch (
+      err
+    ) {
+      if (optimistic && previewIndex !== -1) {
+        history = history.slice(0, previewIndex);
+      }
+      if (step.type === 'input') {
+        inputError = payload?.message ?? payload?.error ?? 'We could not find that ID. Double-check and try again.';
+      }
+      return;
+    }
+
+    if (!REFETCH_KEYS.has(step.key)) {
+      answers[step.key] = value;
+    }
+
+    if (step.type === 'input') {
+      inputValue = value;
+      inputError = '';
+    }
+
+    if (REFETCH_KEYS.has(step.key)) {
+      await refetchSteps();
     }
 
     syncTranscript();
     await tick(); scrollToLatestPrompt();
+  }
+
+  async function handleSubmitInput(event: Event) {
+    event.preventDefault();
+    if (!currentQ || currentQ.type !== 'input' || inputSubmitting) return;
+
+    const trimmed = inputValue.trim().toUpperCase().replace(/\s+/g, '');
+    if (!trimmed) {
+      inputError = 'Please enter your Patient ID to continue.';
+      return;
+    }
+
+    inputSubmitting = true;
+    await submitAnswer(trimmed, { optimistic: false });
+    inputSubmitting = false;
   }
 
   onMount(async () => {
@@ -138,20 +216,54 @@
     const data = await res.json();
     steps = (data?.steps ?? []) as Step[];
     answers = (data?.answers ?? {}) as Record<string, unknown>;
-    totalQuestions = steps.filter(isProgress).length;
     syncTranscript();
     await tick(); scrollToLatestPrompt();
   });
 
-  function handleRestart() { location.reload(); }
+  function handleRestart() {
+    restartError = '';
+    showRestartConfirm = true;
+  }
+
+  function cancelRestart() {
+    if (restartSubmitting) return;
+    restartError = '';
+    showRestartConfirm = false;
+  }
+
+  async function confirmRestart() {
+    if (restartSubmitting) return;
+    restartSubmitting = true;
+    restartError = '';
+
+    try {
+      const res = await fetch('/api/session', {
+        method: 'POST',
+        headers: { 'cache-control': 'no-store' }
+      });
+
+      if (!res.ok) {
+        throw new Error('Failed to start a new session.');
+      }
+
+      const body = (await res.json().catch(() => ({}))) as Partial<{ token: string }>;
+      const newToken = typeof body.token === 'string' ? body.token : null;
+      const dest = newToken ? `/api/session/${encodeURIComponent(newToken)}#chat` : '/assessment#chat';
+      location.replace(dest);
+    } catch (err) {
+      console.error(err);
+      restartError = err instanceof Error ? err.message : 'Failed to start a new session.';
+      restartSubmitting = false;
+    }
+  }
 </script>
 
 <section class="mx-auto max-w-[1024px]">
   <div class="rounded-2xl bg-neutral-25 ring-1 ring-black/5 shadow-lg overflow-hidden flex flex-col h-[560px] md:h-[600px]">
     <ChatHeader
       {title}
-      question={Math.min(answeredCount + (currentQ ? 1 : 0), totalQuestions)}
-      total={totalQuestions}
+      question={headerQuestion}
+      total={headerTotal}
       showRestart={true}
       on:restart={handleRestart}
     />
@@ -165,7 +277,7 @@
         <div class="text-sm text-neutral-600">
           <div class="inline-flex items-center gap-2 rounded-lg border border-neutral-200 px-3 py-2 bg-neutral-25">
             <span class="animate-pulse h-2 w-2 rounded-full bg-primary"></span>
-            Preparing your PDF…
+            Preparing your PDF...
           </div>
         </div>
       {/if}
@@ -201,17 +313,88 @@
       {/if}
 
       {#if currentQ}
-        {#each normalizeOptions(currentQ.options) as opt}
-          <button
-            class="block w-full text-left rounded-lg border border-neutral-300 px-4 py-3 mb-2 hover:bg-neutral-50 focus-visible:ring-2 focus-visible:ring-mint-400"
-            on:click={() => selectOption(opt.value)}
-          >
-            {opt.label}
-          </button>
-        {/each}
+        {#if currentQ.type === 'input'}
+          <form class="space-y-2" on:submit|preventDefault={handleSubmitInput}>
+            <input
+              class="w-full rounded-lg border border-neutral-300 px-4 py-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-mint-400"
+              type="text"
+              bind:value={inputValue}
+              placeholder={currentQ.placeholder ?? 'Enter value'}
+              autocomplete="off"
+              autocapitalize="characters"
+              spellcheck={false}
+              disabled={inputSubmitting}
+            />
+            {#if inputError}
+              <div class="text-sm text-red-600">{inputError}</div>
+            {/if}
+            <button
+              class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-white hover:bg-primary-700 disabled:opacity-70"
+              type="submit"
+              disabled={inputSubmitting}
+            >
+              {inputSubmitting ? 'Checking...' : 'Submit'}
+            </button>
+          </form>
+        {:else}
+          {#each normalizeOptions(currentQ) as opt}
+            <button
+              class="block w-full text-left rounded-lg border border-neutral-300 px-4 py-3 mb-2 hover:bg-neutral-50 focus-visible:ring-2 focus-visible:ring-mint-400"
+              on:click={() => submitAnswer(opt.value, { optimistic: true })}
+            >
+              {opt.label}
+            </button>
+          {/each}
+        {/if}
       {/if}
 
       <div bind:this={bottomEl}></div>
     </div>
   </div>
 </section>
+
+{#if showRestartConfirm}
+  <div
+    class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4"
+    role="dialog"
+    aria-modal="true"
+    on:click={() => {
+      if (!restartSubmitting) cancelRestart();
+    }}
+  >
+    <div
+      class="w-full max-w-sm rounded-2xl bg-white p-6 shadow-xl space-y-4"
+      on:click|stopPropagation
+    >
+      <h2 class="text-lg font-semibold text-neutral-900">Start a new session?</h2>
+      <p class="text-sm text-neutral-600">
+        Starting over will discard your current answers. You can keep this session if you want to return later.
+      </p>
+      {#if restartError}
+        <p class="text-sm text-red-600">{restartError}</p>
+      {/if}
+      <div class="flex justify-end gap-3 pt-2">
+        <button
+          type="button"
+          class="inline-flex items-center rounded-lg border border-neutral-300 px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-50 disabled:opacity-70"
+          on:click={cancelRestart}
+          disabled={restartSubmitting}
+        >
+          Keep session
+        </button>
+        <button
+          type="button"
+          class="inline-flex items-center rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary-700 disabled:opacity-70"
+          on:click={confirmRestart}
+          disabled={restartSubmitting}
+        >
+          {restartSubmitting ? 'Starting...' : 'Forfeit & start over'}
+        </button>
+      </div>
+    </div>
+  </div>
+{/if}
+
+
+
+

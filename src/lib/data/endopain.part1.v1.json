@@ -1,18 +1,15 @@
-[
+﻿[
   {
     "type": "text",
     "key": "intro",
-    "bot": [
-      "Hi! I'm here to understand your pelvic pain so we can guide next steps.",
-      "This is quick and private. Let's begin."
-    ]
+    "bot": ["I'm here to understand your pelvic pain so we can guide next steps. This is quick and private. Let's begin."]
   },
 
   {
     "type": "single",
     "key": "q1_spontaneous_pelvic_pain",
     "prompt": "Do you have spontaneous pelvic pain?",
-    "options": [
+    "options": [                                       
       { "label": "Yes", "value": "yes" },
       { "label": "No",  "value": "no"  }
     ],
@@ -22,9 +19,9 @@
   {
     "type": "single",
     "key": "q2_spontaneous_pelvic_intensity",
-    "prompt": "If yes: Intensity (0–10)",
+    "prompt": "If yes: Intensity (0-10)",
     "options": [
-      { "label": "0 – No pain", "value": "0" },
+      { "label": "0 - No pain", "value": "0" },
       { "label": "1", "value": "1" },
       { "label": "2", "value": "2" },
       { "label": "3", "value": "3" },
@@ -34,7 +31,7 @@
       { "label": "7", "value": "7" },
       { "label": "8", "value": "8" },
       { "label": "9", "value": "9" },
-      { "label": "10 – Worst pain", "value": "10" }
+      { "label": "10 - Worst pain", "value": "10" }
     ],
     "progress": false
   },
@@ -53,9 +50,9 @@
   {
     "type": "single",
     "key": "q4_menstrual_intensity",
-    "prompt": "If yes: Intensity (0–10)",
+    "prompt": "If yes: Intensity (0-10)",
     "options": [
-      { "label": "0 – No pain", "value": "0" },
+      { "label": "0 - No pain", "value": "0" },
       { "label": "1", "value": "1" },
       { "label": "2", "value": "2" },
       { "label": "3", "value": "3" },
@@ -65,7 +62,7 @@
       { "label": "7", "value": "7" },
       { "label": "8", "value": "8" },
       { "label": "9", "value": "9" },
-      { "label": "10 – Worst pain", "value": "10" }
+      { "label": "10 - Worst pain", "value": "10" }
     ],
     "progress": false
   },
@@ -84,9 +81,9 @@
   {
     "type": "single",
     "key": "q6_dyspareunia_intensity",
-    "prompt": "If yes: Intensity (0–10)",
+    "prompt": "If yes: Intensity (0-10)",
     "options": [
-      { "label": "0 – No pain", "value": "0" },
+      { "label": "0 - No pain", "value": "0" },
       { "label": "1", "value": "1" },
       { "label": "2", "value": "2" },
       { "label": "3", "value": "3" },
@@ -96,7 +93,7 @@
       { "label": "7", "value": "7" },
       { "label": "8", "value": "8" },
       { "label": "9", "value": "9" },
-      { "label": "10 – Worst pain", "value": "10" }
+      { "label": "10 - Worst pain", "value": "10" }
     ],
     "progress": false
   },
@@ -115,9 +112,9 @@
   {
     "type": "single",
     "key": "q8_postcoital_intensity",
-    "prompt": "If yes: Intensity (0–10)",
+    "prompt": "If yes: Intensity (0-10)",
     "options": [
-      { "label": "0 – No pain", "value": "0" },
+      { "label": "0 - No pain", "value": "0" },
       { "label": "1", "value": "1" },
       { "label": "2", "value": "2" },
       { "label": "3", "value": "3" },
@@ -127,7 +124,7 @@
       { "label": "7", "value": "7" },
       { "label": "8", "value": "8" },
       { "label": "9", "value": "9" },
-      { "label": "10 – Worst pain", "value": "10" }
+      { "label": "10 - Worst pain", "value": "10" }
     ],
     "progress": false
   },
@@ -148,7 +145,7 @@
     "key": "q10_bowel_menses_intensity",
     "prompt": "Intensity (0–10)",
     "options": [
-      { "label": "0 – No pain", "value": "0" },
+      { "label": "0 - No pain", "value": "0" },
       { "label": "1", "value": "1" },
       { "label": "2", "value": "2" },
       { "label": "3", "value": "3" },
@@ -158,7 +155,7 @@
       { "label": "7", "value": "7" },
       { "label": "8", "value": "8" },
       { "label": "9", "value": "9" },
-      { "label": "10 – Worst pain", "value": "10" }
+      { "label": "10 - Worst pain", "value": "10" }
     ],
     "progress": false
   },
@@ -181,7 +178,7 @@
     "key": "q12_bowel_outside_intensity",
     "prompt": "Intensity (0–10)",
     "options": [
-      { "label": "0 – No pain", "value": "0" },
+      { "label": "0 - No pain", "value": "0" },
       { "label": "1", "value": "1" },
       { "label": "2", "value": "2" },
       { "label": "3", "value": "3" },
@@ -191,7 +188,7 @@
       { "label": "7", "value": "7" },
       { "label": "8", "value": "8" },
       { "label": "9", "value": "9" },
-      { "label": "10 – Worst pain", "value": "10" }
+      { "label": "10 - Worst pain", "value": "10" }
     ],
     "progress": false
   },
@@ -212,7 +209,7 @@
     "key": "q14_urination_intensity",
     "prompt": "Intensity (0–10)",
     "options": [
-      { "label": "0 – No pain", "value": "0" },
+      { "label": "0 - No pain", "value": "0" },
       { "label": "1", "value": "1" },
       { "label": "2", "value": "2" },
       { "label": "3", "value": "3" },
@@ -222,7 +219,7 @@
       { "label": "7", "value": "7" },
       { "label": "8", "value": "8" },
       { "label": "9", "value": "9" },
-      { "label": "10 – Worst pain", "value": "10" }
+      { "label": "10 - Worst pain", "value": "10" }
     ],
     "progress": false
   },
@@ -243,7 +240,7 @@
     "key": "q16_lumbar_intensity",
     "prompt": "Intensity (0–10)",
     "options": [
-      { "label": "0 – No pain", "value": "0" },
+      { "label": "0 - No pain", "value": "0" },
       { "label": "1", "value": "1" },
       { "label": "2", "value": "2" },
       { "label": "3", "value": "3" },
@@ -253,7 +250,7 @@
       { "label": "7", "value": "7" },
       { "label": "8", "value": "8" },
       { "label": "9", "value": "9" },
-      { "label": "10 – Worst pain", "value": "10" }
+      { "label": "10 â€“ Worst pain", "value": "10" }
     ],
     "progress": false
   },
@@ -321,3 +318,4 @@
 
   { "type": "text", "key": "outro", "bot": ["Excellent work — Part 1 complete!"] }
 ]
+
