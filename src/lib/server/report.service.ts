@@ -10,11 +10,11 @@ const BUCKET = 'pdf-results';
 export async function fetchSessionByToken(token: string) {
   const { data, error } = await supa
     .from('sessions')
-    .select('id, created_at')
+    .select('id, created_at, patient_id')
     .eq('public_token', token)
     .single();
   if (error || !data) return null;
-  return data as { id: string; created_at: string };
+  return data as { id: string; created_at: string; patient_id: string | null };
 }
 
 export async function fetchAnswers(sessionId: string) {
@@ -35,11 +35,22 @@ export async function fetchAnswers(sessionId: string) {
   return answers;
 }
 
+async function fetchPatientPublicId(patientId: string): Promise<string | null> {
+  const { data } = await supa
+    .from('patients')
+    .select('public_id')
+    .eq('id', patientId)
+    .maybeSingle();
+
+  return data?.public_id ?? null;
+}
+
 /** Build/Upload report for a token; returns signed download URL */
 export async function buildAndUploadReport(token: string) {
   const session = await fetchSessionByToken(token);
   if (!session) throw new Error('session_not_found');
 
+  const patientPublicId = session.patient_id ? await fetchPatientPublicId(session.patient_id) : null;
   const answers = await fetchAnswers(session.id);
 
   const pages: Array<{ title: string; lines: string[]; scoring?: string }> = [];
@@ -78,6 +89,7 @@ export async function buildAndUploadReport(token: string) {
   // Render & upload (private bucket)
   const bytes = await renderSummaryPdf({
     token,
+    patientId: patientPublicId,
     generatedAt: new Date(session.created_at),
     pages
   });

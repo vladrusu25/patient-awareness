@@ -9,10 +9,11 @@ type PdfPageSpec = {
 
 export async function renderSummaryPdf(opts: {
   token: string;
+  patientId?: string | null;
   generatedAt: Date;
   pages: PdfPageSpec[];  // one element per part you want to render
 }): Promise<Uint8Array> {
-  const { token, generatedAt, pages } = opts;
+  const { token, patientId, generatedAt, pages } = opts;
   const doc = await PDFDocument.create();
 
   // Fonts & colors
@@ -39,6 +40,7 @@ export async function renderSummaryPdf(opts: {
 
   const dt = formatDateTime(generatedAt);
   const total = pages.length;
+  const patientLabel = patientId && patientId.trim() ? patientId.trim() : 'Not provided';
 
   pages.forEach((spec, idx) => {
     const page = doc.addPage([pageW, pageH]);
@@ -54,7 +56,11 @@ export async function renderSummaryPdf(opts: {
       y -= 26;
     }
 
-    page.drawText(`Session: ${token}`, {
+    page.drawText(`Assessment ID: ${token}`, {
+      x, y, size: metaSize, font: fontRegular, color: subGray
+    });
+    y -= 14;
+    page.drawText(`Patient ID: ${patientLabel}`, {
       x, y, size: metaSize, font: fontRegular, color: subGray
     });
     y -= 14;
@@ -72,7 +78,7 @@ export async function renderSummaryPdf(opts: {
     // numbered answers (single-line fit with ellipsis)
     const fit = (text: string, maxW: number) => {
       if (fontRegular.widthOfTextAtSize(text, lineSize) <= maxW) return text;
-      const ellipsis = '…';
+      const ellipsis = '...';
       const ellW = fontRegular.widthOfTextAtSize(ellipsis, lineSize);
       let lo = 0, hi = text.length;
       while (lo < hi) {
@@ -128,3 +134,4 @@ function pad2(n: number) { return n < 10 ? `0${n}` : `${n}`; }
 function formatDateTime(d: Date) {
   return `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}, ${pad2(d.getHours())}:${pad2(d.getMinutes())}`;
 }
+

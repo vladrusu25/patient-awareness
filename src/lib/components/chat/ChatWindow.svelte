@@ -46,6 +46,7 @@
   let pdfStatus: PdfStatus = 'idle';
   let pdfError = '';
   let pdfRequested = false;
+  let pdfReminderShown = false;
 
   let showRestartConfirm = false;
   let restartSubmitting = false;
@@ -53,6 +54,18 @@
 
   let chatBodyEl: HTMLDivElement | null = null;
   let bottomEl: HTMLDivElement | null = null;
+
+  const pdfReminderText = () =>
+    `Please download and keep this PDF. Your Assessment ID is ${token}. Save it somewhere safe (note it down or take a screenshot) so you can use it on the PDF Search page if you misplace the download.`;
+
+  function appendPdfReminder() {
+    if (!pdfReminderShown || pdfStatus !== 'ready') return;
+
+    const reminder = pdfReminderText();
+    if (!history.some((m) => m.side === 'left' && m.text === reminder)) {
+      history = [...history, { side: 'left', text: reminder }];
+    }
+  }
 
   const scrollToLatestPrompt = () => {
     if (chatBodyEl) {
@@ -87,15 +100,18 @@
     inputError = '';
   }
 
-  function syncTranscript() {
+  function syncTranscript(options?: { allowCompletion?: boolean }) {
+    const allowCompletion = options?.allowCompletion ?? true;
+
     const snap = rebuildTranscript(steps, answers);
     history = snap.history;
+    appendPdfReminder();
     currentQ = snap.currentQ;
     progress = snap.progress;
 
     const hasQuestionSteps = steps.some((s) => s.type !== 'text');
 
-    if (snap.finished && hasQuestionSteps && !pdfRequested) {
+    if (allowCompletion && snap.finished && hasQuestionSteps && !pdfRequested) {
       pdfRequested = true;
       history.push({
         side: 'left',
@@ -115,6 +131,8 @@
       pdfUrl = res.downloadUrl;
       pdfStatus = 'ready';
       history.push({ side: 'left', text: 'Your PDF report is ready. Use the button below to download it.' });
+      pdfReminderShown = true;
+      history = [...history, { side: 'left', text: pdfReminderText() }];
       await tick(); scrollToLatestPrompt();
       return;
     }
