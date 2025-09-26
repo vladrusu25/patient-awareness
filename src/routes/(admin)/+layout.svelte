@@ -2,8 +2,8 @@
   export let data: { user: { id: string; username: string; role: 'admin' | 'doctor' } };
 </script>
 
-<!-- Lock to viewport; no body scroll -->
-<div class="h-screen overflow-hidden bg-neutral-25">
+<!-- Admin shell with sticky header; allow page scrolling -->
+<div class="min-h-screen bg-neutral-25">
   <!-- 56px header -->
   <header class="sticky top-0 z-30 w-full bg-primary text-white shadow-sm h-14">
     <div class="mx-auto max-w-screen-2xl h-full flex items-center justify-between px-5">
@@ -26,8 +26,10 @@
     </div>
   </header>
 
-  <!-- Slot gets exact remaining height; parent keeps overflow hidden -->
-  <main class="mx-auto w-full max-w-screen-2xl px-6 py-5 h-[calc(100vh-56px)] overflow-hidden">
+  <!-- Provide roomy content area below the sticky header -->
+  <main class="mx-auto w-full max-w-screen-2xl px-6 py-5 min-h-[calc(100vh-56px)] pb-4">
     <slot />
   </main>
 </div>
+
+
