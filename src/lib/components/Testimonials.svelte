@@ -81,7 +81,7 @@
           <blockquote
             class="mt-4 text-[17px] leading-7 text-neutral-600"
           >
-            “{t.text}”
+            &ldquo;{t.text}&rdquo;
           </blockquote>
         </figure>
       {/each}

@@ -4,7 +4,7 @@
   export let items: Item[] = [
     {
       title: 'Quick & Easy',
-      copy: 'Complete your assessment in just 5–10 minutes',
+      copy: 'Complete your assessment in just 5-10 minutes',
       icon: 'clock'
     },
     {
@@ -27,9 +27,9 @@
   };
 
   const ALT: Record<Item['icon'], string> = {
-    clock: 'Clock icon – Quick & Easy',
-    shield: 'Shield icon – Private & Secure',
-    steth: 'Medical icon – Expert Insights'
+    clock: 'Clock icon - Quick & Easy',
+    shield: 'Shield icon - Private & Secure',
+    steth: 'Medical icon - Expert Insights'
   };
 </script>
 

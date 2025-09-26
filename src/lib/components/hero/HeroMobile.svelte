@@ -41,7 +41,7 @@
         Quick, private AI-powered insights.
       </p>
       <p class="mt-1 text-white/80 text-[clamp(12px,3.4vw,14px)]">
-        ~5 minutes • No sign-up • Free of charge
+        ~5 minutes &middot; No sign-up &middot; Free of charge
       </p>
 
       <form method="POST" action="/assessment?/start" class="mt-5">

@@ -18,7 +18,7 @@
     const t = token.trim().toUpperCase();
 
     if (!/^[A-Z0-9]{16}$/.test(t)) {
-      errorMsg = 'Token must be 16 characters (A–Z, 0–9).';
+      errorMsg = 'Token must be 16 characters (A-Z, 0-9).';
       return;
     }
 
@@ -32,16 +32,16 @@
 
       if (!res.ok) {
         if (data?.code === 'invalid_format') {
-          errorMsg = 'Token must be 16 characters (A–Z, 0–9).';
+          errorMsg = 'Token must be 16 characters (A-Z, 0-9).';
         } else if (data?.code === 'not_found') {
-          errorMsg = 'Invalid token — this token doesn’t exist.';
+          errorMsg = 'Invalid token - this token does not exist.';
         } else if (data?.code === 'rate_limited') {
           const s = typeof data?.retryAfter === 'number' ? data.retryAfter : 60;
           errorMsg = `Too many attempts. Try again in ${s} seconds.`;
         } else if (data?.code === 'no_pdf') {
           errorMsg = 'Report not available yet. Please try again later.';
         } else {
-          errorMsg = 'An error occurred — please try again.';
+          errorMsg = 'An error occurred - please try again.';
         }
         return;
       }
@@ -49,28 +49,28 @@
       if (data?.ok && data?.viewUrl && data?.downloadUrl) {
         viewUrl = data.viewUrl;           // same-origin inline preview
         downloadUrl = data.downloadUrl;   // signed URL (attachment)
-        foundMsg = 'Found PDF — ready to download.';
+        foundMsg = 'Found PDF - ready to download.';
       } else {
-        errorMsg = 'An error occurred — please try again.';
+        errorMsg = 'An error occurred - please try again.';
       }
     } catch (err) {
       console.error(err);
-      errorMsg = 'An error occurred — please try again.';
+      errorMsg = 'An error occurred - please try again.';
     } finally {
       loading = false;
     }
   }
 </script>
 
-<section class="mx-auto max-w-[1024px] py-10 px-6">
+<section class="mx-auto max-w-[1024px] py-10 px-4 sm:px-6">
   <h1 class="text-2xl font-heading font-semibold text-neutral-800">Find your PDF report</h1>
   <p class="mt-2 text-neutral-600">
-    Enter your 16-character token (e.g. <code class="px-1 rounded bg-neutral-50">AB2C…</code>) to retrieve your report.
+    Enter your 16-character token (e.g. <code class="px-1 rounded bg-neutral-50">AB2C...</code>) to retrieve your report.
   </p>
 
-  <form class="mt-6 flex gap-3" on:submit|preventDefault={onSearch}>
+  <form class="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center" on:submit|preventDefault={onSearch}>
     <input
-      class="flex-1 rounded-lg border border-neutral-300 px-4 py-3 outline-none focus:ring-2 focus:ring-mint-400"
+      class="w-full rounded-lg border border-neutral-300 px-4 py-3 outline-none focus:ring-2 focus:ring-mint-400"
       placeholder="Enter your token (16 characters)"
       bind:value={token}
       maxlength="16"
@@ -79,11 +79,11 @@
       spellcheck="false"
     />
     <button
-      class="h-[46px] px-6 rounded-lg bg-primary text-white font-heading hover:bg-primary-700 disabled:opacity-50"
+      class="h-[46px] w-full sm:w-auto px-6 rounded-lg bg-primary text-white font-heading hover:bg-primary-700 disabled:opacity-50"
       type="submit"
       disabled={loading}
     >
-      {loading ? 'Searching…' : 'Search'}
+      {loading ? 'Searching...' : 'Search'}
     </button>
   </form>
 
@@ -113,7 +113,7 @@
 
       <!-- Inline preview via same-origin streaming route (always inline) -->
       <div class="rounded-lg border border-neutral-200 overflow-hidden">
-        <iframe src={viewUrl} class="w-full h-[600px]" title="PDF preview"></iframe>
+        <iframe src={viewUrl} class="w-full h-[360px] sm:h-[480px] md:h-[600px]" title="PDF preview"></iframe>
       </div>
     </div>
   {/if}

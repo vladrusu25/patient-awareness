@@ -4,7 +4,7 @@
   export let tagline =
     'Empowering individuals with personalized health insights through AI-powered assessments.';
   export let email = 'support@healthcare.com';
-  export let phone = '+1 (555) 123–4567';
+  export let phone = '+1 (555) 123-4567';
   export let address = '123 Health St, Medical City';
 
   const year = new Date().getFullYear();
@@ -45,7 +45,7 @@
       </div>
 
       <!-- Navigation -->
-      <nav aria-label="Footer – Navigation">
+      <nav aria-label="Footer navigation">
         <h3 class="text-white font-heading text-base font-semibold">Navigation</h3>
         <ul class="mt-4 space-y-3">
           {#each nav as item}
@@ -61,7 +61,7 @@
       </nav>
 
       <!-- Support -->
-      <nav aria-label="Footer – Support">
+      <nav aria-label="Footer support">
         <h3 class="text-white font-heading text-base font-semibold">Support</h3>
         <ul class="mt-4 space-y-3">
           {#each support as item}
@@ -77,7 +77,7 @@
       </nav>
 
       <!-- Contact -->
-      <div aria-label="Footer – Contact">
+      <div aria-label="Footer contact">
         <h3 class="text-white font-heading text-base font-semibold">Contact</h3>
         <ul class="mt-4 space-y-4">
           <li class="flex items-start gap-3">
@@ -108,7 +108,7 @@
 
     <!-- Copyright -->
     <p class="text-center text-sm mt-6">
-      © {year} {brand}. All rights reserved.
+      &copy; {year} {brand}. All rights reserved.
     </p>
   </div>
 </footer>

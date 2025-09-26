@@ -11,7 +11,7 @@
 
     <div class="mt-10 text-center">
       <iframe
-        class="w-full h-[400px] md:h-[500px] rounded-xl shadow-lg"
+        class="w-full h-[220px] sm:h-[320px] md:h-[420px] lg:h-[520px] rounded-xl shadow-lg"
         src={videoSrc}
         title="Pelvic Health Video"
         frameborder="0"

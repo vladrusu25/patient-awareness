@@ -276,8 +276,8 @@
   }
 </script>
 
-<section class="mx-auto max-w-[1024px]">
-  <div class="rounded-2xl bg-neutral-25 ring-1 ring-black/5 shadow-lg overflow-hidden flex flex-col h-[560px] md:h-[600px]">
+<section class="mx-auto max-w-[1024px] px-4 sm:px-6">
+  <div class="rounded-2xl bg-neutral-25 ring-1 ring-black/5 shadow-lg overflow-hidden flex flex-col w-full min-h-[480px] h-[min(85vh,640px)] sm:h-[600px]">
     <ChatHeader
       {title}
       question={headerQuestion}
@@ -286,7 +286,7 @@
       on:restart={handleRestart}
     />
 
-    <div bind:this={chatBodyEl} class="flex-1 overflow-y-auto p-4 md:p-6 space-y-6 bg-white">
+    <div bind:this={chatBodyEl} class="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6 bg-white">
       {#each history as m}
         <ChatBubble side={m.side} text={m.text} />
       {/each}
@@ -412,7 +412,3 @@
     </div>
   </div>
 {/if}
-
-
-
-

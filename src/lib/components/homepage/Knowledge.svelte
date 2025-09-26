@@ -5,7 +5,7 @@
 <section class="bg-neutral-25 py-16">
   <div class="mx-auto max-w-[1280px] px-6">
     <!-- Section Heading -->
-    <h2 class="text-center font-heading text-4xl font-bold text-neutral-900 mb-12">
+    <h2 class="text-center font-heading text-3xl sm:text-4xl font-bold text-neutral-900 mb-12">
       Empower Yourself with Knowledge About Pelvic Health
     </h2>
 
