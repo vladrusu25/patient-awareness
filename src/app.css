@@ -1,4 +1,4 @@
-@import "tailwindcss";
+﻿@import "tailwindcss";
 
 @theme{
   --font-heading: "Poppins", ui-sans-serif, system-ui;
@@ -21,7 +21,19 @@
 
 body { font-family: var(--font-body); }
 h1,h2,h3 { font-family: var(--font-heading); }
-
+html[lang="ru"] {
+  --font-heading: "Manrope", "Poppins", ui-sans-serif, system-ui;
+  --font-body: "PT Sans", "Inter", ui-sans-serif, system-ui;
+}
+html[lang="ru"] .font-heading {
+  font-family: var(--font-heading);
+  font-weight: 600;
+}
+html[lang="ru"] .font-heading.font-bold,
+html[lang="ru"] .font-heading.font-extrabold,
+html[lang="ru"] .font-heading.font-black {
+  font-weight: 700;
+}
 /* Header height (adjust if yours is different) */
 :root { --header-h: 64px; }
 

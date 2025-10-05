@@ -1,4 +1,5 @@
-<script lang="ts">
+﻿<script lang="ts">
+  import { t } from '$lib/i18n';
   import StepRenderer from '$lib/StepRenderer.svelte';
 
   // matches what +page.server.ts returns
@@ -13,14 +14,14 @@
 
 {#if data.notFound}
   <main class="mx-auto max-w-xl p-6">
-    <h1 class="text-2xl font-semibold">Invalid link</h1>
-    <p class="mt-2 text-sm text-neutral-600">Please check the code you received.</p>
+    <h1 class="text-2xl font-semibold">{$t('share.invalidTitle')}</h1>
+    <p class="mt-2 text-sm text-neutral-600">{$t('share.invalidDescription')}</p>
   </main>
 {:else}
   <main class="mx-auto max-w-xl p-6 space-y-6">
     <header class="space-y-1">
-      <h1 class="text-2xl font-semibold">Pelvic Health Check</h1>
-      <p class="text-sm text-neutral-600">Informational only — not a medical diagnosis.</p>
+      <h1 class="text-2xl font-semibold">{$t('share.heading')}</h1>
+      <p class="text-sm text-neutral-600">{$t('share.disclaimer')}</p>
     </header>
 
     <section class="rounded-2xl bg-white p-5 shadow">

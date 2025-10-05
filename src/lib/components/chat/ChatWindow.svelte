@@ -1,5 +1,7 @@
 <script lang="ts">
-  import { onMount, tick } from 'svelte';
+  import { onMount, tick, onDestroy } from 'svelte';
+  import { get } from 'svelte/store';
+  import { t, language } from '$lib/i18n';
   import ChatHeader from './ChatHeader.svelte';
   import ChatBubble from './ChatBubble.svelte';
 
@@ -14,10 +16,13 @@
   } from '../assessment/chat/transcript';
 
   import { generateReportAndGetUrls } from '../assessment/report';
+  import { translateSteps } from '$lib/i18n/assessment-texts';
+  import type { Language } from '$lib/i18n/types';
 
-  export let title = 'Health Assessment';
+  export let title: string | null = null;
   export let token: string;
 
+  let rawSteps: Step[] = [];
   let steps: Step[] = [];
   let answers: Record<string, unknown> = {};
   let history: Message[] = [];
@@ -55,8 +60,9 @@
   let chatBodyEl: HTMLDivElement | null = null;
   let bottomEl: HTMLDivElement | null = null;
 
-  const pdfReminderText = () =>
-    `Please download and keep this PDF. Your Assessment ID is ${token}. Save it somewhere safe (note it down or take a screenshot) so you can use it on the PDF Search page if you misplace the download.`;
+  let headerTitle = '';
+
+  const pdfReminderText = () => $t('chat.pdfReminder', { token });
 
   function appendPdfReminder() {
     if (!pdfReminderShown || pdfStatus !== 'ready') return;
@@ -89,10 +95,24 @@
 
   const REFETCH_KEYS = new Set(['p0_patient_status', 'p0_patient_id_entry', 'c1_continue_part2', 'c2_continue_part3']);
 
+function applyTranslation(lang?: Language) {
+  steps = translateSteps(rawSteps, lang ?? get(language));
+}
+
+const unsubscribeLanguage = language.subscribe((lang) => {
+  applyTranslation(lang);
+  if (rawSteps.length) syncTranscript({ allowCompletion: false });
+});
+
+onDestroy(() => {
+  unsubscribeLanguage();
+});
+
   $: headerTotal = progress.active.total;
   $: headerQuestion = headerTotal
     ? Math.min(progress.active.answered + (progress.active.includesCurrent ? 1 : 0), headerTotal)
     : 0;
+  $: headerTitle = title ?? $t('assessment.title');
 
   $: if (currentQ?.type === 'input') {
     const stored = answers[currentQ.key];
@@ -104,33 +124,36 @@
     const allowCompletion = options?.allowCompletion ?? true;
 
     const snap = rebuildTranscript(steps, answers);
-    history = snap.history;
+    const hasQuestionSteps = steps.some((s) => s.type !== 'text');
+    const shouldAppendCompletion = snap.finished && hasQuestionSteps;
+
+    const completionText = $t('chat.completion');
+    let nextHistory = snap.history;
+    if (shouldAppendCompletion && !nextHistory.some((m) => m.side === 'left' && m.text === completionText)) {
+      nextHistory = [...nextHistory, { side: 'left', text: completionText }];
+    }
+
+    history = nextHistory;
     appendPdfReminder();
     currentQ = snap.currentQ;
     progress = snap.progress;
 
-    const hasQuestionSteps = steps.some((s) => s.type !== 'text');
-
-    if (allowCompletion && snap.finished && hasQuestionSteps && !pdfRequested) {
+    if (shouldAppendCompletion && allowCompletion && !pdfRequested) {
       pdfRequested = true;
-      history.push({
-        side: 'left',
-        text: "Thanks! You've completed the questions for now. Your assessment is complete."
-      });
       startReportFlow();
     }
   }
 
   async function startReportFlow() {
     pdfStatus = 'generating'; pdfError = ''; pdfUrl = null;
-    history.push({ side: 'left', text: 'Preparing your PDF report... this usually takes a few seconds.' });
+    history.push({ side: 'left', text: $t('chat.preparingReport') });
     await tick(); scrollToLatestPrompt();
 
     const res = await generateReportAndGetUrls(token);
     if (res.ok) {
       pdfUrl = res.downloadUrl;
       pdfStatus = 'ready';
-      history.push({ side: 'left', text: 'Your PDF report is ready. Use the button below to download it.' });
+      history.push({ side: 'left', text: $t('chat.reportReady') });
       pdfReminderShown = true;
       history = [...history, { side: 'left', text: pdfReminderText() }];
       await tick(); scrollToLatestPrompt();
@@ -138,8 +161,10 @@
     }
 
     pdfStatus = 'error';
-    pdfError = res.status === 0 ? 'Network error while generating the report.' : `Could not generate report (${res.status}).`;
-    history.push({ side: 'left', text: 'We had trouble generating your PDF. You can try again below.' });
+    pdfError = res.status === 0
+      ? $t('chat.networkError')
+      : $t('chat.statusError', { status: String(res.status) });
+    history.push({ side: 'left', text: $t('chat.reportError') });
     await tick(); scrollToLatestPrompt();
   }
 
@@ -150,7 +175,8 @@
       });
       if (res.ok) {
         const data = await res.json();
-        steps = (data?.steps ?? steps) as Step[];
+        rawSteps = (data?.steps ?? rawSteps) as Step[];
+        applyTranslation();
         answers = (data?.answers ?? answers) as Record<string, unknown>;
         return true;
       }
@@ -183,7 +209,7 @@
       });
       payload = await res.json().catch(() => ({}));
       if (!res.ok || payload?.ok !== true) {
-        throw new Error(payload?.message ?? payload?.error ?? 'Answer failed');
+        throw new Error(payload?.message ?? payload?.error ?? $t('chat.answerFailed'));
       }
     } catch (
       err
@@ -192,7 +218,7 @@
         history = history.slice(0, previewIndex);
       }
       if (step.type === 'input') {
-        inputError = payload?.message ?? payload?.error ?? 'We could not find that ID. Double-check and try again.';
+        inputError = payload?.message ?? payload?.error ?? $t('chat.idNotFound');
       }
       return;
     }
@@ -220,7 +246,7 @@
 
     const trimmed = inputValue.trim().toUpperCase().replace(/\s+/g, '');
     if (!trimmed) {
-      inputError = 'Please enter your Patient ID to continue.';
+      inputError = $t('chat.patientIdPrompt');
       return;
     }
 
@@ -232,8 +258,9 @@
   onMount(async () => {
     const res = await fetch(`/api/session/${encodeURIComponent(token)}/steps`);
     const data = await res.json();
-    steps = (data?.steps ?? []) as Step[];
     answers = (data?.answers ?? {}) as Record<string, unknown>;
+    rawSteps = (data?.steps ?? []) as Step[];
+    applyTranslation();
     syncTranscript();
     await tick(); scrollToLatestPrompt();
   });
@@ -261,7 +288,7 @@
       });
 
       if (!res.ok) {
-        throw new Error('Failed to start a new session.');
+        throw new Error($t('chat.sessionStartFailed'));
       }
 
       const body = (await res.json().catch(() => ({}))) as Partial<{ token: string }>;
@@ -270,7 +297,7 @@
       location.replace(dest);
     } catch (err) {
       console.error(err);
-      restartError = err instanceof Error ? err.message : 'Failed to start a new session.';
+      restartError = $t('chat.sessionStartFailed');
       restartSubmitting = false;
     }
   }
@@ -279,7 +306,7 @@
 <section class="mx-auto max-w-[1024px] px-4 sm:px-6">
   <div class="rounded-2xl bg-neutral-25 ring-1 ring-black/5 shadow-lg overflow-hidden flex flex-col w-full min-h-[480px] h-[min(85vh,640px)] sm:h-[600px]">
     <ChatHeader
-      {title}
+      title={headerTitle}
       question={headerQuestion}
       total={headerTotal}
       showRestart={true}
@@ -295,7 +322,7 @@
         <div class="text-sm text-neutral-600">
           <div class="inline-flex items-center gap-2 rounded-lg border border-neutral-200 px-3 py-2 bg-neutral-25">
             <span class="animate-pulse h-2 w-2 rounded-full bg-primary"></span>
-            Preparing your PDF...
+            {$t('chat.preparingShort')}
           </div>
         </div>
       {/if}
@@ -308,7 +335,7 @@
             rel="noopener"
             class="inline-flex items-center gap-2 px-6 py-3 text-white bg-primary rounded-lg hover:bg-primary-700"
           >
-            Download your PDF
+            {$t('actions.downloadPdf')}
             <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
               <polyline points="7 10 12 15 17 10" />
@@ -325,7 +352,7 @@
             class="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-neutral-300 hover:bg-neutral-50"
             on:click={startReportFlow}
           >
-            Try again
+            {$t('actions.tryAgain')}
           </button>
         </div>
       {/if}
@@ -337,7 +364,7 @@
               class="w-full rounded-lg border border-neutral-300 px-4 py-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-mint-400"
               type="text"
               bind:value={inputValue}
-              placeholder={currentQ.placeholder ?? 'Enter value'}
+              placeholder={currentQ.placeholder ?? $t('assessment.inputPlaceholder')}
               autocomplete="off"
               autocapitalize="characters"
               spellcheck={false}
@@ -351,7 +378,7 @@
               type="submit"
               disabled={inputSubmitting}
             >
-              {inputSubmitting ? 'Checking...' : 'Submit'}
+              {inputSubmitting ? $t('actions.checking') : $t('actions.submit')}
             </button>
           </form>
         {:else}
@@ -384,9 +411,9 @@
       class="w-full max-w-sm rounded-2xl bg-white p-6 shadow-xl space-y-4"
       on:click|stopPropagation
     >
-      <h2 class="text-lg font-semibold text-neutral-900">Start a new session?</h2>
+      <h2 class="text-lg font-semibold text-neutral-900">{$t('actions.confirmRestart')}</h2>
       <p class="text-sm text-neutral-600">
-        Starting over will discard your current answers. You can keep this session if you want to return later.
+        {$t('assessment.restart.warning')}
       </p>
       {#if restartError}
         <p class="text-sm text-red-600">{restartError}</p>
@@ -398,7 +425,7 @@
           on:click={cancelRestart}
           disabled={restartSubmitting}
         >
-          Keep session
+          {$t('actions.keepSession')}
         </button>
         <button
           type="button"
@@ -406,7 +433,7 @@
           on:click={confirmRestart}
           disabled={restartSubmitting}
         >
-          {restartSubmitting ? 'Starting...' : 'Forfeit & start over'}
+          {restartSubmitting ? $t('actions.starting') : $t('actions.forfeit')}
         </button>
       </div>
     </div>

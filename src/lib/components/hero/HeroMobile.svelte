@@ -1,4 +1,6 @@
-<script lang="ts">
+﻿<script lang="ts">
+  import { t } from '$lib/i18n';
+
   // Keep these tunable from where you render the component
   export let heightVh: number = 40;   // hero height (vh)
   export let padTop: number = 28;      // EXTRA padding above title (px)
@@ -28,20 +30,20 @@
                stroke="currentColor" stroke-width="2" class="opacity-90">
             <path d="M12 21s-6-4.35-8.485-6.835A6 6 0 1 1 12 5a6 6 0 1 1 8.485 9.165C18 16.65 12 21 12 21Z"/>
           </svg>
-          Private by design
+          {$t('hero.badge')}
         </div>
       {/if}
 
       <h1 class="text-white font-heading font-bold leading-tight
                  text-[clamp(28px,8vw,40px)]">
-        Your Health Matters
+        {$t('hero.title')}
       </h1>
 
       <p class="mt-2 text-white/90 text-[clamp(14px,3.8vw,16px)] leading-snug">
-        Quick, private AI-powered insights.
+        {$t('hero.subtitle')}
       </p>
       <p class="mt-1 text-white/80 text-[clamp(12px,3.4vw,14px)]">
-        ~5 minutes &middot; No sign-up &middot; Free of charge
+        {$t('hero.meta')}
       </p>
 
       <form method="POST" action="/assessment?/start" class="mt-5">
@@ -50,7 +52,7 @@
           class="h-11 px-5 rounded-lg bg-white/95 text-primary font-heading font-semibold
                  shadow-sm hover:bg-white focus:outline-none focus:ring-2 focus:ring-mint-400"
         >
-          Start Assessment
+          {$t('actions.startAssessment')}
         </button>
       </form>
     </div>

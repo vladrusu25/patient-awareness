@@ -1,26 +1,26 @@
-<script lang="ts">
-  // You can tweak these in-place or pass via props later if you want
+﻿<script lang="ts">
+  import { t } from '$lib/i18n';
+
   export let brand = 'HealthCare';
-  export let tagline =
-    'Empowering individuals with personalized health insights through AI-powered assessments.';
+  export let tagline: string | null = null;
   export let email = 'support@healthcare.com';
   export let phone = '+1 (555) 123-4567';
   export let address = '123 Health St, Medical City';
 
   const year = new Date().getFullYear();
 
-  const nav = [
-    { label: 'Home', href: '/' },
-    { label: 'About', href: '/about' },
-    { label: 'Assessment', href: '/assessment' },
-    { label: 'Contact', href: '/contact' }
+  const navItems = [
+    { labelKey: 'footer.navItems.home', href: '/' },
+    { labelKey: 'footer.navItems.about', href: '/about' },
+    { labelKey: 'footer.navItems.assessment', href: '/assessment' },
+    { labelKey: 'footer.navItems.contact', href: '/contact' }
   ];
 
-  const support = [
-    { label: 'Help Center', href: '/help' },
-    { label: 'Privacy Policy', href: '/privacy' },
-    { label: 'Terms of Service', href: '/terms' },
-    { label: 'FAQ', href: '/faq' }
+  const supportItems = [
+    { labelKey: 'footer.supportItems.helpCenter', href: '/help' },
+    { labelKey: 'footer.supportItems.privacyPolicy', href: '/privacy' },
+    { labelKey: 'footer.supportItems.terms', href: '/terms' },
+    { labelKey: 'footer.supportItems.faq', href: '/faq' }
   ];
 </script>
 
@@ -40,45 +40,43 @@
         </div>
 
         <p class="mt-4 max-w-sm leading-tight">
-          {tagline}
+          {tagline ?? $t('footer.tagline')}
         </p>
       </div>
 
       <!-- Navigation -->
-      <nav aria-label="Footer navigation">
-        <h3 class="text-white font-heading text-base font-semibold">Navigation</h3>
+      <nav aria-label={$t('footer.navigationHeading')}>
+        <h3 class="text-white font-heading text-base font-semibold">{$t('footer.navigationHeading')}</h3>
         <ul class="mt-4 space-y-3">
-          {#each nav as item}
+          {#each navItems as item}
             <li>
               <a
                 href={item.href}
                 class="transition-colors hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white/30 rounded"
-                >{item.label}</a
-              >
+              >{$t(item.labelKey)}</a>
             </li>
           {/each}
         </ul>
       </nav>
 
       <!-- Support -->
-      <nav aria-label="Footer support">
-        <h3 class="text-white font-heading text-base font-semibold">Support</h3>
+      <nav aria-label={$t('footer.supportHeading')}>
+        <h3 class="text-white font-heading text-base font-semibold">{$t('footer.supportHeading')}</h3>
         <ul class="mt-4 space-y-3">
-          {#each support as item}
+          {#each supportItems as item}
             <li>
               <a
                 href={item.href}
                 class="transition-colors hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white/30 rounded"
-                >{item.label}</a
-              >
+              >{$t(item.labelKey)}</a>
             </li>
           {/each}
         </ul>
       </nav>
 
       <!-- Contact -->
-      <div aria-label="Footer contact">
-        <h3 class="text-white font-heading text-base font-semibold">Contact</h3>
+      <div aria-label={$t('footer.contactHeading')}>
+        <h3 class="text-white font-heading text-base font-semibold">{$t('footer.contactHeading')}</h3>
         <ul class="mt-4 space-y-4">
           <li class="flex items-start gap-3">
             <svg class="h-5 w-5 text-slate-300 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -108,7 +106,7 @@
 
     <!-- Copyright -->
     <p class="text-center text-sm mt-6">
-      &copy; {year} {brand}. All rights reserved.
+      &copy; {year} {brand}. {$t('footer.rights')}
     </p>
   </div>
 </footer>

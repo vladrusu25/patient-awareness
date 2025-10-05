@@ -1,7 +1,13 @@
-<script lang="ts">
-  // Load Tailwind/global styles ONCE for the whole app
+﻿<script lang="ts">
   import '../app.css';
-  export let data;
+  import { language } from '$lib/i18n';
+
+  export let data: { language?: 'en' | 'ru' };
+
+  $: desired = data?.language ?? 'en';
+  $: if ($language !== desired) {
+    language.set(desired);
+  }
 </script>
 
 <slot />

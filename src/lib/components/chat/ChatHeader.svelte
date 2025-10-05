@@ -1,8 +1,9 @@
-<script lang="ts">
+﻿<script lang="ts">
+  import { t } from '$lib/i18n';
   import { createEventDispatcher } from 'svelte';
 
   // Props
-  export let title = 'Health Assessment';
+  export let title: string | null = null;
   export let question = 1;
   export let total = 10;
   export let showRestart = false;
@@ -15,6 +16,23 @@
   // Derived progress (0–100)
   $: pct = Math.max(0, Math.min(100, Math.round((question / Math.max(1, total)) * 100)));
 
+  let progressLabel = '';
+  let displayTitle = '';
+  let downloadAria = '';
+  let downloadTitle = '';
+  let restartAria = '';
+  let restartTitle = '';
+
+  $: progressLabel = $t('assessment.header.questionProgress', {
+    current: String(question),
+    total: String(total)
+  });
+  $: displayTitle = title ?? $t('assessment.title');
+  $: downloadAria = $t('assessment.header.downloadAria');
+  $: downloadTitle = $t('assessment.header.downloadTitle');
+  $: restartAria = $t('assessment.header.restartAria');
+  $: restartTitle = $t('actions.restart');
+
   function onRestart() {
     dispatch('restart');
   }
@@ -22,13 +40,13 @@
 
 <header
   class="bg-primary text-white px-4 py-3 md:px-6 md:py-0 md:h-16 flex flex-col gap-2 md:flex-row md:items-center md:justify-between"
-  aria-label="Assessment header"
+  aria-label={$t('assessment.header.aria')}
 >
-  <h3 class="font-semibold text-base md:text-lg">{title}</h3>
+  <h3 class="font-semibold text-base md:text-lg">{displayTitle}</h3>
 
   <div class="flex w-full flex-col gap-2 md:w-auto md:flex-row md:items-center md:justify-end md:gap-3">
     <div class="flex w-full items-center gap-2 text-xs text-white/90 md:w-auto md:text-sm">
-      <span class="whitespace-nowrap">Question {question} of {total}</span>
+      <span class="whitespace-nowrap">{progressLabel}</span>
       <div class="flex-1 h-2 rounded-full bg-white/30 overflow-hidden min-w-[120px] md:flex-none md:w-[180px]">
         <div class="h-full bg-white rounded-full" style={`width:${pct}%`}></div>
       </div>
@@ -39,8 +57,8 @@
         <a
           href={downloadUrl}
           class="inline-flex h-8 w-8 items-center justify-center rounded-md bg-white/10 hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
-          aria-label="Download assessment PDF"
-          title="Download PDF"
+          aria-label={downloadAria}
+          title={downloadTitle}
           rel="noopener"
         >
           <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -55,8 +73,8 @@
         <button
           type="button"
           class="inline-flex h-8 w-8 items-center justify-center rounded-md bg-white/10 hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
-          aria-label="Restart assessment"
-          title="Restart"
+          aria-label={restartAria}
+          title={restartTitle}
           on:click={onRestart}
         >
           <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">

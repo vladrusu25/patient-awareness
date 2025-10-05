@@ -1,4 +1,5 @@
-<script lang="ts">
+﻿<script lang="ts">
+  import { t } from '$lib/i18n';
   import HeroWaves from '$lib/components/hero/HeroWaves.svelte';
 </script>
 
@@ -21,11 +22,11 @@
   <div class="relative z-10 max-w-[1200px] mx-auto h-full px-6 grid grid-cols-12">
     <div class="col-span-7 flex flex-col justify-center">
       <h1 class="text-white font-heading font-extrabold leading-tight text-[56px] md:text-[72px]">
-        Your Health Matters
+        {$t('hero.title')}
       </h1>
 
       <p class="mt-5 text-white/90 text-xl max-w-[760px]">
-        Get personalized health insights through our AI-powered assessment. Quick, private, and designed by medical experts.
+        {$t('hero.copy')}
       </p>
 
       <form method="POST" action="/assessment?/start" class="mt-8">
@@ -33,7 +34,7 @@
           type="submit"
           class="h-12 md:h-14 px-6 md:px-8 rounded-xl bg-white text-primary text-base md:text-lg font-semibold shadow-lg hover:opacity-95"
         >
-          Start Assessment
+          {$t('actions.startAssessment')}
         </button>
       </form>
     </div>

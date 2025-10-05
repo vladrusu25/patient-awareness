@@ -1,4 +1,4 @@
-// src/routes/(website)/admin/login/+page.server.ts
+﻿// src/routes/(website)/admin/login/+page.server.ts
 import type { Actions, PageServerLoad } from './$types.js';
 import { fail, redirect } from '@sveltejs/kit';
 import { z } from 'zod';
@@ -30,20 +30,20 @@ export const actions: Actions = {
       max: 10,
       windowMs: 10 * 60_000
     });
-    if (!rl.ok) return fail(429, { error: 'Too many attempts. Try again later.' });
+    if (!rl.ok) return fail(429, { errorCode: 'auth.errors.rateLimit' });
 
     const formData = await request.formData();
     const parsed = Schema.safeParse(Object.fromEntries(formData));
-    if (!parsed.success) return fail(400, { error: 'Invalid input.' });
+    if (!parsed.success) return fail(400, { errorCode: 'auth.errors.invalidInput' });
 
     const username = parsed.data.username.trim().toLowerCase();
     const password = parsed.data.password;
 
     const user = await findUserByUsername(ROLE, username);
-    if (!user) return fail(400, { error: 'Invalid credentials.' });
+    if (!user) return fail(400, { errorCode: 'auth.errors.invalidCredentials' });
 
     const ok = await verifyPassword(user.password_hash, password);
-    if (!ok) return fail(400, { error: 'Invalid credentials.' });
+    if (!ok) return fail(400, { errorCode: 'auth.errors.invalidCredentials' });
 
     const sess = await createSession(user.id, ROLE);
 
@@ -58,3 +58,4 @@ export const actions: Actions = {
     throw redirect(302, url.searchParams.get('next') ?? '/admin');
   }
 };
+

@@ -1,4 +1,7 @@
 <script lang="ts">
+  import { t, language } from '$lib/i18n';
+  import { translateSteps } from '$lib/i18n/assessment-texts';
+
   // Local type
   type Step =
     | { key: string; type: 'message'; text: string }
@@ -10,14 +13,25 @@
   export let steps: { steps: Step[] };
   export let previous: { step_key: string; value_json: any }[] = [];
 
-  // Resume from first unanswered
   const answered = new Map(previous.map((a) => [a.step_key, a.value_json]));
-  let index = steps.steps.findIndex((s) => !answered.has(s.key));
-  if (index < 0) index = 0;
+  let localizedSteps: Step[] = [];
+  $: localizedSteps = translateSteps(steps?.steps ?? [], $language);
 
-  // Current step (reactive)
+  let index = 0;
+  let initializedIndex = false;
+  $: if (localizedSteps.length && !initializedIndex) {
+    const first = localizedSteps.findIndex((s) => !answered.has(s.key));
+    index = first >= 0 ? first : 0;
+    initializedIndex = true;
+  }
+  $: if (localizedSteps.length === 0) {
+    index = 0;
+  } else if (index >= localizedSteps.length) {
+    index = localizedSteps.length - 1;
+  }
+
   let current: Step | undefined;
-  $: current = steps.steps[index];
+  $: current = localizedSteps[index];
 
   // Buffer for the current answer
   let localValue: any = null;
@@ -29,7 +43,7 @@
       body: JSON.stringify({ step_key: step.key, value })
     });
     answered.set(step.key, value);
-    index = Math.min(index + 1, steps.steps.length - 1);
+    index = Math.min(index + 1, localizedSteps.length - 1);
     localValue = null;
   }
 
@@ -41,16 +55,16 @@
 </script>
 
 {#if !current}
-  <p>No steps configured.</p>
+  <p>{$t('assessment.noSteps')}</p>
 
 {:else if current.type === 'message'}
   <div class="space-y-4">
     <p>{current.text}</p>
     <button
       class="rounded-lg bg-neutral-900 text-white px-4 py-2"
-      on:click={() => (index = Math.min(index + 1, steps.steps.length - 1))}
+      on:click={() => (index = Math.min(index + 1, localizedSteps.length - 1))}
     >
-      Continue
+      {$t('actions.continue')}
     </button>
   </div>
 
@@ -72,7 +86,7 @@
       on:click={() => save(current, Number(localValue))}
       disabled={localValue === null || localValue === ''}
     >
-      Next
+      {$t('actions.next')}
     </button>
   </div>
 
@@ -94,7 +108,7 @@
       class="rounded-lg bg-neutral-900 text-white px-4 py-2"
       on:click={() => save(current, Array.isArray(localValue) ? localValue : [])}
     >
-      Next
+      {$t('actions.next')}
     </button>
   </div>
 
@@ -118,7 +132,7 @@
       on:click={() => save(current, localValue)}
       disabled={!localValue}
     >
-      Next
+      {$t('actions.next')}
     </button>
   </div>
 {/if}

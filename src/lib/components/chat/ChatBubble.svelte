@@ -1,4 +1,6 @@
-<script lang="ts">
+﻿<script lang="ts">
+  import { t } from '$lib/i18n';
+
   type Side = 'left' | 'right';
 
   export let side: Side = 'left';
@@ -14,7 +16,7 @@
   >
     <img
       src="/images/assessment_page/doctor_avatar.png"
-      alt="Doctor avatar"
+      alt={$t('chat.doctorAlt')}
       class="h-full w-full object-cover"
       width="40"
       height="40"
@@ -42,7 +44,7 @@
   {#if side === 'right'}
   <img
     src="/images/assessment_page/user_icon.png"  
-    alt="You"
+    alt={$t('chat.userAlt')}
     class="h-10 w-10 shrink-0 rounded-full ring-1 ring-black/5 object-cover"
   />
 {/if}

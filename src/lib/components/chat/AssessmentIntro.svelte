@@ -1,5 +1,5 @@
-<script lang="ts">
-  // No data needed yet — pre-session landing
+﻿<script lang="ts">
+  import { t } from '$lib/i18n';
 </script>
 
 <div class="bg-neutral-25 min-h-[80vh] py-10 px-4">
@@ -15,8 +15,8 @@
           </svg>
         </div>
         <div class="leading-tight">
-          <div class="font-semibold">Health Assessment</div>
-          <div class="text-xs opacity-80">private by design</div>
+          <div class="font-semibold">{$t('assessment.title')}</div>
+          <div class="text-xs opacity-80">{$t('common.privacyTagline')}</div>
         </div>
       </div>
 
@@ -37,16 +37,19 @@
       </div>
 
       <h1 class="font-heading text-2xl md:text-3xl font-semibold text-neutral-900">
-        Health Assessment
+        {$t('assessmentIntro.title')}
       </h1>
 
       <p class="mt-4 text-neutral-600 max-w-[720px] mx-auto">
-        This short assessment captures key information about your symptoms and experiences.
-        It’s designed to be quick, private, and helpful for deciding the next steps.
+        {$t('assessmentIntro.intro1')}
       </p>
 
       <p class="mt-4 text-neutral-600 max-w-[720px] mx-auto">
-        When you finish, you’ll get a result and resources tailored to your situation.
+        {$t('assessmentIntro.intro2')}
+      </p>
+
+      <p class="mt-4 text-neutral-600 max-w-[720px] mx-auto">
+        {$t('assessmentIntro.intro3')}
       </p>
 
       <!-- Start (posts to the "start" action you already built) -->
@@ -57,7 +60,7 @@
                  px-6 py-3 text-base font-medium hover:bg-primary-700
                  focus-visible:ring-2 focus-visible:ring-mint-400 w-full sm:w-auto"
         >
-          Start
+          {$t('actions.start')}
         </button>
       </form>
 
@@ -66,7 +69,7 @@
           <path d="M12 8v5l3 3" />
           <circle cx="12" cy="12" r="9" />
         </svg>
-        <span>Time to complete: ~5 minutes</span>
+        <span>{$t('assessmentIntro.timeEstimate')}</span>
       </div>
     </div>
   </div>

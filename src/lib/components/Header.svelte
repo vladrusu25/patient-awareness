@@ -1,25 +1,67 @@
-<script lang="ts">
+﻿<script lang="ts">
   import { page } from '$app/stores';
+  import { browser } from '$app/environment';
+  import { t, language, switchLanguage } from '$lib/i18n';
+  import type { Language } from '$lib/i18n/types';
 
   const links = [
-    { href: '/', label: 'Home' },
-    //{ href: '/about', label: 'About' },
-    { href: '/assessment', label: 'Assessment' },
-    //{ href: '/contact', label: 'Contact' },
-    { href: '/api/pdf-search', label: 'PDF Search' },
-    { href: '/admin', label: 'Dashboard' }  // <-- Add this line
+    { href: '/', labelKey: 'nav.home' },
+    { href: '/assessment', labelKey: 'nav.assessment' },
+    { href: '/api/pdf-search', labelKey: 'nav.pdfSearch' },
+    { href: '/admin', labelKey: 'nav.dashboard' }
+  ];
+
+  const languages: { value: Language; label: string }[] = [
+    { value: 'en', label: 'EN' },
+    { value: 'ru', label: 'РУ' }
   ];
 
   $: pathname = $page.url.pathname;
-  const isActive = (href: string) =>
-    href === '/' ? pathname === '/' : pathname.startsWith(href);
+  const isActive = (href: string) => (href === '/' ? pathname === '/' : pathname.startsWith(href));
 
   let mobileOpen = false;
+  let mobileLanguageOpen = false;
+  let desktopLanguageOpen = false;
+  let selectedLanguage: Language = 'en';
+  let desktopMenuEl: HTMLDivElement | null = null;
+
+  $: selectedLanguage = $language;
+  $: activeLanguageLabel =
+    languages.find((lang) => lang.value === selectedLanguage)?.label ?? selectedLanguage.toUpperCase();
+
+  const closeMobileMenu = () => {
+    mobileOpen = false;
+    mobileLanguageOpen = false;
+  };
+
+  const changeLanguage = async (lang: Language) => {
+    if (lang === $language) return;
+    await switchLanguage(lang);
+    if (browser) {
+      window.location.reload();
+    }
+  };
+
+  const selectLanguage = async (lang: Language) => {
+    await changeLanguage(lang);
+    desktopLanguageOpen = false;
+    mobileLanguageOpen = false;
+  };
+
+  const toggleDesktopLanguageMenu = () => {
+    desktopLanguageOpen = !desktopLanguageOpen;
+  };
+
+  const handleDesktopMenuFocusOut = (event: FocusEvent) => {
+    const related = event.relatedTarget as Node | null;
+    if (!desktopMenuEl?.contains(related)) {
+      desktopLanguageOpen = false;
+    }
+  };
 </script>
 
 <header class="sticky top-0 z-40 bg-white/90 backdrop-blur border-b border-neutral-100">
   <div class="mx-auto max-w-[1280px] px-6 h-16 flex items-center justify-between">
-    <!-- Brand -->
     <a href="/" class="flex items-center gap-3">
       <div class="h-10 w-10 rounded-lg bg-primary grid place-items-center">
         <svg viewBox="0 0 24 24" class="h-5 w-5 text-white" fill="none" stroke="currentColor" stroke-width="2">
@@ -29,38 +71,92 @@
       <span class="font-heading font-bold text-xl leading-7 text-neutral-600">HealthCare</span>
     </a>
 
-    <!-- Desktop nav -->
-    <nav class="hidden md:flex items-center gap-8">
-      {#each links as l}
-        <a
-          href={l.href}
-          class="text-base font-heading transition-colors"
-          class:text-neutral-900={isActive(l.href)}
-          class:text-neutral-600={!isActive(l.href)}
-        >
-          {l.label}
-        </a>
-      {/each}
+    <div class="hidden md:flex items-center gap-6">
+      <nav class="flex items-center gap-8">
+        {#each links as l}
+          <a
+            href={l.href}
+            class="text-base font-heading transition-colors"
+            class:text-neutral-900={isActive(l.href)}
+            class:text-neutral-600={!isActive(l.href)}
+          >
+            {$t(l.labelKey)}
+          </a>
+        {/each}
 
-      <!-- POST to the start action -->
-      <form method="POST" action="/assessment?/start" class="ml-2">
+        <form method="POST" action="/assessment?/start" class="ml-2">
+          <button
+            type="submit"
+            class="h-10 px-6 rounded-lg bg-primary text-white text-base font-heading
+                   hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-mint-400"
+          >
+            {$t('actions.startAssessment')}
+          </button>
+        </form>
+      </nav>
+
+      <div
+        class="relative"
+        bind:this={desktopMenuEl}
+        on:focusout={handleDesktopMenuFocusOut}
+      >
         <button
-          type="submit"
-          class="h-10 px-6 rounded-lg bg-primary text-white text-base font-heading
-                 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-mint-400"
+          type="button"
+          class="inline-flex items-center gap-2 rounded-lg border border-neutral-200 bg-white px-3 py-2 text-sm font-semibold uppercase text-neutral-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-mint-400"
+          on:click={toggleDesktopLanguageMenu}
+          aria-haspopup="true"
+          aria-expanded={desktopLanguageOpen}
+          aria-label={$t('common.selectLanguage')}
         >
-          Start Assessment
+          <span>{activeLanguageLabel}</span>
+          <svg
+            class="h-4 w-4 text-neutral-500 transition-transform duration-200"
+            class:rotate-180={desktopLanguageOpen}
+            viewBox="0 0 20 20"
+            fill="none"
+          >
+            <path
+              d="M7 8l3 3 3-3"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
         </button>
-      </form>
-    </nav>
 
-    <!-- Mobile hamburger -->
+        {#if desktopLanguageOpen}
+          <div class="absolute right-0 mt-2 w-28 rounded-lg border border-neutral-200 bg-white py-1 shadow-lg">
+            {#each languages as lang}
+              <button
+                type="button"
+                class="flex w-full items-center justify-between px-3 py-2 text-sm font-medium text-neutral-600 transition-colors hover:bg-neutral-25"
+                class:text-neutral-900={selectedLanguage === lang.value}
+                on:click={() => selectLanguage(lang.value)}
+              >
+                <span>{lang.label}</span>
+                {#if selectedLanguage === lang.value}
+                  <svg class="h-4 w-4 text-primary" viewBox="0 0 20 20" fill="none">
+                    <path d="M5 10l3 3 7-7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                {/if}
+              </button>
+            {/each}
+          </div>
+        {/if}
+      </div>
+    </div>
+
     <button
       class="md:hidden inline-flex items-center justify-center rounded-lg p-2 text-neutral-700
              hover:bg-neutral-25 focus:outline-none focus:ring-2 focus:ring-mint-400"
-      aria-label="Toggle menu"
+      aria-label={$t('header.toggleMenu')}
       aria-expanded={mobileOpen}
-      on:click={() => (mobileOpen = !mobileOpen)}
+      on:click={() => {
+        desktopLanguageOpen = false;
+        mobileLanguageOpen = false;
+        mobileOpen = !mobileOpen;
+      }}
     >
       {#if !mobileOpen}
         <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -84,21 +180,62 @@
             class:bg-neutral-25={isActive(l.href)}
             class:text-neutral-900={isActive(l.href)}
             class:text-neutral-600={!isActive(l.href)}
-            on:click={() => (mobileOpen = false)}
+            on:click={closeMobileMenu}
           >
-            {l.label}
+            {$t(l.labelKey)}
           </a>
         {/each}
 
-        <!-- Mobile POST button -->
+        <div class="relative mt-1">
+          <button
+            type="button"
+            class="flex w-full items-center justify-between rounded-lg border border-neutral-200 bg-white px-3 py-2 text-sm font-semibold uppercase text-neutral-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-mint-400"
+            on:click={() => (mobileLanguageOpen = !mobileLanguageOpen)}
+            aria-haspopup="true"
+            aria-expanded={mobileLanguageOpen}
+            aria-label={$t('common.selectLanguage')}
+          >
+            <span>{activeLanguageLabel}</span>
+            <svg
+              class="h-4 w-4 text-neutral-500 transition-transform duration-200"
+              class:rotate-180={mobileLanguageOpen}
+              viewBox="0 0 20 20"
+              fill="none"
+            >
+              <path
+                d="M7 8l3 3 3-3"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </button>
+
+          {#if mobileLanguageOpen}
+            <div class="mt-2 rounded-lg border border-neutral-200 bg-white shadow-sm">
+              {#each languages as lang}
+                <button
+                  type="button"
+                  class="w-full px-3 py-2 text-left text-sm font-medium text-neutral-600 transition-colors hover:bg-neutral-25"
+                  class:text-neutral-900={selectedLanguage === lang.value}
+                  on:click={() => selectLanguage(lang.value)}
+                >
+                  {lang.label}
+                </button>
+              {/each}
+            </div>
+          {/if}
+        </div>
+
         <form method="POST" action="/assessment?/start" class="mt-2">
           <button
             type="submit"
             class="h-10 w-full px-6 rounded-lg bg-primary text-white text-base font-heading hover:bg-primary-700
                    focus:outline-none focus:ring-2 focus:ring-mint-400"
-            on:click={() => (mobileOpen = false)}
+            on:click={closeMobileMenu}
           >
-            Start Assessment
+            {$t('actions.startAssessment')}
           </button>
         </form>
       </nav>

@@ -1,30 +1,33 @@
-<script lang="ts">
+﻿<script lang="ts">
+  import { t } from '$lib/i18n';
   import Footer from "$lib/components/Footer.svelte";
+
+  const TOKEN_PATTERN = /^[A-Z0-9]{16}$/;
 
   let token = '';
   let loading = false;
-  let errorMsg = '';
-  let foundMsg = '';
+  let errorMsg: string | null = null;
+  let foundMsg: string | null = null;
   let viewUrl: string | null = null;
   let downloadUrl: string | null = null;
 
   async function onSearch(e: SubmitEvent) {
     e.preventDefault();
-    errorMsg = '';
-    foundMsg = '';
+    errorMsg = null;
+    foundMsg = null;
     viewUrl = null;
     downloadUrl = null;
 
-    const t = token.trim().toUpperCase();
+    const trimmed = token.trim().toUpperCase();
 
-    if (!/^[A-Z0-9]{16}$/.test(t)) {
-      errorMsg = 'Token must be 16 characters (A-Z, 0-9).';
+    if (!TOKEN_PATTERN.test(trimmed)) {
+      errorMsg = $t('pdfSearch.errors.invalidFormat');
       return;
     }
 
     loading = true;
     try {
-      const res = await fetch(`/api/pdf-search/${encodeURIComponent(t)}`, {
+      const res = await fetch(`/api/pdf-search/${encodeURIComponent(trimmed)}`, {
         headers: { 'cache-control': 'no-store' }
       });
 
@@ -32,30 +35,30 @@
 
       if (!res.ok) {
         if (data?.code === 'invalid_format') {
-          errorMsg = 'Token must be 16 characters (A-Z, 0-9).';
+          errorMsg = $t('pdfSearch.errors.invalidFormat');
         } else if (data?.code === 'not_found') {
-          errorMsg = 'Invalid token - this token does not exist.';
+          errorMsg = $t('pdfSearch.errors.notFound');
         } else if (data?.code === 'rate_limited') {
-          const s = typeof data?.retryAfter === 'number' ? data.retryAfter : 60;
-          errorMsg = `Too many attempts. Try again in ${s} seconds.`;
+          const seconds = typeof data?.retryAfter === 'number' ? data.retryAfter : 60;
+          errorMsg = $t('pdfSearch.errors.rateLimited', { seconds: String(seconds) });
         } else if (data?.code === 'no_pdf') {
-          errorMsg = 'Report not available yet. Please try again later.';
+          errorMsg = $t('pdfSearch.errors.noPdf');
         } else {
-          errorMsg = 'An error occurred - please try again.';
+          errorMsg = $t('pdfSearch.errors.generic');
         }
         return;
       }
 
       if (data?.ok && data?.viewUrl && data?.downloadUrl) {
-        viewUrl = data.viewUrl;           // same-origin inline preview
-        downloadUrl = data.downloadUrl;   // signed URL (attachment)
-        foundMsg = 'Found PDF - ready to download.';
+        viewUrl = data.viewUrl;
+        downloadUrl = data.downloadUrl;
+        foundMsg = $t('pdfSearch.found');
       } else {
-        errorMsg = 'An error occurred - please try again.';
+        errorMsg = $t('pdfSearch.errors.generic');
       }
     } catch (err) {
       console.error(err);
-      errorMsg = 'An error occurred - please try again.';
+      errorMsg = $t('pdfSearch.errors.generic');
     } finally {
       loading = false;
     }
@@ -63,15 +66,15 @@
 </script>
 
 <section class="mx-auto max-w-[1024px] py-10 px-4 sm:px-6">
-  <h1 class="text-2xl font-heading font-semibold text-neutral-800">Find your PDF report</h1>
+  <h1 class="text-2xl font-heading font-semibold text-neutral-800">{$t('pdfSearch.title')}</h1>
   <p class="mt-2 text-neutral-600">
-    Enter your 16-character token (e.g. <code class="px-1 rounded bg-neutral-50">AB2C...</code>) to retrieve your report.
+    {@html $t('pdfSearch.description')}
   </p>
 
   <form class="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center" on:submit|preventDefault={onSearch}>
     <input
       class="w-full rounded-lg border border-neutral-300 px-4 py-3 outline-none focus:ring-2 focus:ring-mint-400"
-      placeholder="Enter your token (16 characters)"
+      placeholder={$t('pdfSearch.placeholder')}
       bind:value={token}
       maxlength="16"
       autocomplete="off"
@@ -83,7 +86,7 @@
       type="submit"
       disabled={loading}
     >
-      {loading ? 'Searching...' : 'Search'}
+      {loading ? $t('pdfSearch.searching') : $t('pdfSearch.search')}
     </button>
   </form>
 
@@ -103,7 +106,7 @@
         rel="noopener noreferrer"
         class="inline-flex items-center gap-2 px-5 py-3 rounded-lg bg-primary text-white hover:bg-primary-700"
       >
-        Download PDF
+        {$t('pdfSearch.download')}
         <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
           <polyline points="7 10 12 15 17 10" />
@@ -113,7 +116,7 @@
 
       <!-- Inline preview via same-origin streaming route (always inline) -->
       <div class="rounded-lg border border-neutral-200 overflow-hidden">
-        <iframe src={viewUrl} class="w-full h-[360px] sm:h-[480px] md:h-[600px]" title="PDF preview"></iframe>
+        <iframe src={viewUrl} class="w-full h-[360px] sm:h-[480px] md:h-[600px]" title={$t('pdfSearch.previewTitle')}></iframe>
       </div>
     </div>
   {/if}
