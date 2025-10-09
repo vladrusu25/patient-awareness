@@ -6,13 +6,11 @@
     ScoreSummary
   } from '$lib/services/doctor.server';
   import { base } from '$app/paths';
+  import { t, language } from '$lib/i18n';
+  import type { Language } from '$lib/i18n/types';
 
   type ScoreKey = 'endopain' | 'pvvq' | 'pcsYes';
-  const SCORE_KEYS: Array<{ key: ScoreKey; label: string; help: string }> = [
-    { key: 'endopain', label: 'ENDOPAIN Global', help: '0-100 (lower is better)' },
-    { key: 'pvvq', label: 'PVVQ Total', help: '20-100 (lower is better)' },
-    { key: 'pcsYes', label: 'PCS Yes Count', help: 'Positive if >= 2 Yes' }
-  ];
+  let scoreKeys: Array<{ key: ScoreKey; label: string; help: string }> = [];
 
   let query = '';
   let loading = false;
@@ -20,6 +18,48 @@
   let lookup: DoctorLookupResult | null = null;
   let kind: 'assessment' | 'patient' | null = null;
   let selectedToken: string | null = null;
+  let currentLanguage: Language = 'en';
+
+  $: currentLanguage = $language;
+  $: locale = currentLanguage === 'ru' ? 'ru-RU' : 'en-US';
+  $: dateFormatter = new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeStyle: 'short' });
+  $: scoreKeys = [
+    { key: 'endopain', label: $t('doctor.scores.endopain.label'), help: $t('doctor.scores.endopain.help') },
+    { key: 'pvvq', label: $t('doctor.scores.pvvq.label'), help: $t('doctor.scores.pvvq.help') },
+    { key: 'pcsYes', label: $t('doctor.scores.pcsYes.label'), help: $t('doctor.scores.pcsYes.help') }
+  ];
+  $: scoreMap = Object.fromEntries(scoreKeys.map((s) => [s.key, s]));
+  $: texts = {
+    headerTitle: $t('doctor.header.title'),
+    headerSubtitle: $t('doctor.header.subtitle'),
+    searchPlaceholder: $t('doctor.search.placeholder'),
+    searchButton: $t('doctor.search.button'),
+    searchLoading: $t('doctor.search.buttonLoading'),
+    clear: $t('doctor.search.clear'),
+    loading: $t('doctor.status.loading'),
+    download: $t('doctor.misc.download'),
+    open: $t('doctor.misc.open'),
+    selectPrompt: $t('doctor.misc.selectPrompt'),
+    notAvailable: $t('doctor.misc.notAvailable'),
+    delta: {
+      none: $t('doctor.delta.none'),
+      noChange: $t('doctor.delta.noChange'),
+      improved: $t('doctor.delta.improved'),
+      worsened: $t('doctor.delta.worsened'),
+      noValue: $t('doctor.delta.noValue')
+    },
+    pcs: {
+      positive: $t('doctor.scores.pcsYes.positive'),
+      below: $t('doctor.scores.pcsYes.below')
+    },
+    assessmentInfo: (token: string, suffix: string) => $t('doctor.search.infoAssessment', { token, suffix }),
+    assessmentSuffix: (patient: string) => $t('doctor.search.infoAssessmentSuffix', { patient }),
+    patientInfo: (patient: string, count: number) => $t('doctor.search.infoPatient', { patient, count }),
+    assessmentTitle: (token: string) => $t('doctor.misc.assessmentTitle', { token }),
+    completedLabel: (date: string) => $t('doctor.misc.completed', { date }),
+    latestMetric: (metric: string) => $t('doctor.misc.latest', { metric }),
+    listItemTitle: (token: string) => $t('doctor.misc.listItemTitle', { token })
+  };
 
   async function performLookup(value: string) {
     loading = true;
@@ -30,7 +70,7 @@
       });
       const data = (await res.json().catch(() => null)) || { result: null, kind: null };
       if (!res.ok || !data || !data.ok) {
-        errorMsg = data?.message ?? 'No results found.';
+        errorMsg = $t('doctor.search.errors.notFound');
         lookup = null;
         kind = null;
         return;
@@ -39,7 +79,7 @@
       kind = data?.kind as 'assessment' | 'patient' || null;
     } catch (err) {
       console.error(err);
-      errorMsg = 'Unable to reach lookup service.';
+      errorMsg = $t('doctor.search.errors.unreachable');
       lookup = null;
       kind = null;
     } finally {
@@ -58,14 +98,14 @@
     event.preventDefault();
     const trimmed = query.trim();
     if (!trimmed) {
-      errorMsg = 'Enter an assessment token or patient ID.';
+      errorMsg = $t('doctor.search.errors.emptyInput');
       return;
     }
     await performLookup(trimmed);
   }
 
   function formatNumber(value: number | null): string {
-    if (value == null || Number.isNaN(value)) return 'n/a';
+    if (value == null || Number.isNaN(value)) return texts.notAvailable;
     return Number.isInteger(value) ? String(value) : value.toFixed(1);
   }
 
@@ -75,22 +115,22 @@
   }
 
   function deltaLabel(delta: number | null): string {
-    if (delta == null) return 'No prior data';
-    if (delta === 0) return 'No change';
-    return delta < 0 ? 'Improved' : 'Worsened';
+    if (delta == null) return texts.delta.none;
+    if (delta === 0) return texts.delta.noChange;
+    return delta < 0 ? texts.delta.improved : texts.delta.worsened;
   }
 
   function deltaValue(delta: number | null): string {
-    if (delta == null) return '--';
+    if (delta == null) return texts.delta.noValue;
     const rounded = Number.isInteger(delta) ? delta : Number(delta.toFixed(1));
     return `${delta > 0 ? '+' : ''}${rounded}`;
   }
 
   function formatDate(iso?: string | null): string {
-    if (!iso) return 'n/a';
+    if (!iso) return texts.notAvailable;
     const date = new Date(iso);
-    if (Number.isNaN(date.getTime())) return 'n/a';
-    return date.toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' });
+    if (Number.isNaN(date.getTime())) return texts.notAvailable;
+    return dateFormatter.format(date);
   }
 
   function pcsBadge(score: ScoreSummary): string {
@@ -123,8 +163,8 @@
     <main class="flex-1 min-h-screen">
       <header class="h-16 px-6 border-b border-neutral-100 bg-white flex items-center justify-between">
         <div>
-          <h1 class="font-heading text-xl text-neutral-800">Doctor Dashboard</h1>
-          <p class="text-sm text-neutral-500">Search assessments by patient or assessment ID.</p>
+          <h1 class="font-heading text-xl text-neutral-800">{texts.headerTitle}</h1>
+          <p class="text-sm text-neutral-500">{texts.headerSubtitle}</p>
         </div>
       </header>
 
@@ -134,7 +174,7 @@
             <div class="relative flex-1">
               <input
                 class="w-full h-12 rounded-xl border border-neutral-200 pl-10 pr-3 outline-none focus:ring-2 focus:ring-primary/30"
-                placeholder="Enter assessment token (16 chars) or patient ID (e.g. A12345)"
+                placeholder={texts.searchPlaceholder}
                 bind:value={query}
                 autocomplete="off"
                 spellcheck={false}
@@ -157,7 +197,7 @@
                 class="h-12 px-5 rounded-xl bg-primary text-white font-heading hover:bg-primary-700 disabled:opacity-60"
                 disabled={loading}
               >
-                {loading ? 'Searching...' : 'Search'}
+                {loading ? texts.searchLoading : texts.searchButton}
               </button>
               {#if lookup}
                 <button
@@ -165,7 +205,7 @@
                   class="h-12 px-4 rounded-xl border border-neutral-300 hover:bg-neutral-50"
                   on:click={resetResults}
                 >
-                  Clear
+                  {texts.clear}
                 </button>
               {/if}
             </div>
@@ -177,17 +217,16 @@
 
           {#if kind === 'assessment' && lookup?.type === 'assessment'}
             <p class="mt-3 text-sm text-neutral-500">
-              Showing assessment token <span class="font-medium text-neutral-700">{lookup.assessment.token}</span>
-              {#if lookup.assessment.patientPublicId}
-                for patient <span class="font-medium text-neutral-700">{lookup.assessment.patientPublicId}</span>
-              {/if}
+              {texts.assessmentInfo(
+                lookup.assessment.token,
+                lookup.assessment.patientPublicId ? texts.assessmentSuffix(lookup.assessment.patientPublicId) : ''
+              )}
             </p>
           {/if}
 
           {#if kind === 'patient' && lookup?.type === 'patient'}
             <p class="mt-3 text-sm text-neutral-500">
-              Showing patient <span class="font-medium text-neutral-700">{lookup.patient.publicId}</span> with
-              {lookup.patient.totalAssessments} assessments.
+              {texts.patientInfo(lookup.patient.publicId, lookup.patient.totalAssessments)}
             </p>
           {/if}
         </section>
@@ -196,7 +235,7 @@
           <section class="rounded-2xl border border-neutral-100 bg-white p-6 text-neutral-600 shadow-sm">
             <div class="flex items-center gap-3">
               <span class="h-3 w-3 animate-pulse rounded-full bg-primary"></span>
-              Fetching data...
+              {texts.loading}
             </div>
           </section>
         {:else if kind === 'assessment' && lookup?.type === 'assessment'}
@@ -204,8 +243,8 @@
             <div class="rounded-2xl border border-neutral-100 bg-white p-5 shadow-sm">
               <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
                 <div>
-                  <h2 class="font-heading text-lg text-neutral-800">Assessment {lookup.assessment.token}</h2>
-                  <p class="text-sm text-neutral-500">Completed {formatDate(lookup.assessment.createdAt)}</p>
+                  <h2 class="font-heading text-lg text-neutral-800">{texts.assessmentTitle(lookup.assessment.token)}</h2>
+                  <p class="text-sm text-neutral-500">{texts.completedLabel(formatDate(lookup.assessment.createdAt))}</p>
                 </div>
                 <div class="flex items-center gap-2">
                   {#if lookup.assessment.downloadUrl}
@@ -215,7 +254,7 @@
                       rel="noopener noreferrer"
                       class="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-heading text-white hover:bg-primary-700"
                     >
-                      Download PDF
+                      {texts.download}
                       <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
                         <polyline points="7 10 12 15 17 10" />
@@ -229,13 +268,13 @@
                     rel="noopener noreferrer"
                     class="inline-flex items-center gap-2 rounded-lg border border-neutral-300 px-4 py-2 text-sm hover:bg-neutral-50"
                   >
-                    Open in new tab
+                    {texts.open}
                   </a>
                 </div>
               </div>
 
               <div class="mt-5 grid gap-4 md:grid-cols-3">
-                {#each SCORE_KEYS as item}
+                {#each scoreKeys as item}
                   <div class="rounded-xl border border-neutral-100 bg-neutral-25/60 p-4">
                     <p class="text-xs uppercase text-neutral-500">{item.label}</p>
                     <p class="mt-2 text-2xl font-heading text-neutral-800">
@@ -244,7 +283,7 @@
                     <p class="text-xs text-neutral-500">{item.help}</p>
                     {#if item.key === 'pcsYes'}
                       <span class={`mt-3 inline-flex items-center gap-1 rounded-full px-2 py-1 text-xs font-medium ${pcsBadge(lookup.assessment.scores)}`}>
-                        {lookup.assessment.scores.pcsYes != null && lookup.assessment.scores.pcsYes >= 2 ? 'Positive screen' : 'Below threshold'}
+                        {lookup.assessment.scores.pcsYes != null && lookup.assessment.scores.pcsYes >= 2 ? texts.pcs.positive : texts.pcs.below}
                       </span>
                     {/if}
                   </div>
@@ -256,7 +295,7 @@
               <iframe
                 src={lookup.assessment.viewUrl}
                 class="w-full h-[520px] rounded-xl border border-neutral-200"
-                title={`Assessment PDF ${lookup.assessment.token}`}
+                title={texts.assessmentTitle(lookup.assessment.token)}
               ></iframe>
             </div>
           </section>
@@ -284,9 +323,9 @@
 
               {#if patientData.latestSummary?.scores}
                 <div class="mt-4 grid gap-3 sm:grid-cols-3">
-                  {#each SCORE_KEYS as item}
+                  {#each scoreKeys as item}
                     <div class="rounded-xl border border-neutral-100 bg-neutral-25/60 p-4">
-                      <p class="text-xs uppercase text-neutral-500">Latest {item.label}</p>
+                      <p class="text-xs uppercase text-neutral-500">{texts.latestMetric(item.label)}</p>
                       <p class="mt-2 text-2xl font-heading text-neutral-800">
                         {formatNumber(patientData.latestSummary.scores[item.key])}
                       </p>
@@ -313,8 +352,8 @@
                   >
                     <div class="flex items-center justify-between gap-3">
                       <div>
-                        <p class="font-heading text-sm text-neutral-700">Assessment {assessment.token}</p>
-                        <p class="text-xs text-neutral-500">{formatDate(assessment.createdAt)}</p>
+                        <p class="font-heading text-sm text-neutral-700">{texts.listItemTitle(assessment.token)}</p>
+                        <p class="text-xs text-neutral-500">{texts.completedLabel(formatDate(assessment.createdAt))}</p>
                       </div>
                       <span class={`inline-flex items-center gap-1 rounded-full px-2 py-1 text-xs font-medium ${deltaTone(assessment.delta?.endopain ?? null)}`}>
                         {deltaLabel(assessment.delta?.endopain ?? null)}
@@ -324,15 +363,15 @@
 
                     <div class="mt-3 grid gap-2 text-xs text-neutral-600">
                       <div class="flex items-center justify-between">
-                        <span>ENDOPAIN</span>
+                        <span>{scoreMap.endopain?.label}</span>
                         <span class="font-medium text-neutral-800">{formatNumber(assessment.scores.endopain)}</span>
                       </div>
                       <div class="flex items-center justify-between">
-                        <span>PVVQ</span>
+                        <span>{scoreMap.pvvq?.label}</span>
                         <span class="font-medium text-neutral-800">{formatNumber(assessment.scores.pvvq)}</span>
                       </div>
                       <div class="flex items-center justify-between">
-                        <span>PCS Yes</span>
+                        <span>{scoreMap.pcsYes?.label}</span>
                         <span class={`inline-flex items-center gap-1 rounded-full px-2 py-1 ${pcsBadge(assessment.scores)}`}>
                           {formatNumber(assessment.scores.pcsYes)}
                         </span>
@@ -347,8 +386,8 @@
                   <div class="rounded-2xl border border-neutral-100 bg-white p-5 shadow-sm">
                     <div class="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
                       <div>
-                        <h3 class="font-heading text-lg text-neutral-800">Assessment {selectedAssessment.token}</h3>
-                        <p class="text-sm text-neutral-500">Completed {formatDate(selectedAssessment.createdAt)}</p>
+                        <h3 class="font-heading text-lg text-neutral-800">{texts.assessmentTitle(selectedAssessment.token)}</h3>
+                        <p class="text-sm text-neutral-500">{texts.completedLabel(formatDate(selectedAssessment.createdAt))}</p>
                       </div>
                       <div class="flex items-center gap-2">
                         {#if selectedAssessment.downloadUrl}
@@ -358,7 +397,7 @@
                             rel="noopener noreferrer"
                             class="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-heading text-white hover:bg-primary-700"
                           >
-                            Download PDF
+                            {texts.download}
                           </a>
                         {/if}
                         <a
@@ -367,13 +406,13 @@
                           rel="noopener noreferrer"
                           class="inline-flex items-center gap-2 rounded-lg border border-neutral-300 px-4 py-2 text-sm hover:bg-neutral-50"
                         >
-                          Open in new tab
+                          {texts.open}
                         </a>
                       </div>
                     </div>
 
                     <div class="mt-4 grid gap-3 sm:grid-cols-3">
-                      {#each SCORE_KEYS as item}
+                      {#each scoreKeys as item}
                         <div class="rounded-xl border border-neutral-100 bg-neutral-25/60 p-4">
                           <p class="text-xs uppercase text-neutral-500">{item.label}</p>
                           <p class="mt-2 text-2xl font-heading text-neutral-800">
@@ -382,7 +421,7 @@
                           <p class="text-xs text-neutral-500">{item.help}</p>
                           {#if item.key === 'pcsYes'}
                             <span class={`mt-3 inline-flex items-center gap-1 rounded-full px-2 py-1 text-xs font-medium ${pcsBadge(selectedAssessment.scores)}`}>
-                              {selectedAssessment.scores.pcsYes != null && selectedAssessment.scores.pcsYes >= 2 ? 'Positive screen' : 'Below threshold'}
+                              {selectedAssessment.scores.pcsYes != null && selectedAssessment.scores.pcsYes >= 2 ? texts.pcs.positive : texts.pcs.below}
                             </span>
                           {:else if item.key === 'endopain'}
                             {#if selectedAssessment.delta?.endopain != null}
@@ -408,12 +447,12 @@
                     <iframe
                       src={selectedAssessment.viewUrl}
                       class="w-full h-[500px] rounded-xl border border-neutral-200"
-                      title={`Assessment PDF ${selectedAssessment.token}`}
+                      title={texts.assessmentTitle(selectedAssessment.token)}
                     ></iframe>
                   </div>
                 {:else}
                   <div class="rounded-2xl border border-neutral-100 bg-white p-6 text-neutral-500 shadow-sm">
-                    Select an assessment to preview its PDF.
+                    {texts.selectPrompt}
                   </div>
                 {/if}
               </div>

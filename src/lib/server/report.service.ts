@@ -4,17 +4,19 @@ import { buildPart1Lines, buildPart2Lines, buildPart3Lines, hasAny } from '$lib/
 import { computeEndopainGlobalScore, computePcsYesCount, computePvvqTotal } from '$lib/assessment/scoring';
 import { PCS_ITEMS, PVVQ_ORDER } from '$lib/assessment/labels';
 import { renderSummaryPdf } from '$lib/pdf/report';
+import type { Language } from '$lib/i18n/types';
+import { getReportLocale } from '$lib/assessment/report-i18n';
 
 const BUCKET = 'pdf-results';
 
 export async function fetchSessionByToken(token: string) {
   const { data, error } = await supa
     .from('sessions')
-    .select('id, created_at, patient_id')
+    .select('id, created_at, patient_id, status')
     .eq('public_token', token)
     .single();
   if (error || !data) return null;
-  return data as { id: string; created_at: string; patient_id: string | null };
+  return data as { id: string; created_at: string; patient_id: string | null; status: string | null };
 }
 
 export async function fetchAnswers(sessionId: string) {
@@ -46,43 +48,45 @@ async function fetchPatientPublicId(patientId: string): Promise<string | null> {
 }
 
 /** Build/Upload report for a token; returns signed download URL */
-export async function buildAndUploadReport(token: string) {
+export async function buildAndUploadReport(token: string, language: Language = 'en') {
   const session = await fetchSessionByToken(token);
   if (!session) throw new Error('session_not_found');
 
   const patientPublicId = session.patient_id ? await fetchPatientPublicId(session.patient_id) : null;
   const answers = await fetchAnswers(session.id);
 
-  const pages: Array<{ title: string; lines: string[]; scoring?: string }> = [];
+  const pages: Array<{ title: string; lines: string[]; scoring?: string; intro?: string[] }> = [];
+  const locale = getReportLocale(language);
 
   // Part 1
-  const p1Lines = buildPart1Lines(answers);
+  const p1Lines = buildPart1Lines(answers, language);
   const p1Score = computeEndopainGlobalScore(answers);
   pages.push({
-    title: 'Part 1. ENDOPAIN-4D',
+    title: locale.partTitles.part1,
     lines: p1Lines,
-    scoring: `Physician scoring (ENDOPAIN-4D Global Score, 0–100): ${p1Score}/100`
+    scoring: locale.scoring.part1(p1Score)
   });
 
   // Part 2 if any answers exist
   if (hasAny(answers, PCS_ITEMS.map(([k]) => k))) {
-    const p2Lines = buildPart2Lines(answers);
+    const p2Lines = buildPart2Lines(answers, language);
     const p2Yes = computePcsYesCount(answers);
     pages.push({
-      title: 'Part 2. PCS Screening (5 items)',
+      title: locale.partTitles.part2,
       lines: p2Lines,
-      scoring: `Physician scoring (PCS positive if >=2 Yes): ${p2Yes} Yes`
+      scoring: locale.scoring.part2(p2Yes, locale.bool.yes)
     });
   }
 
   // Part 3 if any answers exist
   if (hasAny(answers, PVVQ_ORDER)) {
-    const p3Lines = buildPart3Lines(answers);
+    const p3Lines = buildPart3Lines(answers, language);
     const p3Total = computePvvqTotal(answers);
     pages.push({
-      title: 'Part 3. Pelvic Varicose Veins Questionnaire (PVVQ, 20 items)',
+      title: locale.partTitles.part3,
       lines: p3Lines,
-      scoring: `Physician scoring (PVVQ Total, 20–100): ${p3Total}`
+      intro: [locale.part3Interpretation],
+      scoring: locale.scoring.part3(p3Total)
     });
   }
 
@@ -91,7 +95,8 @@ export async function buildAndUploadReport(token: string) {
     token,
     patientId: patientPublicId,
     generatedAt: new Date(session.created_at),
-    pages
+    pages,
+    language
   });
 
   const objectPath = `assessment-${token}.pdf`;
@@ -110,6 +115,10 @@ export async function buildAndUploadReport(token: string) {
     .from(BUCKET)
     .createSignedUrl(objectPath, 60 * 10, { download: `patient-report-${token}.pdf` });
 
+  if (session.status !== 'ended') {
+    await markSessionEnded(session.id);
+  }
+
   return { objectPath, downloadUrl: dl?.signedUrl ?? null };
 }
 
@@ -119,4 +128,27 @@ export async function streamReport(token: string) {
   const { data, error } = await supa.storage.from(BUCKET).download(objectPath);
   if (error || !data) return null;
   return data;
+}
+
+export async function markSessionStatus(sessionId: string, status: string) {
+  const { error } = await supa
+    .from('sessions')
+    .update({ status })
+    .eq('id', sessionId);
+  if (error) throw new Error(error.message);
+}
+
+export async function markSessionEnded(sessionId: string) {
+  await markSessionStatus(sessionId, 'ended');
+}
+
+export async function markSessionEndedByToken(token: string) {
+  const normalized = token.trim().toUpperCase();
+  if (!normalized) return false;
+  const session = await fetchSessionByToken(normalized);
+  if (!session) return false;
+  if (session.status !== 'ended') {
+    await markSessionEnded(session.id);
+  }
+  return true;
 }

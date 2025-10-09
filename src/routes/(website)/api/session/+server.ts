@@ -2,12 +2,22 @@ import type { RequestHandler } from './$types';
 import { json, error } from '@sveltejs/kit';
 import { supa } from '$lib/server/supabase';
 import { customAlphabet } from 'nanoid';
+import { markSessionEndedByToken } from '$lib/server/report.service';
 
 const nanoid = customAlphabet('ABCDEFGHJKLMNPQRSTUVWXYZ23456789', 16);
 
 // Creates a session with the latest questionnaire template.
 // Sets an httpOnly cookie "pa_token" and returns { token }.
 export const POST: RequestHandler = async ({ cookies }) => {
+  const existingToken = cookies.get('pa_token');
+  if (existingToken) {
+    try {
+      await markSessionEndedByToken(existingToken);
+    } catch (err) {
+      console.error('Failed to mark previous session ended', err);
+    }
+  }
+
   // 1) pick latest template
   const { data: tmpl, error: tmplErr } = await supa
     .from('questionnaire_templates')

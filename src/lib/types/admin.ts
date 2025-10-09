@@ -22,4 +22,4 @@ export type MetricsSummary = {
 
 export type TrendPoint = { x: number; y: number; series: 'data' | 'fit'; };
 
-export type DateRange = { label: string; days: number };
+export type DateRange = { key: string; labelKey: string; days: number | null };

@@ -1,12 +1,14 @@
-    <script lang="ts">
-	import Footer from '$lib/components/Footer.svelte';
-	import Knowledge from '$lib/components/homepage/Knowledge.svelte';
-	import Video from '$lib/components/homepage/Video.svelte';
+<script lang="ts">
+  import Footer from '$lib/components/Footer.svelte';
+  import Knowledge from '$lib/components/homepage/Knowledge.svelte';
+  import PelvicPainInfo from '$lib/components/homepage/PelvicPainInfo.svelte';
+  import Video from '$lib/components/homepage/Video.svelte';
   import Testimonials from '$lib/components/Testimonials.svelte';
 </script>
 
 <!-- ...other sections above... -->
 <Knowledge />
+<PelvicPainInfo />
 <Video />
 <Testimonials />
 <Footer />

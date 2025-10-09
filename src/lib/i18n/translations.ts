@@ -6,7 +6,7 @@ type Node = Leaf | { [key: string]: Node };
 
 export const translations: Record<string, Node> = {
   common: {
-    brand: { en: 'HealthCare', ru: 'HealthCare' },
+    brand: { en: 'Smart Health', ru: 'Smart Health' },
     privacyTagline: {
       en: 'private by design',
       ru: 'конфиденциально по задумке'
@@ -19,7 +19,14 @@ export const translations: Record<string, Node> = {
     home: { en: 'Home', ru: 'Главная' },
     assessment: { en: 'Assessment', ru: 'Оценка' },
     pdfSearch: { en: 'PDF Search', ru: 'Поиск PDF' },
+    pcs: { en: 'PCS', ru: 'СТВЗ' },
+    endometriosis: { en: 'Endometriosis', ru: 'Эндометриоз' },
     dashboard: { en: 'Dashboard', ru: 'Панель' },
+    assessmentMenu: { en: 'Assessment', ru: 'Оценка' },
+    conditionsMenu: { en: 'Conditions', ru: 'Состояния' },
+    dashboardMenu: { en: 'Dashboard', ru: 'Панели' },
+    dashboardDoctors: { en: 'For doctors', ru: 'Для врачей' },
+    dashboardAdmins: { en: 'For admins', ru: 'Для администраторов' },
     about: { en: 'About', ru: 'О нас' },
     contact: { en: 'Contact', ru: 'Контакты' }
   },
@@ -59,15 +66,8 @@ export const translations: Record<string, Node> = {
     rights: { en: 'All rights reserved.', ru: 'Все права защищены.' },
     navItems: {
       home: { en: 'Home', ru: 'Главная' },
-      about: { en: 'About', ru: 'О нас' },
       assessment: { en: 'Assessment', ru: 'Оценка' },
       contact: { en: 'Contact', ru: 'Контакты' }
-    },
-    supportItems: {
-      helpCenter: { en: 'Help Center', ru: 'Центр помощи' },
-      privacyPolicy: { en: 'Privacy Policy', ru: 'Политика конфиденциальности' },
-      terms: { en: 'Terms of Service', ru: 'Условия использования' },
-      faq: { en: 'FAQ', ru: 'Частые вопросы' }
     }
   },
   hero: {
@@ -134,6 +134,145 @@ export const translations: Record<string, Node> = {
         ru: 'Показатель улучшения при правильной терапии и уходе за тазовым дном'
       },
       alt: { en: 'Heart icon', ru: 'Значок сердца' }
+    }
+  },
+  pelvicPainInfo: {
+    heading: {
+      en: 'Chronic Pelvic Pain: Get Clarity and Next Steps',
+      ru: 'Хроническая тазовая боль: Поймите причину и сделайте первый шаг'
+    },
+    introPrimary: {
+      en: 'Chronic pelvic pain can have more than one cause at the same time.',
+      ru: 'Хроническая боль в тазу может иметь несколько причин одновременно.'
+    },
+    introSecondary: {
+      en: 'Pelvic Congestion Syndrome (PCS)—enlarged veins in the pelvis—often overlaps with conditions like:',
+      ru: 'Синдром тазового венозного застоя (СТВЗ) — расширение вен в области таза — часто сочетается с другими гинекологическими заболеваниями, такими как:'
+    },
+    conditions: {
+      endometriosis: { en: 'Endometriosis', ru: 'Эндометриоз' },
+      adenomyosis: { en: 'Adenomyosis', ru: 'Аденомиоз' },
+      fibroids: { en: 'Uterine fibroids', ru: 'Миома матки' },
+      adhesions: { en: 'Pelvic adhesions (scar tissue)', ru: 'Тазовые спайки (рубцовая ткань после операций или воспалений)' },
+      pid: { en: 'Pelvic inflammatory disease (PID)', ru: 'Воспалительные заболевания органов малого таза (ВЗОМТ)' }
+    },
+    outlook: {
+      en: 'Because these conditions share similar symptoms, it’s important to look at the whole picture—not just one possible cause.',
+      ru: 'Поскольку симптомы этих состояний могут быть похожи, важно рассматривать всю картину, а не только одну возможную причину.'
+    },
+    learnMore: {
+      endometriosis: { en: 'Learn more about Endometriosis', ru: 'Узнайте больше об эндометриозе' },
+      pcs: { en: 'Learn more about Pelvic Congestion Syndrome (PCS)', ru: 'Узнайте больше о синдроме тазового венозного застоя (СТВЗ)' }
+    },
+    helpHeading: {
+      en: 'How we help',
+      ru: 'Как мы помогаем'
+    },
+    helpBody: {
+      en: 'We use a team approach. Gynecologists, radiologists, vascular specialists, pain experts, and psychologists work together to provide an accurate diagnosis and a personalized treatment plan.',
+      ru: 'Мы используем междисциплинарный подход. Гинекологи, радиологи, сосудистые специалисты, специалисты по боли и психологи работают вместе, чтобы обеспечить точный диагноз и подобрать персональный план лечения.'
+    },
+    ctaHeading: {
+      en: 'Start your assessment',
+      ru: 'Пройдите оценку'
+    },
+    ctaBody: {
+      en: 'The short questionnaire below helps us understand your symptoms and supports this team-based care.',
+      ru: 'Короткая анкета ниже поможет нам лучше понять ваши симптомы и поддержит этот командный подход к вашему лечению.'
+    },
+    ctaButton: {
+      en: 'Start your assessment →',
+      ru: 'Пройти оценку →'
+    }
+  },
+  pcsPage: {
+    hero: {
+      title: { en: 'Pelvic Congestion Syndrome (PCS)', ru: 'Синдром тазового венозного застоя (СТВЗ)' },
+      description: {
+        en: 'Understand how PCS can drive chronic pelvic pain and what collaborative care can do to help.',
+        ru: 'Поймите, как СТВЗ влияет на хроническую тазовую боль и как междисциплинарная помощь может помочь.'
+      },
+      cta: { en: 'Start the assessment', ru: 'Начать оценку' }
+    }
+  },
+  endometriosisPage: {
+    hero: {
+      title: {
+        en: 'Endometriosis: Understanding the Condition and Its Overlap with Other Diseases',
+        ru: 'Эндометриоз: понимание состояния и его пересечения с другими заболеваниями'
+      },
+      headline: {
+        en: 'Endometriosis is more than one disease—it’s part of a bigger picture.',
+        ru: 'Эндометриоз — это больше, чем одно заболевание: это часть более широкой картины.'
+      },
+      description: {
+        en: 'Discover how endometriosis can overlap with Pelvic Congestion Syndrome (PCS) and why understanding these links matters for better care.',
+        ru: 'Узнайте, как эндометриоз пересекается с синдромом тазового венозного застоя (СТВЗ) и почему понимание этих связей важно для лучшего лечения.'
+      },
+      primaryCta: { en: 'Take the Symptom Questionnaire', ru: 'Пройдите опрос по симптомам' }
+    },
+    sections: {
+      whatIs: {
+        headline: { en: 'What is Endometriosis?', ru: 'Что такое эндометриоз?' },
+        body: {
+          en: 'Endometriosis occurs when tissue similar to the lining of the uterus grows outside it, causing pain, inflammation, and sometimes infertility.',
+          ru: 'Эндометриоз возникает, когда ткань, похожая на слизистую оболочку матки, растет вне её пределов, вызывая боль, воспаление и иногда бесплодие.'
+        },
+        symptomsTitle: { en: 'Common symptoms include:', ru: 'К распространённым симптомам относятся:' },
+        symptoms: {
+          pelvicPain: { en: 'Chronic pelvic pain', ru: 'Хроническая тазовая боль' },
+          periodPain: { en: 'Pain during periods or intercourse', ru: 'Боль во время менструаций или при половом акте' },
+          discomfort: { en: 'Digestive or urinary discomfort', ru: 'Дискомфорт со стороны пищеварительной или мочевой систем' }
+        }
+      },
+      overlap: {
+        headline: { en: 'Why Overlap Matters', ru: 'Почему важно учитывать пересечения' },
+        body: {
+          en: 'Endometriosis rarely acts alone. Conditions like Pelvic Congestion Syndrome (PCS) often coexist, intensifying pain and delaying diagnosis.',
+          ru: 'Эндометриоз редко действует в одиночку. Такие состояния, как синдром тазового венозного застоя (СТВЗ), часто присутствуют одновременно, усиливая боль и затрудняя диагностику.'
+        },
+        stats: {
+          first: { en: 'Up to 80% of women with endometriosis show signs of PCS (ovarian varices).', ru: 'До 80% женщин с эндометриозом имеют признаки СТВЗ (оварикоз).' },
+          second: { en: 'Overlapping conditions can lead to years of delayed treatment.', ru: 'Пересекающиеся состояния могут приводить к многолетним задержкам в лечении.' }
+        },
+        cta: { en: 'Learn About PCS', ru: 'Узнать о СТВЗ' }
+      },
+      help: {
+        headline: { en: 'How We Help', ru: 'Как мы помогаем' },
+        body: {
+          en: 'Our platform uses validated Endopain-4D and PVVQ questionnaires to map symptoms and uncover possible overlaps.',
+          ru: 'Мы используем валидированные опросники Endopain-4D и PVVQ, чтобы картировать ваши симптомы и выявлять возможные пересечения.'
+        },
+        body2: {
+          en: 'Your input supports integrated care models—gynecologists, vascular specialists, and pain experts working together.',
+          ru: 'Ваш вклад поддерживает интегрированные модели помощи, где гинекологи, сосудистые специалисты и эксперты по боли работают вместе.'
+        },
+        cta: { en: 'Start Your Questionnaire Now', ru: 'Начните опрос сейчас' }
+      },
+      science: {
+        headline: { en: 'Backed by Science', ru: 'Подтверждено наукой' },
+        intro: {
+          en: 'Explore clinical research confirming the link between endometriosis and PCS:',
+          ru: 'Изучите клинические исследования, подтверждающие связь между эндометриозом и СТВЗ:'
+        },
+        links: {
+          study1: { en: 'Endometriosis and PCS Overlap Study (Women’s Health Journal)', ru: 'Исследование пересечения эндометриоза и СТВЗ (Women’s Health Journal)' },
+          study2: { en: 'PCS as Differential Diagnosis in Chronic Pelvic Pain', ru: 'СТВЗ как дифференциальный диагноз хронической тазовой боли' },
+          study3: { en: 'Endometriosis vs PCS Explained', ru: 'Эндометриоз против СТВЗ: объяснение' }
+        }
+      },
+      voice: {
+        headline: { en: 'Your Voice Can Change Care', ru: 'Ваш голос может изменить подход к помощи' },
+        body: {
+          en: 'Every questionnaire completed brings us closer to proving what many women already feel: endometriosis and PCS often go hand in hand.',
+          ru: 'Каждый заполненный опрос приближает нас к подтверждению того, что эндометриоз и СТВЗ часто идут рука об руку.'
+        },
+        body2: {
+          en: 'Together, we can push for faster diagnosis, better treatment, and improved quality of life.',
+          ru: 'Вместе мы можем добиться более быстрой диагностики, лучшего лечения и повышения качества жизни.'
+        },
+        cta: { en: 'Join the Movement – Share Your Symptoms', ru: 'Присоединяйтесь — поделитесь своими симптомами' }
+      }
     }
   },
   video: {
@@ -298,6 +437,121 @@ export const translations: Record<string, Node> = {
     userAlt: {
       en: 'You',
       ru: 'Вы'
+    }
+  }
+,
+  admin: {
+    nav: {
+      overview: { en: 'Overview', ru: 'Обзор' }
+    },
+    range: {
+      selectLabel: { en: 'Date range', ru: 'Период' },
+      all: { en: 'All time', ru: 'За всё время' },
+      last30: { en: 'Last 30 days', ru: 'Последние 30 дней' },
+      last7: { en: 'Last 7 days', ru: 'Последние 7 дней' },
+      today: { en: 'Today', ru: 'Сегодня' }
+    },
+    stats: {
+      completedAll: { en: 'Completed all parts', ru: 'Завершили все части' },
+      part1Only: { en: 'Part 1 only', ru: 'Только часть 1' },
+      pvvqContinued: { en: 'PVVQ continued', ru: 'Продолжили PVVQ' },
+      conversionRate: { en: 'PVVQ conversion rate', ru: 'Конверсия в PVVQ' }
+    },
+    patients: {
+      title: { en: 'Recent patients', ru: 'Недавние пациенты' },
+      empty: { en: 'No recent patients yet.', ru: 'Недавних пациентов пока нет.' },
+      headers: {
+        patient: { en: 'Patient', ru: 'Пациент' },
+        severity: { en: 'Severity', ru: 'Тяжесть' },
+        status: { en: 'Status', ru: 'Статус' },
+        lastSeen: { en: 'Last assessment', ru: 'Последняя оценка' }
+      },
+      severity: {
+        low: { en: 'Low', ru: 'Низкая' },
+        medium: { en: 'Medium', ru: 'Средняя' },
+        high: { en: 'High', ru: 'Высокая' }
+      },
+      status: {
+        new: { en: 'New', ru: 'Новый' },
+        pending: { en: 'Pending', ru: 'В ожидании' },
+        reviewed: { en: 'Reviewed', ru: 'Просмотрено' }
+      },
+      noDate: { en: '—', ru: '—' }
+    },
+    analytics: {
+      title: { en: 'Endopain vs PVVQ trend', ru: 'Соотношение Endopain и PVVQ' },
+      datasets: {
+        sessions: { en: 'Sessions', ru: 'Сессии' },
+        fit: { en: 'Trend line', ru: 'Линия тренда' }
+      },
+      axes: {
+        x: { en: 'ENDOPAIN-4D Global Score (0–100)', ru: 'Общий балл ENDOPAIN-4D (0–100)' },
+        y: { en: 'PVVQ Total Score (20–100)', ru: 'Суммарный балл PVVQ (20–100)' }
+      },
+      tooltip: { en: '{{label}}: Endopain {{x}}, PVVQ {{y}}', ru: '{{label}}: Endopain {{x}}, PVVQ {{y}}' },
+      empty: { en: 'Not enough data yet.', ru: 'Недостаточно данных.' }
+    }
+  },
+  doctor: {
+    sidebar: {
+      patients: { en: 'Assessments', ru: 'Оценки' },
+      qrTitle: { en: 'Personal QR', ru: 'Персональный QR' },
+      qrHint: { en: 'Scan to connect patients to you', ru: 'Отсканируйте, чтобы пациенты могли подключиться к вам' },
+      share: { en: 'Share QR', ru: 'Поделиться QR' }
+    },
+    header: {
+      title: { en: 'Doctor Dashboard', ru: 'Панель врача' },
+      subtitle: { en: 'Search assessments by patient or assessment ID.', ru: 'Ищите оценки по пациенту или идентификатору оценки.' }
+    },
+    search: {
+      placeholder: { en: 'Enter assessment token (16 chars) or patient ID (e.g. A12345)', ru: 'Введите токен оценки (16 символов) или ID пациента (например, A12345)' },
+      button: { en: 'Search', ru: 'Поиск' },
+      buttonLoading: { en: 'Searching...', ru: 'Поиск...' },
+      clear: { en: 'Clear', ru: 'Очистить' },
+      infoAssessment: { en: 'Showing assessment token {{token}}{{suffix}}', ru: 'Показана оценка с токеном {{token}}{{suffix}}' },
+      infoAssessmentSuffix: { en: ' for patient {{patient}}', ru: ' для пациента {{patient}}' },
+      infoPatient: { en: 'Showing patient {{patient}} with {{count}} assessments.', ru: 'Показан пациент {{patient}} (оценок: {{count}}).' },
+      errors: {
+        emptyInput: { en: 'Enter an assessment token or patient ID.', ru: 'Введите токен оценки или ID пациента.' },
+        notFound: { en: 'No results found.', ru: 'Ничего не найдено.' },
+        unreachable: { en: 'Unable to reach lookup service.', ru: 'Не удалось связаться со службой поиска.' }
+      }
+    },
+    status: {
+      loading: { en: 'Fetching data...', ru: 'Загрузка данных...' }
+    },
+    scores: {
+      endopain: {
+        label: { en: 'ENDOPAIN Global', ru: 'ENDOPAIN Global' },
+        help: { en: '0-100 (lower is better)', ru: '0-100 (ниже — лучше)' }
+      },
+      pvvq: {
+        label: { en: 'PVVQ Total', ru: 'PVVQ Total' },
+        help: { en: '20-100 (lower is better)', ru: '20-100 (ниже — лучше)' }
+      },
+      pcsYes: {
+        label: { en: 'PCS Yes Count', ru: 'Количество ответов «Да» PCS' },
+        help: { en: 'Positive if ≥ 2 Yes', ru: 'Положительно при ≥ 2 ответах «Да»' },
+        positive: { en: 'Positive screen', ru: 'Положительный скрининг' },
+        below: { en: 'Below threshold', ru: 'Ниже порога' }
+      }
+    },
+    delta: {
+      none: { en: 'No prior data', ru: 'Нет предыдущих данных' },
+      noChange: { en: 'No change', ru: 'Без изменений' },
+      improved: { en: 'Improved', ru: 'Улучшение' },
+      worsened: { en: 'Worsened', ru: 'Ухудшение' },
+      noValue: { en: '--', ru: '--' }
+    },
+    misc: {
+      notAvailable: { en: 'n/a', ru: '—' },
+      selectPrompt: { en: 'Select an assessment to preview its PDF.', ru: 'Выберите оценку, чтобы просмотреть её PDF.' },
+      download: { en: 'Download PDF', ru: 'Скачать PDF' },
+      open: { en: 'Open in new tab', ru: 'Открыть в новой вкладке' },
+      completed: { en: 'Completed {{date}}', ru: 'Завершено {{date}}' },
+      assessmentTitle: { en: 'Assessment {{token}}', ru: 'Оценка {{token}}' },
+      latest: { en: 'Latest {{metric}}', ru: 'Последний показатель {{metric}}' },
+      listItemTitle: { en: 'Assessment {{token}}', ru: 'Оценка {{token}}' }
     }
   }
 };

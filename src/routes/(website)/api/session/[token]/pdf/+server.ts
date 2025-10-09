@@ -2,6 +2,7 @@
 import type { RequestHandler } from './$types';
 import { error, json } from '@sveltejs/kit';
 import { buildAndUploadReport, fetchSessionByToken, streamReport } from '$lib/server/report.service';
+import type { Language } from '$lib/i18n/types';
 
 const TOKEN_RE = /^[A-Z0-9]{16}$/;
 
@@ -25,13 +26,16 @@ export const GET: RequestHandler = async ({ params }) => {
 };
 
 // POST => generate, upload, return URLs (fast UX)
-export const POST: RequestHandler = async ({ params }) => {
+export const POST: RequestHandler = async ({ params, cookies }) => {
   const token = params.token?.trim().toUpperCase() ?? '';
   if (!TOKEN_RE.test(token)) throw error(400, 'invalid_format');
   const session = await fetchSessionByToken(token);
   if (!session) throw error(404, 'not_found');
 
-  const { downloadUrl } = await buildAndUploadReport(token);
+  const langCookie = cookies.get('lang');
+  const language: Language = langCookie === 'ru' ? 'ru' : 'en';
+
+  const { downloadUrl } = await buildAndUploadReport(token, language);
   return json({
     ok: true,
     viewUrl: `/api/session/${encodeURIComponent(token)}/pdf`,

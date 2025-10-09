@@ -1,19 +1,22 @@
-<script context="module" lang="ts">
+﻿<script context="module" lang="ts">
   export type NavItem = { href: string; label: string; active?: boolean; icon?: string };
 </script>
 
 <script lang="ts">
+  import { t } from '$lib/i18n';
   export let items: NavItem[] = [];
 </script>
 
 <aside class="h-full w-[260px] shrink-0 border-r border-neutral-100 bg-white overflow-y-auto">
   <div class="px-4 py-4 flex items-center gap-3">
-    <div class="h-9 w-9 rounded-lg bg-primary grid place-items-center">
-      <svg viewBox="0 0 24 24" class="h-5 w-5 text-white" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M12 21s-6-4.35-8.485-6.835A6 6 0 1 1 12 5a6 6 0 1 1 8.485 9.165C18 16.65 12 21 12 21Z" />
-      </svg>
-    </div>
-    <span class="font-heading font-bold text-lg text-neutral-700">HealthCare</span>
+    <img
+      src="/images/logo.png"
+      alt="Smart Health logo"
+      class="h-9 w-auto"
+      loading="lazy"
+      decoding="async"
+    />
+    <span class="font-heading font-bold text-lg text-neutral-700">{$t('common.brand')}</span>
   </div>
 
   <nav class="px-3 space-y-2">

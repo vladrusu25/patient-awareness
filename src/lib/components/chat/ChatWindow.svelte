@@ -61,6 +61,7 @@
   let bottomEl: HTMLDivElement | null = null;
 
   let headerTitle = '';
+  let restartDialogEl: HTMLDivElement | null = null;
 
   const pdfReminderText = () => $t('chat.pdfReminder', { token });
 
@@ -108,6 +109,18 @@ onDestroy(() => {
   unsubscribeLanguage();
 });
 
+  function handleRestartDialogKey(event: KeyboardEvent) {
+    if (event.key === 'Escape' && !restartSubmitting) {
+      event.preventDefault();
+      cancelRestart();
+    }
+  }
+
+  function handleRestartBackdropClick(event: MouseEvent) {
+    if (event.target !== event.currentTarget) return;
+    if (!restartSubmitting) cancelRestart();
+  }
+
   $: headerTotal = progress.active.total;
   $: headerQuestion = headerTotal
     ? Math.min(progress.active.answered + (progress.active.includesCurrent ? 1 : 0), headerTotal)
@@ -118,6 +131,12 @@ onDestroy(() => {
     const stored = answers[currentQ.key];
     inputValue = typeof stored === 'string' ? stored : '';
     inputError = '';
+  }
+
+  $: if (showRestartConfirm) {
+    tick().then(() => {
+      restartDialogEl?.focus();
+    });
   }
 
   function syncTranscript(options?: { allowCompletion?: boolean }) {
@@ -190,7 +209,8 @@ onDestroy(() => {
     if (!currentQ) return;
 
     const step = currentQ;
-    const optimistic = options.optimistic ?? step.type !== 'input';
+    const wantsOptimistic = options.optimistic ?? step.type !== 'input';
+    const optimistic = wantsOptimistic && !REFETCH_KEYS.has(step.key);
     const preview = labelFor(step, value);
 
     let previewIndex = -1;
@@ -293,8 +313,10 @@ onDestroy(() => {
 
       const body = (await res.json().catch(() => ({}))) as Partial<{ token: string }>;
       const newToken = typeof body.token === 'string' ? body.token : null;
-      const dest = newToken ? `/api/session/${encodeURIComponent(newToken)}#chat` : '/assessment#chat';
-      location.replace(dest);
+      if (!newToken) {
+        throw new Error($t('chat.sessionStartFailed'));
+      }
+      location.replace(`/assessment?token=${encodeURIComponent(newToken)}#chat`);
     } catch (err) {
       console.error(err);
       restartError = $t('chat.sessionStartFailed');
@@ -403,15 +425,16 @@ onDestroy(() => {
     class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4"
     role="dialog"
     aria-modal="true"
-    on:click={() => {
-      if (!restartSubmitting) cancelRestart();
-    }}
+    aria-labelledby="restart-dialog-title"
+    tabindex="-1"
+    bind:this={restartDialogEl}
+    on:keydown={handleRestartDialogKey}
+    on:click={handleRestartBackdropClick}
   >
     <div
       class="w-full max-w-sm rounded-2xl bg-white p-6 shadow-xl space-y-4"
-      on:click|stopPropagation
     >
-      <h2 class="text-lg font-semibold text-neutral-900">{$t('actions.confirmRestart')}</h2>
+      <h2 id="restart-dialog-title" class="text-lg font-semibold text-neutral-900">{$t('actions.confirmRestart')}</h2>
       <p class="text-sm text-neutral-600">
         {$t('assessment.restart.warning')}
       </p>

@@ -16,7 +16,11 @@ type PatientRow = {
 };
 
 /* ---------- Helpers ---------- */
-function fromDays(days: number) { const d = new Date(); d.setUTCDate(d.getUTCDate() - days); return d.toISOString(); }
+function fromDays(days: number) {
+  const d = new Date();
+  d.setUTCDate(d.getUTCDate() - days);
+  return d.toISOString();
+}
 function anonFromToken(token: string) { const a = (token?.[0] ?? 'A').toUpperCase(); const b = (token?.[1] ?? 'B').toUpperCase(); return { initials: `${a}.${b}.`, name: `${a}.${b}.` }; }
 function severityFromEndopain(g: number | null): 'low' | 'medium' | 'high' { if (g == null) return 'low'; if (g >= 40) return 'high'; if (g >= 20) return 'medium'; return 'low'; }
 function normalizeSessionJoin(s: PatientRow['sessions'] | null): { public_token: string; created_at: string } | null {
@@ -27,8 +31,11 @@ function normalizeSessionJoin(s: PatientRow['sessions'] | null): { public_token:
 export function getDoctorDataSource() {
   return {
     async getMetrics(range: DateRange): Promise<MetricsSummary> {
-      const since = fromDays(range.days);
-      const { data, error } = await supa.from('session_scores').select('parts, computed_at').gte('computed_at', since).order('computed_at', { ascending: false });
+      let query = supa.from('session_scores').select('parts, computed_at').order('computed_at', { ascending: false });
+      if (range.days != null) {
+        query = query.gte('computed_at', fromDays(range.days));
+      }
+      const { data, error } = await query;
       if (error) throw new Error(`metrics query failed: ${error.message}`);
       const rows = (data ?? []) as MetricsRow[];
 
@@ -42,12 +49,14 @@ export function getDoctorDataSource() {
     },
 
     async getPatients(range: DateRange): Promise<PatientLike[]> {
-      const since = fromDays(range.days);
-      const { data, error } = await supa.from('session_scores')
+      let query = supa.from('session_scores')
         .select('session_id, endopain_global, computed_at, sessions!inner(public_token, created_at)')
-        .gte('computed_at', since)
         .order('computed_at', { ascending: false })
         .limit(12);
+      if (range.days != null) {
+        query = query.gte('computed_at', fromDays(range.days));
+      }
+      const { data, error } = await query;
       if (error) throw new Error(`patients query failed: ${error.message}`);
 
       const rows = (data ?? []) as unknown as PatientRow[];
@@ -62,16 +71,18 @@ export function getDoctorDataSource() {
 
     /** Analytics: only sessions that completed all 3 parts + best-fit line */
     async getPainQoLTrend(range: DateRange): Promise<TrendPoint[]> {
-      const since = fromDays(range.days);
-      const { data, error } = await supa
+      let query = supa
         .from('session_scores')
         .select('endopain_global, pvvq_total, computed_at, parts')
         .contains('parts', { part1: true, part2: true, part3: true })
         .not('endopain_global', 'is', null)
         .not('pvvq_total', 'is', null)
-        .gte('computed_at', since)
         .order('computed_at', { ascending: true })
         .limit(500);
+      if (range.days != null) {
+        query = query.gte('computed_at', fromDays(range.days));
+      }
+      const { data, error } = await query;
 
       if (error) throw new Error(`trend query failed: ${error.message}`);
 

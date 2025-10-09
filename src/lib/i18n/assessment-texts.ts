@@ -82,16 +82,24 @@ const EXACT_EN_TO_RU: Record<string, string> = {
   "Enter your Patient ID so we can link to your previous assessments (example: A12345).": 'Введите идентификатор пациента, чтобы связать данные с предыдущими оценками (например, A12345).',
   'A12345': 'A12345',
   'Nice progress - Part 2 is just 5 quick questions that help identify pelvic vein involvement.': 'Отличный прогресс — часть 2 включает всего 5 вопросов и помогает выявить вовлечение тазовых вен.',
+  "Great! I've created your Patient ID. Please save it. You'll use it next time to see your progress.": 'Отлично! Я создал ваш идентификатор пациента. Сохраните его — он понадобится в следующий раз, чтобы увидеть ваш прогресс.',
   'Would you like to continue with Part 2 (PCS screening)?': 'Хотите продолжить и пройти часть 2 (скрининг PCS)?',
   'Great work - Part 3 (PVVQ) takes about 2-3 minutes and really strengthens your report.': 'Прекрасно! Часть 3 (PVVQ) занимает около 2–3 минут и значительно усиливает ваш отчёт.',
   'Would you like to continue with Part 3 (PVVQ)?': 'Хотите продолжить и пройти часть 3 (PVVQ)?',
   "Thanks - you've completed everything needed for now.": 'Спасибо — на этом всё.',
-  "We're preparing your PDF report next.": 'Сейчас мы подготовим ваш PDF-отчёт.'
+  "We're preparing your PDF report next.": 'Сейчас мы подготовим ваш PDF-отчёт.',
+  "It takes ~2–3 minutes and really strengthens your report.": 'Это занимает около 2–3 минут и значительно усиливает ваш отчёт.',
+  "Excellent work — Part 1 complete!": 'Отличная работа — часть 1 завершена!',
+  "Great job — Part 3 complete! We’re preparing your full report.": 'Отличная работа — часть 3 завершена! Мы готовим полный отчёт.',
+  "You’re doing well — keep going!": 'Вы отлично справляетесь — продолжайте!',
+  "Great! I’ve created your Patient ID. Please save it. You’ll use it next time to see your progress.": 'Отлично! Я создал ваш идентификатор пациента. Сохраните его — он понадобится в следующий раз, чтобы увидеть ваш прогресс.',
+  "We don’t collect personal details. Your Patient ID only links your own assessments.": 'Мы не собираем персональные данные. Ваш идентификатор пациента используется только для ваших оценок.',
+  '10 â€“ Worst pain': '10 – самая сильная боль',
 };
 
 const REGEX_RULES: RegexRule[] = [
   {
-    pattern: /^Patient ID: (.+) - save or take a screenshot\.$/,
+    pattern: /^Patient ID: (.+) [-–—] save or take a screenshot\.$/,
     translate: (lang, match) => {
       if (lang === 'ru') {
         return `Идентификатор пациента: ${match[1]} — сохраните его или сделайте скриншот.`;
@@ -100,7 +108,7 @@ const REGEX_RULES: RegexRule[] = [
     }
   },
   {
-    pattern: /^Thanks! We've linked your previous results. Patient ID (.+) is all set - let's continue\.$/,
+    pattern: /^Thanks! We['’]ve linked your previous results. Patient ID (.+) is all set [-–—] let's continue\.$/,
     translate: (lang, match) => {
       if (lang === 'ru') {
         return `Спасибо! Мы связали ваши предыдущие результаты. Идентификатор ${match[1]} готов — продолжим.`;
