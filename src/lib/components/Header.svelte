@@ -27,7 +27,8 @@
       labelKey: 'nav.conditionsMenu',
       items: [
         { href: '/endometriosis', labelKey: 'nav.endometriosis' },
-        { href: '/pcs', labelKey: 'nav.pcs' }
+        { href: '/pcs', labelKey: 'nav.pcs' },
+        { href: '/pcs/diagnosis', labelKey: 'nav.pcsDiagnosis' }
       ]
     },
     {

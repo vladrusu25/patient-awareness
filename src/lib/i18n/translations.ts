@@ -19,7 +19,8 @@ export const translations: Record<string, Node> = {
     home: { en: 'Home', ru: 'Главная' },
     assessment: { en: 'Assessment', ru: 'Оценка' },
     pdfSearch: { en: 'PDF Search', ru: 'Поиск PDF' },
-    pcs: { en: 'PCS', ru: 'СТВЗ' },
+    pcs: { en: 'PCS', ru: 'ПВС' },
+    pcsDiagnosis: { en: 'PCS Diagnosis', ru: 'Диагностика ПВС' },
     endometriosis: { en: 'Endometriosis', ru: 'Эндометриоз' },
     dashboard: { en: 'Dashboard', ru: 'Панель' },
     assessmentMenu: { en: 'Assessment', ru: 'Оценка' },
@@ -187,12 +188,300 @@ export const translations: Record<string, Node> = {
   },
   pcsPage: {
     hero: {
-      title: { en: 'Pelvic Congestion Syndrome (PCS)', ru: 'Синдром тазового венозного застоя (СТВЗ)' },
-      description: {
-        en: 'Understand how PCS can drive chronic pelvic pain and what collaborative care can do to help.',
-        ru: 'Поймите, как СТВЗ влияет на хроническую тазовую боль и как междисциплинарная помощь может помочь.'
+      title: {
+        en: 'Pelvic Congestion Syndrome (PCS): Understanding the Condition and Its Impact',
+        ru: 'Синдром тазового венозного застоя (ПВС): понимание состояния и его влияния'
       },
-      cta: { en: 'Start the assessment', ru: 'Начать оценку' }
+      headline: {
+        en: 'Pelvic Congestion Syndrome: Unveiling the Hidden Cause of Chronic Pelvic Pain',
+        ru: 'Синдром тазового венозного застоя: скрытая причина хронической тазовой боли'
+      },
+      subheadline: {
+        en: 'Learn how PCS causes persistent discomfort and how its symptoms overlap with other conditions like endometriosis, affecting daily life and fertility.',
+        ru: 'Узнайте, как ПВС вызывает постоянный дискомфорт, пересекается с эндометриозом и влияет на повседневную жизнь и фертильность.'
+      },
+      cta: { en: 'Take the Symptom Questionnaire', ru: 'Пройдите опрос по симптомам' },
+      imageAlt: {
+        en: 'Illustration of pelvic veins highlighting pelvic congestion syndrome',
+        ru: 'Иллюстрация тазовых вен при синдроме венозного застоя'
+      }
+    },
+    sections: {
+      whatIs: {
+        headline: { en: 'What is Pelvic Congestion Syndrome?', ru: 'Что такое синдром тазового венозного застоя?' },
+        intro: {
+          en: 'Pelvic Congestion Syndrome (PCS) is a condition characterized by chronic pelvic pain caused by enlarged and dysfunctional veins in the pelvic area. When these veins fail to carry blood back to the heart, blood pools and creates ongoing discomfort. PCS primarily affects women of childbearing age, with symptoms often worsening after pregnancy.',
+          ru: 'Синдром тазового венозного застоя (ПВС) сопровождается хронической тазовой болью из-за расширенных и дисфункциональных вен в малом тазу. Когда кровь не возвращается по ним к сердцу, она застаивается и вызывает стойкий дискомфорт. Чаще всего ПВС встречается у женщин репродуктивного возраста, а симптомы нередко усиливаются после беременности.'
+        },
+        causesTitle: { en: 'Common causes include:', ru: 'Распространённые причины:' },
+        causes: {
+          pregnancy: { en: 'Enlarged veins related to pregnancy or hormonal changes', ru: 'Расширение вен на фоне беременности или гормональных изменений' },
+          estrogen: { en: 'Elevated estrogen levels that increase vein dilation', ru: 'Повышенный уровень эстрогенов, усиливающий дилатацию вен' },
+          familyHistory: { en: 'Family history of varicose veins or PCS', ru: 'Наследственная предрасположенность к варикозной болезни или ПВС' }
+        }
+      },
+      risk: {
+        headline: { en: 'Who is at Risk of Developing PCS?', ru: 'Кто находится в группе риска?' },
+        intro: {
+          en: 'Certain factors make PCS more likely to develop or worsen over time:',
+          ru: 'Эти факторы повышают вероятность возникновения или прогрессирования ПВС:'
+        },
+        factors: {
+          pregnancies: { en: 'Multiple pregnancies, with risk increasing after each pregnancy', ru: 'Многократные беременности, при которых риск растёт с каждой последующей' },
+          venousHistory: { en: 'Family history of venous issues such as varicose veins', ru: 'Семейный анамнез венозных нарушений, включая варикоз' },
+          hormones: { en: 'Hormonal influences in women of childbearing age', ru: 'Гормональные влияния у женщин репродуктивного возраста' }
+        }
+      },
+      symptoms: {
+        headline: { en: 'Symptoms of PCS', ru: 'Симптомы ПВС' },
+        intro: {
+          en: 'PCS symptoms can look a lot like endometriosis and other pelvic conditions. Many people experience some combination of the following:',
+          ru: 'Проявления ПВС нередко напоминают эндометриоз и другие заболевания малого таза. Часто наблюдается сочетание следующих симптомов:'
+        },
+        list: {
+          pelvicPain: { en: 'Chronic pelvic pain that intensifies toward the end of the day', ru: 'Хроническая тазовая боль, усиливающаяся к концу дня' },
+          dyspareunia: { en: 'Pain or discomfort during sexual intercourse (dyspareunia)', ru: 'Боль или дискомфорт во время полового акта (диспареуния)' },
+          backPain: { en: 'Lower back pain that can radiate into the hips or legs', ru: 'Боль в пояснице с иррадиацией в бёдра или ноги' },
+          giIssues: { en: 'Digestive discomfort such as bloating or constipation', ru: 'Диспепсия, вздутие живота и запоры' },
+          bleeding: { en: 'Irregular vaginal bleeding or increased discharge', ru: 'Нерегулярные вагинальные кровотечения или усиление выделений' },
+          fatigue: { en: 'Fatigue, brain fog, or difficulty sleeping', ru: 'Усталость, туман в голове или нарушения сна' },
+          heaviness: { en: 'A sense of heaviness or fullness in the lower abdomen', ru: 'Ощущение тяжести или распирания в нижней части живота' }
+        },
+        cta: { en: 'Explore PCS Symptoms in Detail', ru: 'Подробнее о симптомах ПВС' }
+      },
+      diagnosis: {
+        headline: { en: 'Diagnosis of PCS', ru: 'Диагностика ПВС' },
+        intro: {
+          en: 'Diagnosis relies on a mix of clinical evaluation and imaging. Pain must persist for more than six months and center on the pelvis.',
+          ru: 'Диагностика опирается на клиническую оценку и визуализирующие методы. Боль должна сохраняться более шести месяцев и локализоваться в области таза.'
+        },
+        featuresTitle: { en: 'Key diagnostic features include:', ru: 'Ключевые диагностические признаки:' },
+        features: {
+          veinSize: { en: 'Tortuous pelvic veins measuring 6 mm or larger', ru: 'Извилистые тазовые вены диаметром 6 мм и более' },
+          flow: { en: 'Slow or reversed venous blood flow on Doppler studies', ru: 'Замедленный или обратный венозный кровоток по данным допплерографии' },
+          dilation: { en: 'Dilated ovarian veins or polycystic ovarian changes', ru: 'Расширенные яичниковые вены или поликистозные изменения яичников' }
+        },
+        cta: { en: 'Read More About Diagnosis', ru: 'Подробнее о диагностике' }
+      },
+      treatment: {
+        headline: { en: 'Treatment Options for PCS', ru: 'Варианты лечения ПВС' },
+        intro: {
+          en: 'Ovarian vein embolization (OVE) is the most common and effective treatment for PCS. It is a minimally invasive procedure that targets the problem veins directly.',
+          ru: 'Эмболизация яичниковых вен (OVE) - самый распространённый и эффективный способ лечения ПВС. Это малоинвазивная процедура, воздействующая напрямую на патологические сосуды.'
+        },
+        benefitsTitle: { en: 'OVE can provide:', ru: 'OVE позволяет:' },
+        benefits: {
+          painRelief: { en: 'Significant pain reduction and relief during daily activities', ru: 'Существенно снизить боль и облегчить повседневную активность' },
+          sexualHealth: { en: 'Improved comfort during sexual activity and intimacy', ru: 'Повысить комфорт в интимной жизни и качество близости' },
+          fertility: { en: 'Potential improvements in fertility for people affected by PCS', ru: 'Повысить шансы на беременность у пациенток с ПВС' }
+        },
+        otherOptions: {
+          en: 'Additional options can include medication, hormone management, or pelvic physical therapy to support recovery.',
+          ru: 'Дополнительно применяют медикаментозную терапию, гормональную коррекцию и тазовую физиотерапию для поддержки восстановления.'
+        }
+      },
+      quality: {
+        headline: { en: 'Improving Quality of Life', ru: 'Повышение качества жизни' },
+        body: {
+          en: 'PCS affects more than just physical comfort. People frequently report disruptions to relationships, mental health, and sexual wellbeing. After OVE, many regain confidence, intimacy, and connection with their partners.',
+          ru: 'ПВС влияет не только на физическое состояние. Пациентки часто отмечают сложности в отношениях, эмоциональном благополучии и сексуальном здоровье. После эмболизации многие возвращают уверенность, близость и связь с партнёром.'
+        }
+      },
+      science: {
+        headline: { en: 'Backed by Science', ru: 'Научные данные' },
+        intro: {
+          en: 'Explore clinical research that validates PCS diagnosis and treatment:',
+          ru: 'Изучите клинические исследования, подтверждающие диагностику и лечение ПВС:'
+        },
+        links: {
+          study1: {
+            en: 'Ovarian Vein Embolization and Pain Relief (Journal of Vascular Surgery)',
+            ru: 'Эмболизация яичниковых вен и снижение боли (Journal of Vascular Surgery)'
+          },
+          study2: {
+            en: 'Pelvic Congestion Syndrome and Fertility Outcomes (International Journal of Reproductive Medicine)',
+            ru: 'ПВС и репродуктивные исходы (International Journal of Reproductive Medicine)'
+          }
+        }
+      },
+      voice: {
+        headline: { en: 'Your Voice Can Change Care', ru: 'Ваш голос помогает менять помощь' },
+        body: {
+          en: 'By completing the symptom questionnaire, you help build the data needed for faster diagnosis, better treatment options, and more informed care models for PCS.',
+          ru: 'Отвечая на вопросы опросника, вы помогаете собирать данные для более быстрой диагностики, улучшения терапии и развития мультидисциплинарной помощи при ПВС.'
+        },
+        cta: { en: 'Share Your Symptoms', ru: 'Поделитесь своими симптомами' }
+      }
+    }
+  },
+  pcsDiagnosisPage: {
+    hero: {
+      title: {
+        en: 'PCS Diagnosis: Clinical and Imaging Guide',
+        ru: 'Диагностика ПВС: клинический и визуализационный гид'
+      },
+      subtitle: {
+        en: 'How clinicians confirm pelvic congestion syndrome when symptoms overlap with other pelvic pain disorders.',
+        ru: 'Как врачи подтверждают синдром тазового венозного застоя, когда симптомы пересекаются с другими причинами тазовой боли.'
+      },
+      intro: {
+        en: 'Use this overview to recognise red flags, choose the right imaging pathway, and understand the evidence that supports a PCS diagnosis.',
+        ru: 'Эта памятка помогает заметить настораживающие признаки, выбрать оптимальный путь визуализации и понять доказательную базу диагностики ПВС.'
+      },
+      backCta: { en: 'Return to PCS Overview', ru: 'Вернуться к обзору ПВС' }
+    },
+    sections: {
+      suspect: {
+        headline: { en: 'When to Suspect PCS', ru: 'Когда подозревать ПВС' },
+        intro: {
+          en: 'PCS is often suspected when pelvic pain persists despite a normal pelvic exam. Key symptom patterns include:',
+          ru: 'ПВС предполагают, если хроническая тазовая боль сохраняется при нормальном гинекологическом осмотре. Обратите внимание на следующие паттерны:'
+        },
+        criteriaTitle: { en: 'Frequent clinical clues:', ru: 'Частые клинические подсказки:' },
+        criteria: {
+          painProgression: {
+            en: 'Pelvic pain beginning after pregnancy and worsening with each subsequent pregnancy.',
+            ru: 'Тазовая боль, появившаяся после беременности и усиливающаяся с каждой последующей.'
+          },
+          painCharacter: {
+            en: 'Dull, aching pain that can flare to sharp or throbbing sensations, often worsening later in the day or after prolonged standing or sitting and easing when lying down.',
+            ru: 'Тупая ноющая боль с острыми или пульсирующими всплесками; усиливается к концу дня или после длительного стояния/сидения и ослабевает в положении лёжа.'
+          },
+          postCoital: {
+            en: 'Pain that intensifies during or after sexual intercourse.',
+            ru: 'Боль, усиливающаяся во время или после полового акта.'
+          },
+          unilateralPain: {
+            en: 'Symptoms frequently present on one side of the pelvis.',
+            ru: 'Симптомы часто локализуются на одной стороне таза.'
+          },
+          palpation: {
+            en: 'Pain reproduced on deep palpation of the ovaries during examination.',
+            ru: 'Болезненность при глубокой пальпации яичников во время осмотра.'
+          },
+          varices: {
+            en: 'Visible varicose veins affecting the vulva, buttocks, or lower extremities.',
+            ru: 'Видимые варикозные узлы вульвы, ягодиц или нижних конечностей.'
+          },
+          neurological: {
+            en: 'Associated lumbosacral neuropathy or radiating lower back pain, especially when standing upright.',
+            ru: 'Сопутствующая пояснично-крестцовая нейропатия или иррадиирующая поясничная боль, особенно в вертикальном положении.'
+          },
+          systemic: {
+            en: 'Systemic complaints such as fatigue, insomnia, headaches, depression, or bowel and bladder dysfunction.',
+            ru: 'Системные жалобы: усталость, бессонница, головные боли, признаки депрессии, нарушения работы кишечника и мочевого пузыря.'
+          },
+          gi: {
+            en: 'Gastrointestinal discomfort, rectal pressure, and abdominal bloating.',
+            ru: 'Желудочно-кишечный дискомфорт, давление в прямой кишке и вздутие живота.'
+          },
+          gynecologic: {
+            en: 'Dysmenorrhea, abnormal vaginal discharge or bleeding, and vulvar edema.',
+            ru: 'Дисменорея, патологические вагинальные выделения или кровотечения, отёк вульвы.'
+          }
+        },
+        note: {
+          en: 'Chronic pelvic pain must persist for more than six months with no inflammatory findings on pelvic exam to formally suspect PCS.',
+          ru: 'Для постановки предварительного диагноза боль должна продолжаться более шести месяцев и не сопровождаться воспалительными находками при осмотре.'
+        }
+      },
+      ultrasound: {
+        headline: { en: 'Ultrasound First-Line', ru: 'Ультразвук как метод первой линии' },
+        intro: {
+          en: 'Transabdominal ultrasound (TAU) helps visualise pelvic varices, while transvaginal ultrasound (TVU) provides higher-resolution views of the pelvic venous plexus.',
+          ru: 'Трансабдоминальное УЗИ (ТАУ) визуализирует тазовые варикозные вены, а трансвагинальное УЗИ (ТВУ) обеспечивает более детальное изображение венозных сплетений.'
+        },
+        bulletsTitle: { en: 'Practical tips from clinical protocols:', ru: 'Практические рекомендации из клинических протоколов:' },
+        bullets: {
+          combo: {
+            en: 'Combine TAU and TVU with colour Doppler imaging and spectral analysis to characterise reflux patterns (Kuligowska 2005; Stones 1990; Hodgson 1991; Lemasle 2017).',
+            ru: 'Комбинируйте ТАУ и ТВУ с цветовым допплером и спектральным анализом, чтобы определить характер рефлюкса (Kuligowska 2005; Stones 1990; Hodgson 1991; Lemasle 2017).'
+          },
+          positioning: {
+            en: 'Use patient positioning (standing or Valsalva manoeuvre) to provoke venous filling when assessing reflux.',
+            ru: 'Используйте положения стоя и пробу Вальсальвы, чтобы спровоцировать венозное наполнение при оценке рефлюкса.'
+          },
+          mapping: {
+            en: 'Identify superficial pelvic leak points that may feed lower-limb varicose veins before planning treatment.',
+            ru: 'Выявляйте поверхностные точки венозных утечек в малом тазу, питающих варикоз нижних конечностей, до планирования лечения.'
+          },
+          predictiveValue: {
+            en: 'An ovarian vein diameter ≥ 6 mm on TAU carries a reported 96% positive predictive value for pelvic varices.',
+            ru: 'Диаметр яичниковой вены ≥ 6 мм по данным ТАУ даёт 96% положительную прогностическую ценность для тазовых варикозов.'
+          }
+        },
+        reference: {
+          en: 'Villalba (2018) and South Coast Vascular protocols outline recommended ultrasound equipment, settings, and step-by-step approaches.',
+          ru: 'Протоколы Villalba (2018) и South Coast Vascular описывают оборудование, настройки и пошаговую методику ультразвукового исследования.'
+        }
+      },
+      criteria: {
+        headline: { en: 'Ultrasound Diagnostic Criteria', ru: 'Ультразвуковые критерии диагностики' },
+        intro: {
+          en: 'Multiple studies converge on a core set of ultrasound findings that support a PCS diagnosis:',
+          ru: 'Ряд исследований сходится во мнении, что следующие признаки подтверждают диагноз ПВС:'
+        },
+        list: {
+          veinSize: { en: 'Tortuous pelvic veins measuring greater than 6 mm in diameter.', ru: 'Извилистые тазовые вены диаметром более 6 мм.' },
+          flow: { en: 'Slow venous flow under 3 cm/sec or reversed caudal flow.', ru: 'Замедленный венозный ток менее 3 см/с или ретроградное каудальное течение.' },
+          arcuate: { en: 'Dilated arcuate veins in the myometrium communicating between bilateral pelvic varices.', ru: 'Расширенные дугообразные вены миометрия, соединяющие двусторонние тазовые варикозы.' },
+          ovarianChanges: { en: 'Polycystic changes in the ovaries associated with venous stasis.', ru: 'Поликистозные изменения яичников, связанные с венозным стазом.' }
+        },
+        citations: {
+          en: 'Key references: Park et al. (AJR 2004); Lemasle & Greiner (Phlebolymphology 2017).',
+          ru: 'Ключевые источники: Park и др. (AJR 2004); Lemasle & Greiner (Phlebolymphology 2017).'
+        }
+      },
+      workflow: {
+        headline: { en: 'Escalating to Advanced Imaging', ru: 'Переход к расширенным методам визуализации' },
+        intro: {
+          en: 'When ultrasound findings and clinical suspicion align, additional imaging clarifies anatomy and treatment planning.',
+          ru: 'Когда клиника и УЗ-данные согласуются, дополнительные методы помогают уточнить анатомию и подготовить план лечения.'
+        },
+        steps: {
+          venography: {
+            en: 'Hyperselective descending pelvic venography remains the gold standard for mapping reflux and planning embolisation when intervention is considered.',
+            ru: 'Гиперселективная нисходящая тазовая венография остаётся золотым стандартом картирования рефлюкса и планирования эмболизации при выборе вмешательства.'
+          },
+          crossSectional: {
+            en: 'CT or MR imaging (including MR venography) helps characterise venous dilation, rule out compressive syndromes, and support multidisciplinary decisions.',
+            ru: 'КТ или МР-исследования (включая МР-венографию) позволяют оценить степень дилатации, исключить компрессионные синдромы и поддержать мультидисциплинарные решения.'
+          },
+          predictiveModels: {
+            en: 'Recent TVU predictive models (Valero 2022; Garcia-Jimenez 2023) assist in triaging who truly needs invasive venography.',
+            ru: 'Новые предиктивные модели ТВУ (Valero 2022; Garcia-Jimenez 2023) помогают определить, кому действительно требуется инвазивная венография.'
+          }
+        }
+      },
+      evidence: {
+        headline: { en: 'Evidence Base', ru: 'Доказательная база' },
+        intro: {
+          en: 'International guidelines and consensus documents recognise ultrasound—especially TVU—as a reliable screening tool, with venography reserved for definitive confirmation and treatment planning.',
+          ru: 'Международные рекомендации и консенсусы признают УЗИ, особенно ТВУ, надёжным скрининговым инструментом; венография остаётся для окончательного подтверждения и планирования вмешательства.'
+        },
+        studies: {
+          uip: {
+            en: 'UIP Consensus (2019): Endorses combined TAU/TVU protocols and highlights the diagnostic value of standing and Valsalva assessments.',
+            ru: 'Консенсус UIP (2019): поддерживает комбинированные протоколы ТАУ/ТВУ и подчёркивает ценность исследований стоя и при пробе Вальсальвы.'
+          },
+          bookwalter: {
+            en: 'Bookwalter (2019): Notes emerging agreement that transvaginal duplex ultrasound can replace venography as the first-line haemodynamic study.',
+            ru: 'Bookwalter (2019): подчёркивает, что трансвагинальное дуплексное УЗИ постепенно заменяет венографию как первичное гемодинамическое исследование.'
+          },
+          kashef: {
+            en: 'Kashef (2023): Recommends pairing ultrasound modalities with colour Doppler for comprehensive venous assessment.',
+            ru: 'Kashef (2023): рекомендует сочетать ультразвуковые методики с цветовым допплером для комплексной оценки венозного русла.'
+          },
+          holdstock: {
+            en: 'Holdstock et al. (2015) and Whiteley et al. (2015): Link haemorrhoids and pelvic reflux, reinforcing the need to evaluate pelvic veins in complex varicose presentations.',
+            ru: 'Holdstock и др. (2015), Whiteley и др. (2015): связывают геморрой с рефлюксом внутренних подвздошных вен и подчёркивают необходимость оценки тазовых вен при сложных формах варикоза.'
+          }
+        },
+        closing: {
+          en: 'Together, these findings support a progressive diagnostic pathway: recognise symptom clusters, document reflux on ultrasound, then escalate to venography or advanced imaging when intervention is planned.',
+          ru: 'В совокупности данные поддерживают пошаговый алгоритм: распознать симптомокомплекс, подтвердить рефлюкс на УЗИ и при планировании вмешательства дополнить обследование венографией или КТ/МР-методами.'
+        }
+      }
     }
   },
   endometriosisPage: {
