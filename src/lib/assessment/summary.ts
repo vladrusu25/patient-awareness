@@ -1,5 +1,5 @@
 // src/lib/assessment/summary.ts
-import type { AnswerMap, LikertValue } from './types';
+import type { AnswerMap } from './types';
 import { PAIRS, LIKERT_KEYS, PCS_ITEMS, PVVQ_ORDER } from './labels';
 import type { Language } from '$lib/i18n/types';
 import { getReportLocale } from './report-i18n';

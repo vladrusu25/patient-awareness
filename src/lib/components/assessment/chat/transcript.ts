@@ -110,7 +110,7 @@ export function resolveNextIndex(
   }
 
   if (nextKey) {
-    const i = steps.findIndex((s) => 'key' in s && (s as any).key === nextKey);
+    const i = steps.findIndex((s) => 'key' in s && (s as Step).key === nextKey);
     if (i !== -1) return i;
   }
 

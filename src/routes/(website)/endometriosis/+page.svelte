@@ -20,7 +20,7 @@
           {$t('endometriosisPage.hero.description')}
         </p>
         <a
-          class="mt-8 inline-flex items-center justify-center rounded-xl bg-white px-6 py-3 text-base font-semibold text-primary shadow-lg transition hover:opacity-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+          class="mt-8 inline-flex items-center justify-center rounded-xl bg-white px-6 py-3 text-base font-semibold text-primary shadow-lg transition hover:opacity-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
           href="/assessment#chat"
         >
           {$t('endometriosisPage.hero.primaryCta')}
@@ -89,7 +89,7 @@
           </li>
         </ul>
         <a
-          class="mt-8 inline-flex items-center justify-center rounded-xl bg-primary px-6 py-3 text-base font-semibold text-white shadow-lg transition hover:bg-primary-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-300"
+          class="mt-8 inline-flex items-center justify-center rounded-xl bg-primary px-6 py-3 text-base font-semibold text-white shadow-lg transition hover:bg-primary-700 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-primary-300"
           href="/pcs"
         >
           {$t('endometriosisPage.sections.overlap.cta')}
@@ -113,7 +113,7 @@
           {$t('endometriosisPage.sections.help.body2')}
         </p>
         <a
-          class="mt-8 inline-flex items-center justify-center rounded-xl bg-primary px-6 py-3 text-base font-semibold text-white shadow-lg transition hover:bg-primary-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-300"
+          class="mt-8 inline-flex items-center justify-center rounded-xl bg-primary px-6 py-3 text-base font-semibold text-white shadow-lg transition hover:bg-primary-700 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-primary-300"
           href="/assessment#chat"
         >
           {$t('endometriosisPage.sections.help.cta')}
@@ -162,7 +162,7 @@
         {$t('endometriosisPage.sections.voice.body2')}
       </p>
       <a
-        class="mt-8 inline-flex w-full sm:w-auto items-center justify-center rounded-xl bg-primary px-6 py-3 text-base font-semibold text-white shadow-lg transition hover:bg-primary-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-300"
+        class="mt-8 inline-flex w-full sm:w-auto items-center justify-center rounded-xl bg-primary px-6 py-3 text-base font-semibold text-white shadow-lg transition hover:bg-primary-700 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-primary-300"
         href="/assessment#chat"
       >
         {$t('endometriosisPage.sections.voice.cta')}

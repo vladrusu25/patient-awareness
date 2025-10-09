@@ -1,4 +1,4 @@
-<script lang="ts">
+﻿<script lang="ts">
   import { t } from '$lib/i18n';
 
   export let brand = 'Smart Health';
@@ -62,10 +62,13 @@
             <a href={`mailto:${email}`} class="hover:text-white transition-colors">{email}</a>
           </li>
           <li class="flex items-start gap-3">
-            <svg class="h-5 w-5 text-slate-300 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M6 9l6 6 6-6" />
-            </svg>
             <a href="/contact" class="hover:text-white transition-colors">{$t('nav.contact')}</a>
+          </li>
+          <li class="flex items-start gap-3">
+            <a href="https://www.instagram.com/smarthealth_pvd/" target="_blank" rel="noopener" class="hover:text-white transition-colors">Instagram</a>
+          </li>
+          <li class="flex items-start gap-3">
+            <a href="https://www.youtube.com/@PelvicVenousDisorders" target="_blank" rel="noopener" class="hover:text-white transition-colors">YouTube</a>
           </li>
         </ul>
       </div>
@@ -80,3 +83,4 @@
     </p>
   </div>
 </footer>
+

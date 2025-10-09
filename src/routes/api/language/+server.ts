@@ -10,7 +10,7 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
   try {
     const data = await request.json();
     language = data?.language;
-  } catch (error) {
+  } catch {
     return json({ error: 'Invalid payload' }, { status: 400 });
   }
 

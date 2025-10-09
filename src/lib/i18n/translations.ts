@@ -492,6 +492,50 @@ export const translations: Record<string, Node> = {
       empty: { en: 'Not enough data yet.', ru: 'Недостаточно данных.' }
     }
   },
+  contactPage: {
+    title: { en: 'Contact our team', ru: 'Связаться с нашей командой' },
+    description: {
+      en: 'Leave your contact details and a short note. A member of the Smart Health team will reach out soon.',
+      ru: 'Оставьте свои контакты и короткое сообщение. Специалист Smart Health свяжется с вами в ближайшее время.'
+    },
+    phoneLabel: { en: 'Phone / WhatsApp (optional)', ru: 'Телефон / WhatsApp (необязательно)' },
+    phonePlaceholder: { en: 'Phone number', ru: 'Номер телефона' },
+    phoneHint: {
+      en: 'Optional — include your country prefix if you prefer a call or WhatsApp message.',
+      ru: 'Необязательно — укажите международный код, если хотите, чтобы мы связались по телефону или WhatsApp.'
+    },
+    emailLabel: { en: 'Email', ru: 'Email' },
+    emailPlaceholder: { en: 'name@example.com', ru: 'name@example.com' },
+    messageLabel: { en: 'Message', ru: 'Сообщение' },
+    messagePlaceholder: {
+      en: 'Tell us how we can help...',
+      ru: 'Расскажите, чем мы можем помочь...'
+    },
+    submit: { en: 'Send message', ru: 'Отправить сообщение' },
+    submitting: { en: 'Sending...', ru: 'Отправка...' },
+    success: {
+      en: 'Thanks! Your message was sent. We will get back to you shortly.',
+      ru: 'Спасибо! Ваше сообщение отправлено. Мы свяжемся с вами в ближайшее время.'
+    },
+    errors: {
+      contactRequired: {
+        en: 'Please provide either a phone number with prefix or an email address.',
+        ru: 'Пожалуйста, укажите телефон с кодом страны или адрес электронной почты.'
+      },
+      invalidPhone: {
+        en: 'That phone number does not look valid.',
+        ru: 'Этот номер телефона выглядит некорректным.'
+      },
+      invalidEmail: {
+        en: 'Please enter a valid email address.',
+        ru: 'Введите корректный адрес электронной почты.'
+      },
+      messageRequired: {
+        en: 'Let us know how we can help.',
+        ru: 'Напишите, чем мы можем помочь.'
+      }
+    }
+  },
   doctor: {
     sidebar: {
       patients: { en: 'Assessments', ru: 'Оценки' },
@@ -555,3 +599,7 @@ export const translations: Record<string, Node> = {
     }
   }
 };
+
+
+
+
