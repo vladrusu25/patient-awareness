@@ -9,7 +9,7 @@ const RANGE_PRESETS: Record<string, { labelKey: string; days: number | null }> =
   '7': { labelKey: 'admin.range.last7', days: 7 },
   today: { labelKey: 'admin.range.today', days: 1 }
 };
-
+//a
 export const load: PageServerLoad = async (event) => {
   requireRole(event.locals, 'admin');
 
