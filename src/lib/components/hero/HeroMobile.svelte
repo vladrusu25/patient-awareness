@@ -9,7 +9,7 @@
 </script>
 
 <section
-  class="relative overflow-hidden bg-gradient-to-b from-primary-700 via-primary-600/75 to-mint-400"
+  class="relative overflow-hidden bg-gradient-to-b from-primary-700 via-primary-600/70 to-[#F9FAFB]"
   style={`min-height:${heightVh}vh`}
 >
   <div class="relative mx-auto max-w-[680px] px-5"
@@ -21,7 +21,7 @@
                   bg-white/15 blur-2xl opacity-40"></div>
     {/if}
 
-    <div class="flex flex-col items-center text-center pb-6">
+    <div class="flex flex-col items-center text-center pb-16">
       {#if showBadge}
         <div class="mb-3 inline-flex items-center gap-2 rounded-full border border-white/20
                     bg-white/15 px-3 py-1 text-[12px] text-white/90 backdrop-blur">
@@ -58,7 +58,7 @@
     </div>
   </div>
   <svg
-    class="pointer-events-none absolute bottom-[-1px] left-0 w-full h-12 sm:h-16 text-white"
+    class="pointer-events-none absolute bottom-[-1px] left-0 w-full h-12 sm:h-16 text-[#F9FAFB]"
     viewBox="0 0 1440 120"
     preserveAspectRatio="none"
     aria-hidden="true"

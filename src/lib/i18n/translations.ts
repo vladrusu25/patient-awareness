@@ -73,14 +73,14 @@ export const translations: Record<string, Node> = {
   },
   hero: {
     badge: { en: 'Private by design', ru: 'Конфиденциально по задумке' },
-    title: { en: 'Your Health Matters', ru: 'Ваше здоровье имеет значение' },
+    title: { en: 'Your Health Matters', ru: 'Ваше здоровье — наш приоритет' },
     copy: {
       en: 'Get personalized health insights through our AI-powered assessment. Quick, private, and designed by medical experts.',
-      ru: 'Получите персональные рекомендации о здоровье с помощью нашей AI-оценки. Быстро, конфиденциально и создано медицинскими экспертами.'
+      ru: 'Персональные рекомендации по здоровью на основе ИИ. Быстро, конфиденциально и составлено врачами.'
     },
     subtitle: {
       en: 'Quick, private AI-powered insights.',
-      ru: 'Быстрые конфиденциальные рекомендации на основе ИИ.'
+      ru: 'Понятные шаги всего за несколько минут.'
     },
     meta: {
       en: '~5 minutes · No sign-up · Free of charge',
