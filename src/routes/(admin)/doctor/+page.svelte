@@ -19,6 +19,7 @@
   let kind: 'assessment' | 'patient' | null = null;
   let selectedToken: string | null = null;
   let currentLanguage: Language = 'en';
+  let mobileNavOpen = false;
 
   $: currentLanguage = $language;
   $: locale = currentLanguage === 'ru' ? 'ru-RU' : 'en-US';
@@ -157,18 +158,53 @@
 </script>
 
 <div class="min-h-screen bg-neutral-25">
-  <div class="flex">
-    <Sidebar active="patients" />
+  <div class="lg:hidden sticky top-0 z-20 border-b border-neutral-100 bg-white">
+    <div class="flex items-center justify-between px-4 py-3">
+      <div class="flex items-center gap-3">
+        <img src="/images/logo.png" alt="Smart Health logo" class="h-8 w-auto" />
+        <span class="font-heading font-semibold text-base text-neutral-700">{$t('common.brand')}</span>
+      </div>
+      <button
+        type="button"
+        class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-neutral-200 text-neutral-600 hover:text-neutral-800 hover:border-neutral-300 focus:outline-none focus:ring-2 focus:ring-mint-400"
+        on:click={() => (mobileNavOpen = true)}
+      >
+        <span class="sr-only">{$t('header.toggleMenu')}</span>
+        <svg class="h-5 w-5" viewBox="0 0 20 20" fill="none">
+          <path
+            d="M4 6h12M4 10h12M4 14h12"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+          />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  {#if mobileNavOpen}
+    <div class="fixed inset-0 z-40 bg-neutral-900/40" on:click={() => (mobileNavOpen = false)}></div>
+    <div class="fixed inset-y-0 left-0 z-50 w-[260px]" on:click|stopPropagation>
+      <Sidebar active="patients" classes="shadow-xl" showClose on:close={() => (mobileNavOpen = false)} />
+    </div>
+  {/if}
+
+  <div class="lg:flex">
+    <Sidebar active="patients" classes="hidden lg:block" />
 
     <main class="flex-1 min-h-screen">
-      <header class="h-16 px-6 border-b border-neutral-100 bg-white flex items-center justify-between">
+      <header class="hidden h-16 px-6 border-b border-neutral-100 bg-white lg:flex lg:items-center lg:justify-between">
         <div>
           <h1 class="font-heading text-xl text-neutral-800">{texts.headerTitle}</h1>
           <p class="text-sm text-neutral-500">{texts.headerSubtitle}</p>
         </div>
       </header>
 
-      <div class="p-6 space-y-6">
+      <div class="px-4 py-4 md:px-6 md:py-6 space-y-6">
+        <div class="lg:hidden">
+          <h1 class="font-heading text-xl text-neutral-800">{texts.headerTitle}</h1>
+          <p class="mt-1 text-sm text-neutral-500">{texts.headerSubtitle}</p>
+        </div>
         <section class="rounded-2xl border border-neutral-100 bg-white p-5 shadow-sm">
           <form class="flex flex-col gap-3 sm:flex-row sm:items-center" on:submit|preventDefault={handleSearch}>
             <div class="relative flex-1">

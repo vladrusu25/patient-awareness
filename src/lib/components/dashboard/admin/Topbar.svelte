@@ -5,7 +5,7 @@
   export let ranges: Array<{ key: string; labelKey: string }>;
 </script>
 
-<div class="mb-4 flex flex-wrap items-center gap-3">
+<div class="flex flex-wrap items-center gap-3">
   <form method="GET" class="relative">
     <label class="sr-only" for="admin-range-select">{$t('admin.range.selectLabel')}</label>
     <div class="relative">

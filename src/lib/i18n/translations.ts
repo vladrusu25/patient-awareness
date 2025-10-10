@@ -11,6 +11,7 @@ export const translations: Record<string, Node> = {
       en: 'private by design',
       ru: 'конфиденциально по задумке'
     },
+    close: { en: 'Close', ru: 'Закрыть' },
     selectLanguage: { en: 'Language', ru: 'Язык' },
     english: { en: 'English', ru: 'Английский' },
     russian: { en: 'Russian', ru: 'Русский' }
