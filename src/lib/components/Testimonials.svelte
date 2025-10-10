@@ -13,19 +13,19 @@
 
   const defaultItems: Testimonial[] = [
     {
-      name: 'Sarah Johnson',
+      name: 'Anna Petrova',
       textKey: 'testimonials.default1',
       rating: 5,
       avatar: '/images/assessment_page/user_icon.png'
     },
     {
-      name: 'Michael Chen',
+      name: 'Elena Kovalenko',
       textKey: 'testimonials.default2',
       rating: 5,
       avatar: '/images/assessment_page/user_icon.png'
     },
     {
-      name: 'Emma Davis',
+      name: 'Katarina Novak',
       textKey: 'testimonials.default3',
       rating: 5,
       avatar: '/images/assessment_page/user_icon.png'

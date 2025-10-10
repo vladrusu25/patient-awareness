@@ -638,16 +638,16 @@ export const translations: Record<string, Node> = {
   testimonials: {
     heading: { en: 'What Our Patients Say', ru: 'Что говорят наши пациенты' },
     default1: {
-      en: 'The assessment was so easy to use and gave me valuable insights about my health. Highly recommend!',
-      ru: 'Оценка оказалась очень простой в использовании и дала ценные сведения о моём здоровье. Очень рекомендую!'
+      en: 'The chat-style questions were easy to follow on my phone, and I finally see how my symptoms connect.',
+      ru: 'Вопросы в формате чата легко проходить на телефоне — теперь понимаю, как мои симптомы связаны.'
     },
     default2: {
-      en: 'Quick, private, and the recommendations were spot on. This tool is a game-changer.',
-      ru: 'Быстро, конфиденциально, а рекомендации действительно точные. Этот инструмент меняет правила игры.'
+      en: 'I love that it creates a private patient ID with no sign-up. Everything stays confidential yet organized.',
+      ru: 'Понравилось, что создаётся личный идентификатор без регистрации: всё конфиденциально и легко продолжить позже.'
     },
     default3: {
-      en: 'I love how comprehensive yet simple the assessment is. Great user experience!',
-      ru: 'Мне нравится, что оценка одновременно подробная и простая. Отличный пользовательский опыт!'
+      en: 'The PDF summary with PCS and endometriosis guidance helped me prepare for my gynecologist visit.',
+      ru: 'PDF-отчёт с подсказками по СТВЗ и эндометриозу помог подготовиться к визиту к гинекологу.'
     },
     ratingLabel: {
       en: 'Rated {{rating}} out of 5',
