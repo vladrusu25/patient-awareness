@@ -74,8 +74,7 @@ const EXACT_EN_TO_RU: Record<string, string> = {
   'Work/professional activities limited: 1-5': 'Работа/профессиональная деятельность ограничены: 1-5',
   'Yes': 'Да',
   "You're doing well - keep going!": 'Вы отлично справляетесь — продолжайте!',
-  'Hi! Before we begin, have you completed this questionnaire before?': 'Привет! Вы уже проходили этот опрос раньше?',
-  'Are you new here or do you have a Patient ID?': 'Вы здесь впервые или у вас есть идентификатор пациента?',
+  'Hi! Before we begin, are you new here or do you have a Patient ID?': 'Привет! Вы здесь впервые или у вас есть идентификатор пациента?',
   "I'm new": 'Я здесь впервые',
   'I have a Patient ID': 'У меня есть идентификатор пациента',
   "We don't collect personal details. Your Patient ID only links your own assessments.": 'Мы не собираем персональные данные. Ваш идентификатор пациента используется только для ваших оценок.',
@@ -83,9 +82,11 @@ const EXACT_EN_TO_RU: Record<string, string> = {
   'A12345': 'A12345',
   'Nice progress - Part 2 is just 5 quick questions that help identify pelvic vein involvement.': 'Отличный прогресс — часть 2 включает всего 5 вопросов и помогает выявить вовлечение тазовых вен.',
   "Great! I've created your Patient ID. Please save it. You'll use it next time to see your progress.": 'Отлично! Я создал ваш идентификатор пациента. Сохраните его — он понадобится в следующий раз, чтобы увидеть ваш прогресс.',
-  'Would you like to continue with Part 2 (PCS screening)?': 'Хотите продолжить и пройти часть 2 (скрининг PCS)?',
+  'Would you like to continue and see if pelvic congestion syndrome (PCS) might be affecting you?':
+    'Хотите продолжить и узнать, есть ли у вас подозрение на синдром тазового венозного застоя?',
   'Great work - Part 3 (PVVQ) takes about 2-3 minutes and really strengthens your report.': 'Прекрасно! Часть 3 (PVVQ) занимает около 2–3 минут и значительно усиливает ваш отчёт.',
-  'Would you like to continue with Part 3 (PVVQ)?': 'Хотите продолжить и пройти часть 3 (PVVQ)?',
+  'Would you like to continue and understand how pelvic pain is impacting your daily life (PVVQ)?':
+    'Хотите продолжить и понять, как тазовая боль влияет на вашу повседневную жизнь (PVVQ)?',
   "Thanks - you've completed everything needed for now.": 'Спасибо — на этом всё.',
   "We're preparing your PDF report next.": 'Сейчас мы подготовим ваш PDF-отчёт.',
   "It takes ~2–3 minutes and really strengthens your report.": 'Это занимает около 2–3 минут и значительно усиливает ваш отчёт.',

@@ -45,14 +45,9 @@ export type ComposeContext = {
 function patientIntro(): Step[] {
   return [
     {
-      type: 'text',
-      key: 'p0_intro',
-      bot: ['Hi! Before we begin, have you completed this questionnaire before?']
-    },
-    {
       type: 'single',
       key: 'p0_patient_status',
-      prompt: 'Are you new here or do you have a Patient ID?',
+      prompt: 'Hi! Before we begin, are you new here or do you have a Patient ID?',
       options: [
         { label: "I'm new", value: 'new' },
         { label: 'I have a Patient ID', value: 'returning' }
@@ -140,7 +135,7 @@ export function composeSteps(
   const gate2: ChoiceStep = {
     type: 'single',
     key: 'c1_continue_part2',
-    prompt: 'Would you like to continue with Part 2 (PCS screening)?',
+    prompt: 'Would you like to continue and see if pelvic congestion syndrome (PCS) might be affecting you?',
     options: [
       { label: 'Yes', value: 'yes' },
       { label: 'No', value: 'no' }
@@ -165,7 +160,7 @@ export function composeSteps(
     const gate3: ChoiceStep = {
       type: 'single',
       key: 'c2_continue_part3',
-      prompt: 'Would you like to continue with Part 3 (PVVQ)?',
+      prompt: 'Would you like to continue and understand how pelvic pain is impacting your daily life (PVVQ)?',
       options: [
         { label: 'Yes', value: 'yes' },
         { label: 'No', value: 'no' }
