@@ -1,7 +1,7 @@
 // src/lib/pdf/report.ts
 import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
 import type { PDFFont } from 'pdf-lib';
-import fontkit from '@pdf-lib/fontkit/dist/fontkit.es.js';
+import fontkit from '@pdf-lib/fontkit/dist/fontkit.umd.js';
 import { readFile } from 'fs/promises';
 import { join } from 'path';
 import type { Language } from '$lib/i18n/types';

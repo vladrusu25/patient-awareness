@@ -75,15 +75,13 @@
       <div class="lg:col-span-6 mt-10 lg:mt-0">
         <div class="relative mx-auto max-w-lg">
           <div class="absolute inset-0 rounded-3xl bg-white/10 blur-3xl"></div>
-          <div class="relative z-10 overflow-hidden rounded-3xl bg-white/10 p-8 shadow-2xl ring-1 ring-white/15 backdrop-blur">
-            <img
-              src="/images/endo_hero.png"
-              alt={$t('pcsPage.hero.imageAlt')}
-              class="w-full rounded-2xl border border-white/20 object-cover"
-              loading="lazy"
-              decoding="async"
-            />
-          </div>
+          <img
+            src="/images/endo_hero.png"
+            alt={$t('pcsPage.hero.imageAlt')}
+            class="relative z-10 w-full rounded-3xl shadow-2xl ring-1 ring-white/15"
+            loading="lazy"
+            decoding="async"
+          />
         </div>
       </div>
     </div>

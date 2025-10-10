@@ -19,8 +19,8 @@ export const translations: Record<string, Node> = {
     home: { en: 'Home', ru: 'Главная' },
     assessment: { en: 'Assessment', ru: 'Оценка' },
     pdfSearch: { en: 'PDF Search', ru: 'Поиск PDF' },
-    pcs: { en: 'PCS', ru: 'ПВС' },
-    pcsDiagnosis: { en: 'PCS Diagnosis', ru: 'Диагностика ПВС' },
+    pcs: { en: 'PCS', ru: 'СТВЗ' },
+    pcsDiagnosis: { en: 'PCS Diagnosis', ru: 'Диагностика СТВЗ' },
     endometriosis: { en: 'Endometriosis', ru: 'Эндометриоз' },
     dashboard: { en: 'Dashboard', ru: 'Панель' },
     assessmentMenu: { en: 'Assessment', ru: 'Оценка' },
@@ -112,29 +112,69 @@ export const translations: Record<string, Node> = {
       en: 'Empower Yourself with Knowledge About Pelvic Health',
       ru: 'Расширяйте знания о здоровье тазового дна'
     },
-    stat1: {
-      title: { en: '1 in 3', ru: '1 из 3' },
-      copy: {
-        en: 'Women experience pelvic floor dysfunction during their lifetime',
-        ru: 'Женщины сталкиваются с дисфункцией тазового дна в течение жизни'
+    cards: {
+      card1: {
+        iconAlt: {
+          en: 'Icon representing how common these conditions are',
+          ru: 'Иконка, отражающая распространённость состояний'
+        },
+        title: {
+          en: '1. How common are these conditions?',
+          ru: '1. Насколько часто встречаются эти состояния?'
+        },
+        bullet1: {
+          en: 'Endometriosis affects about 1 in 10 women of reproductive age.',
+          ru: 'Эндометриоз встречается примерно у 1 из 10 женщин репродуктивного возраста.'
+        },
+        bullet2: {
+          en: 'Pelvic Congestion Syndrome (PCS) may account for up to 30% of women with chronic pelvic pain seen in gynecology clinics. Read more about this: <a class="text-green-900 underline" href="https://icarebetter.com/endometriosis/education/related-conditions/pelvic-congestion-syndrome-another-cause-of-chronic-pelvic-pain-2/" target="_blank" rel="noopener noreferrer">icarebetter.com</a>.',
+          ru: 'Синдром тазового венозного застоя (СТВЗ) может быть причиной до 30% случаев хронической тазовой боли у женщин на приёме у гинеколога. Подробнее: <a class="text-green-900 underline" href="https://icarebetter.com/endometriosis/education/related-conditions/pelvic-congestion-syndrome-another-cause-of-chronic-pelvic-pain-2/" target="_blank" rel="noopener noreferrer">icarebetter.com</a>.'
+        }
       },
-      alt: { en: 'Chart icon', ru: 'Значок диаграммы' }
-    },
-    stat2: {
-      title: { en: '50%', ru: '50%' },
-      copy: {
-        en: 'Of women over 50 experience some form of pelvic organ prolapse',
-        ru: 'У 50% женщин старше 50 лет наблюдается форма пролапса органов малого таза'
+      card2: {
+        iconAlt: {
+          en: 'Icon illustrating overlapping symptoms',
+          ru: 'Иконка, показывающая пересечение симптомов'
+        },
+        title: {
+          en: '2. They share similar symptoms',
+          ru: '2. Симптомы часто пересекаются'
+        },
+        intro: {
+          en: 'Both conditions can cause:',
+          ru: 'Оба состояния могут вызывать:'
+        },
+        bullet1: {
+          en: 'Chronic pelvic pain (lasting more than 6 months)',
+          ru: 'Хроническую тазовую боль (длится более 6 месяцев)'
+        },
+        bullet2: {
+          en: 'Pain that worsens before periods or after sex',
+          ru: 'Боль, усиливающуюся перед менструацией или после полового акта'
+        },
+        bullet3: {
+          en: 'Lower back or abdominal discomfort',
+          ru: 'Дискомфорт в пояснице или нижней части живота'
+        },
+        note: {
+          en: 'This overlap can make diagnosis challenging. Read more about this: <a class="text-green-900 underline" href="https://www.healthline.com/health/pelvic-congestion-syndrome-and-endometriosis" target="_blank" rel="noopener noreferrer">healthline.com</a>.',
+          ru: 'Из-за сходства симптомов постановка диагноза затруднена. Подробнее: <a class="text-green-900 underline" href="https://www.healthline.com/health/pelvic-congestion-syndrome-and-endometriosis" target="_blank" rel="noopener noreferrer">healthline.com</a>.'
+        }
       },
-      alt: { en: 'Group icon', ru: 'Значок группы' }
-    },
-    stat3: {
-      title: { en: '85%', ru: '85%' },
-      copy: {
-        en: 'Improvement rate with proper pelvic floor therapy and care',
-        ru: 'Показатель улучшения при правильной терапии и уходе за тазовым дном'
-      },
-      alt: { en: 'Heart icon', ru: 'Значок сердца' }
+      card3: {
+        iconAlt: {
+          en: 'Icon representing ultrasound imaging',
+          ru: 'Иконка, обозначающая ультразвуковое исследование'
+        },
+        title: {
+          en: '3. Ultrasound can help',
+          ru: '3. УЗИ помогает в диагностике'
+        },
+        description: {
+          en: 'Modern transvaginal ultrasound is a key, non-invasive tool for detecting signs of endometriosis and PCS, helping doctors plan the right treatment and avoid delays. Read more about this: <a class="text-green-900 underline" href="https://link.springer.com/article/10.1007/s13669-025-00424-2" target="_blank" rel="noopener noreferrer">springer.com</a>.',
+          ru: 'Современное трансвагинальное УЗИ — важный неинвазивный метод для выявления признаков эндометриоза и СТВЗ, который помогает врачу выбрать правильное лечение и избежать задержки диагностики. Подробнее: <a class="text-green-900 underline" href="https://link.springer.com/article/10.1007/s13669-025-00424-2" target="_blank" rel="noopener noreferrer">springer.com</a>.'
+        }
+      }
     }
   },
   pelvicPainInfo: {
@@ -190,7 +230,7 @@ export const translations: Record<string, Node> = {
     hero: {
       title: {
         en: 'Pelvic Congestion Syndrome (PCS): Understanding the Condition and Its Impact',
-        ru: 'Синдром тазового венозного застоя (ПВС): понимание состояния и его влияния'
+        ru: 'Синдром тазового венозного застоя (СТВЗ): понимание состояния и его влияния'
       },
       headline: {
         en: 'Pelvic Congestion Syndrome: Unveiling the Hidden Cause of Chronic Pelvic Pain',
@@ -198,7 +238,7 @@ export const translations: Record<string, Node> = {
       },
       subheadline: {
         en: 'Learn how PCS causes persistent discomfort and how its symptoms overlap with other conditions like endometriosis, affecting daily life and fertility.',
-        ru: 'Узнайте, как ПВС вызывает постоянный дискомфорт, пересекается с эндометриозом и влияет на повседневную жизнь и фертильность.'
+        ru: 'Узнайте, как СТВЗ вызывает постоянный дискомфорт, пересекается с эндометриозом и влияет на повседневную жизнь и фертильность.'
       },
       cta: { en: 'Take the Symptom Questionnaire', ru: 'Пройдите опрос по симптомам' },
       imageAlt: {
@@ -211,20 +251,20 @@ export const translations: Record<string, Node> = {
         headline: { en: 'What is Pelvic Congestion Syndrome?', ru: 'Что такое синдром тазового венозного застоя?' },
         intro: {
           en: 'Pelvic Congestion Syndrome (PCS) is a condition characterized by chronic pelvic pain caused by enlarged and dysfunctional veins in the pelvic area. When these veins fail to carry blood back to the heart, blood pools and creates ongoing discomfort. PCS primarily affects women of childbearing age, with symptoms often worsening after pregnancy.',
-          ru: 'Синдром тазового венозного застоя (ПВС) сопровождается хронической тазовой болью из-за расширенных и дисфункциональных вен в малом тазу. Когда кровь не возвращается по ним к сердцу, она застаивается и вызывает стойкий дискомфорт. Чаще всего ПВС встречается у женщин репродуктивного возраста, а симптомы нередко усиливаются после беременности.'
+          ru: 'Синдром тазового венозного застоя (СТВЗ) сопровождается хронической тазовой болью из-за расширенных и дисфункциональных вен в малом тазу. Когда кровь не возвращается по ним к сердцу, она застаивается и вызывает стойкий дискомфорт. Чаще всего СТВЗ встречается у женщин репродуктивного возраста, а симптомы нередко усиливаются после беременности.'
         },
         causesTitle: { en: 'Common causes include:', ru: 'Распространённые причины:' },
         causes: {
           pregnancy: { en: 'Enlarged veins related to pregnancy or hormonal changes', ru: 'Расширение вен на фоне беременности или гормональных изменений' },
           estrogen: { en: 'Elevated estrogen levels that increase vein dilation', ru: 'Повышенный уровень эстрогенов, усиливающий дилатацию вен' },
-          familyHistory: { en: 'Family history of varicose veins or PCS', ru: 'Наследственная предрасположенность к варикозной болезни или ПВС' }
+          familyHistory: { en: 'Family history of varicose veins or PCS', ru: 'Наследственная предрасположенность к варикозной болезни или СТВЗ' }
         }
       },
       risk: {
         headline: { en: 'Who is at Risk of Developing PCS?', ru: 'Кто находится в группе риска?' },
         intro: {
           en: 'Certain factors make PCS more likely to develop or worsen over time:',
-          ru: 'Эти факторы повышают вероятность возникновения или прогрессирования ПВС:'
+          ru: 'Эти факторы повышают вероятность возникновения или прогрессирования СТВЗ:'
         },
         factors: {
           pregnancies: { en: 'Multiple pregnancies, with risk increasing after each pregnancy', ru: 'Многократные беременности, при которых риск растёт с каждой последующей' },
@@ -233,10 +273,10 @@ export const translations: Record<string, Node> = {
         }
       },
       symptoms: {
-        headline: { en: 'Symptoms of PCS', ru: 'Симптомы ПВС' },
+        headline: { en: 'Symptoms of PCS', ru: 'Симптомы СТВЗ' },
         intro: {
           en: 'PCS symptoms can look a lot like endometriosis and other pelvic conditions. Many people experience some combination of the following:',
-          ru: 'Проявления ПВС нередко напоминают эндометриоз и другие заболевания малого таза. Часто наблюдается сочетание следующих симптомов:'
+          ru: 'Проявления СТВЗ нередко напоминают эндометриоз и другие заболевания малого таза. Часто наблюдается сочетание следующих симптомов:'
         },
         list: {
           pelvicPain: { en: 'Chronic pelvic pain that intensifies toward the end of the day', ru: 'Хроническая тазовая боль, усиливающаяся к концу дня' },
@@ -247,10 +287,10 @@ export const translations: Record<string, Node> = {
           fatigue: { en: 'Fatigue, brain fog, or difficulty sleeping', ru: 'Усталость, туман в голове или нарушения сна' },
           heaviness: { en: 'A sense of heaviness or fullness in the lower abdomen', ru: 'Ощущение тяжести или распирания в нижней части живота' }
         },
-        cta: { en: 'Explore PCS Symptoms in Detail', ru: 'Подробнее о симптомах ПВС' }
+        cta: { en: 'Explore PCS Symptoms in Detail', ru: 'Подробнее о симптомах СТВЗ' }
       },
       diagnosis: {
-        headline: { en: 'Diagnosis of PCS', ru: 'Диагностика ПВС' },
+        headline: { en: 'Diagnosis of PCS', ru: 'Диагностика СТВЗ' },
         intro: {
           en: 'Diagnosis relies on a mix of clinical evaluation and imaging. Pain must persist for more than six months and center on the pelvis.',
           ru: 'Диагностика опирается на клиническую оценку и визуализирующие методы. Боль должна сохраняться более шести месяцев и локализоваться в области таза.'
@@ -264,16 +304,16 @@ export const translations: Record<string, Node> = {
         cta: { en: 'Read More About Diagnosis', ru: 'Подробнее о диагностике' }
       },
       treatment: {
-        headline: { en: 'Treatment Options for PCS', ru: 'Варианты лечения ПВС' },
+        headline: { en: 'Treatment Options for PCS', ru: 'Варианты лечения СТВЗ' },
         intro: {
           en: 'Ovarian vein embolization (OVE) is the most common and effective treatment for PCS. It is a minimally invasive procedure that targets the problem veins directly.',
-          ru: 'Эмболизация яичниковых вен (OVE) - самый распространённый и эффективный способ лечения ПВС. Это малоинвазивная процедура, воздействующая напрямую на патологические сосуды.'
+          ru: 'Эмболизация яичниковых вен (OVE) - самый распространённый и эффективный способ лечения СТВЗ. Это малоинвазивная процедура, воздействующая напрямую на патологические сосуды.'
         },
-        benefitsTitle: { en: 'OVE can provide:', ru: 'OVE позволяет:' },
+        benefitsTitle: { en: 'OVE can provide:', ru: 'Эмболизация яичниковых вен позволяет:' },
         benefits: {
           painRelief: { en: 'Significant pain reduction and relief during daily activities', ru: 'Существенно снизить боль и облегчить повседневную активность' },
           sexualHealth: { en: 'Improved comfort during sexual activity and intimacy', ru: 'Повысить комфорт в интимной жизни и качество близости' },
-          fertility: { en: 'Potential improvements in fertility for people affected by PCS', ru: 'Повысить шансы на беременность у пациенток с ПВС' }
+          fertility: { en: 'Potential improvements in fertility for people affected by PCS', ru: 'Повысить шансы на беременность у пациенток с СТВЗ' }
         },
         otherOptions: {
           en: 'Additional options can include medication, hormone management, or pelvic physical therapy to support recovery.',
@@ -284,14 +324,14 @@ export const translations: Record<string, Node> = {
         headline: { en: 'Improving Quality of Life', ru: 'Повышение качества жизни' },
         body: {
           en: 'PCS affects more than just physical comfort. People frequently report disruptions to relationships, mental health, and sexual wellbeing. After OVE, many regain confidence, intimacy, and connection with their partners.',
-          ru: 'ПВС влияет не только на физическое состояние. Пациентки часто отмечают сложности в отношениях, эмоциональном благополучии и сексуальном здоровье. После эмболизации многие возвращают уверенность, близость и связь с партнёром.'
+          ru: 'СТВЗ влияет не только на физическое состояние. Пациентки часто отмечают сложности в отношениях, эмоциональном благополучии и сексуальном здоровье. После эмболизации многие возвращают уверенность, близость и связь с партнёром.'
         }
       },
       science: {
         headline: { en: 'Backed by Science', ru: 'Научные данные' },
         intro: {
           en: 'Explore clinical research that validates PCS diagnosis and treatment:',
-          ru: 'Изучите клинические исследования, подтверждающие диагностику и лечение ПВС:'
+          ru: 'Изучите клинические исследования, подтверждающие диагностику и лечение СТВЗ:'
         },
         links: {
           study1: {
@@ -300,15 +340,15 @@ export const translations: Record<string, Node> = {
           },
           study2: {
             en: 'Pelvic Congestion Syndrome and Fertility Outcomes (International Journal of Reproductive Medicine)',
-            ru: 'ПВС и репродуктивные исходы (International Journal of Reproductive Medicine)'
+            ru: 'СТВЗ и репродуктивные исходы (International Journal of Reproductive Medicine)'
           }
         }
       },
       voice: {
-        headline: { en: 'Your Voice Can Change Care', ru: 'Ваш голос помогает менять помощь' },
+        headline: { en: 'Your Voice Can Change Care', ru: 'Ваш голос помогает улучшать помощь пациентам' },
         body: {
           en: 'By completing the symptom questionnaire, you help build the data needed for faster diagnosis, better treatment options, and more informed care models for PCS.',
-          ru: 'Отвечая на вопросы опросника, вы помогаете собирать данные для более быстрой диагностики, улучшения терапии и развития мультидисциплинарной помощи при ПВС.'
+          ru: 'Отвечая на вопросы опросника, вы помогаете собирать данные для более быстрой диагностики, улучшения терапии и развития мультидисциплинарной помощи при СТВЗ.'
         },
         cta: { en: 'Share Your Symptoms', ru: 'Поделитесь своими симптомами' }
       }
@@ -318,7 +358,7 @@ export const translations: Record<string, Node> = {
     hero: {
       title: {
         en: 'PCS Diagnosis: Clinical and Imaging Guide',
-        ru: 'Диагностика ПВС: клинический и визуализационный гид'
+        ru: 'Диагностика СТВЗ: клинический и визуализационный гид'
       },
       subtitle: {
         en: 'How clinicians confirm pelvic congestion syndrome when symptoms overlap with other pelvic pain disorders.',
@@ -326,16 +366,16 @@ export const translations: Record<string, Node> = {
       },
       intro: {
         en: 'Use this overview to recognise red flags, choose the right imaging pathway, and understand the evidence that supports a PCS diagnosis.',
-        ru: 'Эта памятка помогает заметить настораживающие признаки, выбрать оптимальный путь визуализации и понять доказательную базу диагностики ПВС.'
+        ru: 'Эта памятка помогает заметить настораживающие признаки, выбрать оптимальный путь визуализации и понять доказательную базу диагностики СТВЗ.'
       },
-      backCta: { en: 'Return to PCS Overview', ru: 'Вернуться к обзору ПВС' }
+      backCta: { en: 'Return to PCS Overview', ru: 'Вернуться к обзору СТВЗ' }
     },
     sections: {
       suspect: {
-        headline: { en: 'When to Suspect PCS', ru: 'Когда подозревать ПВС' },
+        headline: { en: 'When to Suspect PCS', ru: 'Когда подозревать СТВЗ' },
         intro: {
           en: 'PCS is often suspected when pelvic pain persists despite a normal pelvic exam. Key symptom patterns include:',
-          ru: 'ПВС предполагают, если хроническая тазовая боль сохраняется при нормальном гинекологическом осмотре. Обратите внимание на следующие паттерны:'
+          ru: 'СТВЗ предполагают, если хроническая тазовая боль сохраняется при нормальном гинекологическом осмотре. Обратите внимание на следующие паттерны:'
         },
         criteriaTitle: { en: 'Frequent clinical clues:', ru: 'Частые клинические подсказки:' },
         criteria: {
@@ -419,7 +459,7 @@ export const translations: Record<string, Node> = {
         headline: { en: 'Ultrasound Diagnostic Criteria', ru: 'Ультразвуковые критерии диагностики' },
         intro: {
           en: 'Multiple studies converge on a core set of ultrasound findings that support a PCS diagnosis:',
-          ru: 'Ряд исследований сходится во мнении, что следующие признаки подтверждают диагноз ПВС:'
+          ru: 'Ряд исследований сходится во мнении, что следующие признаки подтверждают диагноз СТВЗ:'
         },
         list: {
           veinSize: { en: 'Tortuous pelvic veins measuring greater than 6 mm in diameter.', ru: 'Извилистые тазовые вены диаметром более 6 мм.' },
@@ -515,14 +555,14 @@ export const translations: Record<string, Node> = {
         }
       },
       overlap: {
-        headline: { en: 'Why Overlap Matters', ru: 'Почему важно учитывать пересечения' },
+        headline: { en: 'Why Overlap Matters', ru: 'Почему важно учитывать сопутствующие заболевания' },
         body: {
           en: 'Endometriosis rarely acts alone. Conditions like Pelvic Congestion Syndrome (PCS) often coexist, intensifying pain and delaying diagnosis.',
-          ru: 'Эндометриоз редко действует в одиночку. Такие состояния, как синдром тазового венозного застоя (СТВЗ), часто присутствуют одновременно, усиливая боль и затрудняя диагностику.'
+          ru: 'Эндометриоз редко бывает единственной причиной хронической тазовой боли. Такие состояния, как синдром тазового венозного застоя (СТВЗ), часто присутствуют одновременно, усиливая боль и затрудняя диагностику.'
         },
         stats: {
-          first: { en: 'Up to 80% of women with endometriosis show signs of PCS (ovarian varices).', ru: 'До 80% женщин с эндометриозом имеют признаки СТВЗ (оварикоз).' },
-          second: { en: 'Overlapping conditions can lead to years of delayed treatment.', ru: 'Пересекающиеся состояния могут приводить к многолетним задержкам в лечении.' }
+          first: { en: 'Up to 80% of women with endometriosis show signs of PCS (ovarian varices).', ru: 'До 80% женщин с эндометриозом имеют признаки СТВЗ (варикоз вен малого таза).' },
+          second: { en: 'Overlapping conditions can lead to years of delayed treatment.', ru: 'Сопутствующие заболевания могут приводить к многолетним задержкам в лечении.' }
         },
         cta: { en: 'Learn About PCS', ru: 'Узнать о СТВЗ' }
       },
@@ -534,7 +574,7 @@ export const translations: Record<string, Node> = {
         },
         body2: {
           en: 'Your input supports integrated care models—gynecologists, vascular specialists, and pain experts working together.',
-          ru: 'Ваш вклад поддерживает интегрированные модели помощи, где гинекологи, сосудистые специалисты и эксперты по боли работают вместе.'
+          ru: 'Ваш вклад поддерживает интегрированные модели помощи, где гинекологи, сосудистые хирурги и интервенционные радиологи работают вместе.'
         },
         cta: { en: 'Start Your Questionnaire Now', ru: 'Начните опрос сейчас' }
       },

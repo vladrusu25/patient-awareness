@@ -1,44 +1,81 @@
 ﻿<script lang="ts">
   import { t } from '$lib/i18n';
+
+  const cards = [
+    {
+      icon: '/images/homepage/chart.png',
+      altKey: 'knowledge.cards.card1.iconAlt',
+      titleKey: 'knowledge.cards.card1.title',
+      bulletKeys: ['knowledge.cards.card1.bullet1', 'knowledge.cards.card1.bullet2']
+    },
+    {
+      icon: '/images/homepage/group.png',
+      altKey: 'knowledge.cards.card2.iconAlt',
+      titleKey: 'knowledge.cards.card2.title',
+      introKey: 'knowledge.cards.card2.intro',
+      bulletKeys: [
+        'knowledge.cards.card2.bullet1',
+        'knowledge.cards.card2.bullet2',
+        'knowledge.cards.card2.bullet3'
+      ],
+      noteKey: 'knowledge.cards.card2.note'
+    },
+    {
+      icon: '/images/homepage/heart.png',
+      altKey: 'knowledge.cards.card3.iconAlt',
+      titleKey: 'knowledge.cards.card3.title',
+      descriptionKey: 'knowledge.cards.card3.description'
+    }
+  ];
 </script>
 
 <section class="bg-neutral-25 py-16">
   <div class="mx-auto max-w-[1280px] px-6">
-    <!-- Section Heading -->
-    <h2 class="text-center font-heading text-3xl sm:text-4xl font-bold text-neutral-900 mb-12">
+    <h2 class="mb-12 text-center font-heading text-3xl font-bold text-neutral-900 sm:text-4xl">
       {$t('knowledge.heading')}
     </h2>
 
-    <!-- Icon Grid Section -->
     <div class="grid grid-cols-1 gap-12 md:grid-cols-3">
-      
-      <!-- First Stat: 1 in 3 -->
-      <div class="bg-white rounded-lg shadow-lg p-8 text-center">
-        <img src="/images/homepage/chart.png" alt={$t('knowledge.stat1.alt')} class="mx-auto h-16 w-16 mb-6" />
-        <h3 class="text-green-900 text-3xl font-bold">{$t('knowledge.stat1.title')}</h3>
-        <p class="text-neutral-600 text-base mt-2">
-          {$t('knowledge.stat1.copy')}
-        </p>
-      </div>
+      {#each cards as card (card.titleKey)}
+        <div class="flex h-full flex-col rounded-lg bg-white p-8 shadow-lg">
+          <img
+            src={card.icon}
+            alt={$t(card.altKey)}
+            class="mx-auto mb-6 h-16 w-16"
+          />
+          <h3 class="text-center text-2xl font-bold text-green-900 md:text-left">
+            {$t(card.titleKey)}
+          </h3>
 
-      <!-- Second Stat: 50% -->
-      <div class="bg-white rounded-lg shadow-lg p-8 text-center">
-        <img src="/images/homepage/group.png" alt={$t('knowledge.stat2.alt')} class="mx-auto h-16 w-16 mb-6" />
-        <h3 class="text-green-900 text-3xl font-bold">{$t('knowledge.stat2.title')}</h3>
-        <p class="text-neutral-600 text-base mt-2">
-          {$t('knowledge.stat2.copy')}
-        </p>
-      </div>
+          <div class="mt-4 flex-1 space-y-4 text-neutral-600">
+            {#if card.introKey}
+              <p class="text-base">
+                {$t(card.introKey)}
+              </p>
+            {/if}
 
-      <!-- Third Stat: 85% -->
-      <div class="bg-white rounded-lg shadow-lg p-8 text-center">
-        <img src="/images/homepage/heart.png" alt={$t('knowledge.stat3.alt')} class="mx-auto h-16 w-16 mb-6" />
-        <h3 class="text-green-900 text-3xl font-bold">{$t('knowledge.stat3.title')}</h3>
-        <p class="text-neutral-600 text-base mt-2">
-          {$t('knowledge.stat3.copy')}
-        </p>
-      </div>
+            {#if card.bulletKeys}
+              <ul class="list-inside list-disc space-y-2 text-base">
+                {#each card.bulletKeys as bulletKey}
+                  <li>{@html $t(bulletKey)}</li>
+                {/each}
+              </ul>
+            {/if}
 
+            {#if card.descriptionKey}
+              <p class="text-base">
+                {@html $t(card.descriptionKey)}
+              </p>
+            {/if}
+
+            {#if card.noteKey}
+              <p class="text-base">
+                {@html $t(card.noteKey)}
+              </p>
+            {/if}
+          </div>
+        </div>
+      {/each}
     </div>
   </div>
 </section>
