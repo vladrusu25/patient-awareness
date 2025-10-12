@@ -2,7 +2,7 @@
   import '../app.css';
   import { language } from '$lib/i18n';
   import { onMount } from 'svelte';
-  import { injectAnalytics } from '@vercel/analytics';
+  import { injectAnalytics } from '@vercel/analytics/sveltekit';
 
   export let data: { language?: 'en' | 'ru' };
 
