@@ -33,7 +33,7 @@ An **Admin** dashboard shows cohorts, metrics, and an Endopain vs PVVQ scatter p
 ---
 
 ## 🌐 Live Demo
-Deployed on Vercel: https://patient-awareness.vercel.app/assessment
+Deployed on Vercel: https://pelviccongestionsyndrome.eu/
 
 ---
 
