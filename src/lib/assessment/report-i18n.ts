@@ -48,42 +48,86 @@ const RU_PART1_LABELS: Record<LabelKey, string> = {
   q11: 'Боль при дефекации вне менструации',
   q13: 'Боль при мочеиспускании',
   q15: 'Боль в пояснице',
-  q17: 'Обезболивающие от тазовой боли (последний месяц)',
-  q18: 'Пропуски работы или учебы из-за боли',
+  q17: 'Обезболивающие от тазовой боли (за последний месяц)',
+  q18: 'Пропуски работы или учёбы из-за боли',
   q19: 'Боль ограничивает повседневную активность',
-  q20: 'Боль влияет на интимную жизнь',
+  q20: 'Боль влияет на половую жизнь',
   q21: 'Боль влияет на социальную/семейную жизнь'
+};
+const KZ_PART1_LABELS: Record<LabelKey, string> = {
+  q1: 'Өздігінен пайда болатын жамбас ауыруы',
+  q3: 'Етеккір кезіндегі ауырсыну',
+  q5: 'Жыныстық қатынас кезіндегі ауырсыну',
+  q7: 'Жыныстық қатынастан кейінгі ауырсыну',
+  q9: 'Етеккір кезінде дәреттену кезіндегі ауырсыну',
+  q11: 'Етеккірден тыс дәреттену кезіндегі ауырсыну',
+  q13: 'Зәр шығару кезіндегі ауырсыну',
+  q15: 'Бел аймағындағы ауырсыну',
+  q17: 'Жамбас ауырсынуына арналған ауырсынуды басатын дәрілер (соңғы ай)',
+  q18: 'Ауырсынуға байланысты жұмысқа/оқуға бармау',
+  q19: 'Ауырсыну күнделікті белсенділікті шектейді',
+  q20: 'Ауырсыну жыныстық өмірге әсер етеді',
+  q21: 'Ауырсыну әлеуметтік/отбасылық өмірге әсер етеді'
 };
 
 const RU_PCS_LABELS: Record<string, string> = {
-  q22_pain_worse_standing: 'Боль усиливается при длительном стоянии или ходьбе',
-  q23_pain_improves_lying: 'Боль уменьшается в положении лежа',
-  q24_pelvic_heaviness_end_day: 'Чувство тяжести или давления в тазу к концу дня',
-  q25_varicose_vulva_buttocks_thighs: 'Варикозные вены в области вульвы, ягодиц или бедер',
+  q22_pain_worse_standing: 'Боль усиливается при длительном стоянии/ходьбе',
+  q23_pain_improves_lying: 'Боль уменьшается лёжа',
+  q24_pelvic_heaviness_end_day: 'Чувство тяжести/давления в тазу к концу дня',
+  q25_varicose_vulva_buttocks_thighs: 'Варикозное расширение вен вульвы/ягодиц/бёдер',
   q26_pelvic_pain_6months: 'Тазовая боль более 6 месяцев'
+};
+const KZ_PCS_LABELS: Record<string, string> = {
+  q22_pain_worse_standing: 'Ұзақ уақыт тұрғанда немесе жүргенде ауырсыну күшейеді',
+  q23_pain_improves_lying: 'Жатқанда ауырсыну жеңілдейді',
+  q24_pelvic_heaviness_end_day: 'Күн соңында жамбас аймағында ауырлық/қысым сезімі',
+  q25_varicose_vulva_buttocks_thighs: 'Вульвада, бөкседе немесе санында көк тамырлардың пайда болуы',
+  q26_pelvic_pain_6months: 'Жамбас ауыруы 6 айдан артық'
 };
 
 const RU_PVVQ_LABELS: Record<string, string> = {
-  q27_lower_abdominal_pain: 'Боль внизу живота (во второй половине цикла)',
-  q28_pain_during_intercourse: 'Боль во время или после полового акта',
+  q27_lower_abdominal_pain: 'Боль в нижней части живота (вторая половина цикла)',
+  q28_pain_during_intercourse: 'Боль во время/после полового акта',
   q29_sitting_pain: 'Боль при длительном сидении',
-  q30_lumbosacral_inguinal_exertion_pain: 'Боль в пояснично-крестцовой или паховой области после нагрузки',
-  q31_perineum_vulvar_tenderness: 'Чувствительность в промежности или области вульвы',
-  q32_household_activities_limit: 'Боль ограничивает бытовую активность',
-  q33_work_activities_limit: 'Боль ограничивает работу или профессиональную активность',
-  q34_reduced_physical_activity: 'Снижена способность к повседневной физической активности',
-  q35_avoid_sport_exercise: 'Из-за боли избегаю спорта или упражнений',
-  q36_need_frequent_rest: 'Необходимость часто отдыхать',
-  q37_avoid_social_events: 'Из-за боли избегаю социальных мероприятий',
-  q38_family_responsibilities_difficult: 'Сложно выполнять семейные обязанности',
-  q39_limitation_of_sexual_life: 'Ограничение интимной жизни',
-  q40_feeling_socially_isolated: 'Чувство социальной изоляции',
-  q41_strain_personal_relationships: 'Напряжение в личных отношениях',
-  q42_feeling_anxious_due_to_pain: 'Тревога или нервозность из-за боли',
-  q43_feeling_depressed_symptoms: 'Подавленность из-за симптомов',
-  q44_concern_about_future_health: 'Тревога за здоровье в будущем',
-  q45_feeling_irritable_short_tempered: 'Раздражительность или вспыльчивость',
-  q46_reduced_self_esteem: 'Сниженная самооценка или уверенность'
+  q30_lumbosacral_inguinal_exertion_pain: 'Боль в пояснично-крестцовой/паховой области после нагрузки',
+  q31_perineum_vulvar_tenderness: 'Чувствительность в области промежности/вульвы',
+  q32_household_activities_limit: 'Боль ограничивает домашние дела',
+  q33_work_activities_limit: 'Боль ограничивает работу/проф. деятельность',
+  q34_reduced_physical_activity: 'Снижение возможности выполнять физическую активность',
+  q35_avoid_sport_exercise: 'Избегание спорта/упражнений из-за боли',
+  q36_need_frequent_rest: 'Нужда в частом отдыхе',
+  q37_avoid_social_events: 'Избегание социальных мероприятий',
+  q38_family_responsibilities_difficult: 'Сложности с семейными обязанностями',
+  q39_limitation_of_sexual_life: 'Ограничение половой жизни',
+  q40_feeling_socially_isolated: 'Ощущение социальной изоляции',
+  q41_strain_personal_relationships: 'Напряжённость в личных отношениях',
+  q42_feeling_anxious_due_to_pain: 'Тревога/нервозность из-за боли',
+  q43_feeling_depressed_symptoms: 'Пониженное настроение из-за симптомов',
+  q44_concern_about_future_health: 'Беспокойство о будущем здоровье',
+  q45_feeling_irritable_short_tempered: 'Раздражительность/вспыльчивость',
+  q46_reduced_self_esteem: 'Пониженная самооценка/уверенность'
+};
+const KZ_PVVQ_LABELS: Record<string, string> = {
+  q27_lower_abdominal_pain: 'Төменгі іш аймағындағы ауырсыну (циклдің екінші жартысы)',
+  q28_pain_during_intercourse: 'Жыныстық қатынас кезінде/кейінгі ауырсыну',
+  q29_sitting_pain: 'Ұзақ отыру кезіндегі ауырсыну',
+  q30_lumbosacral_inguinal_exertion_pain: 'Күш түскеннен кейін бел, сегізкөз немесе шап аймағындағы ауырсыну',
+  q31_perineum_vulvar_tenderness: 'Аралық және вульва аймағындағы сезімталдық/ауырсыну',
+  q32_household_activities_limit: 'Үй шаруасындағы белсенділікті ауырсыну шектейді',
+  q33_work_activities_limit: 'Жұмыс/кәсіби белсенділікті ауырсыну шектейді',
+  q34_reduced_physical_activity: 'Күнделікті физикалық белсенділікті орындау қабілетінің төмендеуі',
+  q35_avoid_sport_exercise: 'Ауырсынуға байланысты спорт/жаттығудан бас тарту',
+  q36_need_frequent_rest: 'Жиі демалуға мұқтаждық',
+  q37_avoid_social_events: 'Әлеуметтік шаралардан бас тарту',
+  q38_family_responsibilities_difficult: 'Отбасылық міндеттерді орындаудағы қиындықтар',
+  q39_limitation_of_sexual_life: 'Жыныстық өмірдің шектелуі',
+  q40_feeling_socially_isolated: 'Әлеуметтік оқшаулануды сезіну',
+  q41_strain_personal_relationships: 'Жеке қарым-қатынастардағы шиеленіс',
+  q42_feeling_anxious_due_to_pain: 'Ауырсынуға байланысты мазасыздану/жүйке кернеуі',
+  q43_feeling_depressed_symptoms: 'Симптомдарға байланысты көңіл-күйдің түсуі',
+  q44_concern_about_future_health: 'Болашақ денсаулық туралы алаңдау/қорқыныш',
+  q45_feeling_irritable_short_tempered: 'Тітіркенгіштік/ашушаңдық',
+  q46_reduced_self_esteem: 'Өзін-өзі бағалау/сенімнің төмендеуі'
 };
 
 const LIKERT_EN: LikertTranslations = {
@@ -98,6 +142,13 @@ const LIKERT_RU: LikertTranslations = {
   sometimes: 'Иногда',
   often: 'Часто',
   always: 'Всегда'
+};
+
+const LIKERT_KZ: LikertTranslations = {
+  never: 'Ешқашан',
+  sometimes: 'Кейде',
+  often: 'Жиі',
+  always: 'Әрқашан'
 };
 
 const LOCALES: Record<Language, ReportLocale> = {
@@ -166,6 +217,39 @@ const LOCALES: Record<Language, ReportLocale> = {
       part3: (total) => `Врачебная оценка (PVVQ, суммарный балл 20-100): ${total}`
     },
     formatPart3Value: (value) => (value ? `${value} из 5` : 'Нет данных')
+  },
+  kz: {
+    summaryTitle: 'Денсаулық бағалауының қысқаша есебі',
+    headers: {
+      assessmentId: 'Бағалау ID',
+      patientId: 'Пациент ID',
+      generated: 'Жасалған күні',
+      patientNotProvided: 'Көрсетілмеген'
+    },
+    bool: {
+      yes: 'Иә',
+      no: 'Жоқ',
+      unsure: 'Нақты емес',
+      na: 'Қолданылмайды'
+    },
+    likert: LIKERT_KZ,
+    partTitles: {
+      part1: '1-бөлім. ENDOPAIN-4D',
+      part2: '2-бөлім. PCS скринингі (5 сұрақ)',
+      part3: '3-бөлім. Жамбас көктамыр сауалнамасы (PVVQ, 20 сұрақ)'
+    },
+    part3Interpretation:
+      'Ұпай неғұрлым төмен болса, өмір сапасы соғұрлым жоғары. PVVQ (20 сұрақ) бойынша жалпы ұпай былай түсіндіріледі: 20 – ең жоғары өмір сапасы; 21–40 – жеңіл төмендеу; 41–60 – орташа төмендеу; 61–80 – айқын төмендеу; 81–100 – өте қатты төмендеу.',
+    part1Labels: KZ_PART1_LABELS,
+    pcsLabels: KZ_PCS_LABELS,
+    pvvqLabels: KZ_PVVQ_LABELS,
+    scoring: {
+      part1: (score) => `Дәрігерлік баға (ENDOPAIN-4D, 0-100): ${score}/100`,
+      part2: (count, yesWord) =>
+        `Дәрігерлік баға (PCS оң деп саналады, егер ${yesWord} жауаптары ≥2 болса): ${count} ${yesWord}`,
+      part3: (total) => `Дәрігерлік баға (PVVQ, 20-100): ${total}`
+    },
+    formatPart3Value: (value) => (value ? `${value}/5` : 'Қолданылмайды')
   }
 };
 

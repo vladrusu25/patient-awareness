@@ -45,7 +45,8 @@
 
   const languages: { value: Language; label: string }[] = [
     { value: 'en', label: 'EN' },
-    { value: 'ru', label: 'РУ' }
+    { value: 'ru', label: 'РУ' },
+    { value: 'kz', label: 'KZ' }
   ];
 
   $: pathname = $page.url.pathname;

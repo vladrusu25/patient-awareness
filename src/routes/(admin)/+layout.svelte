@@ -1,4 +1,4 @@
-<script lang="ts">
+﻿<script lang="ts">
   import { t, language, switchLanguage } from '$lib/i18n';
   import type { Language } from '$lib/i18n/types';
   import { browser } from '$app/environment';
@@ -8,7 +8,8 @@
 
   const languages: { value: Language; label: string }[] = [
     { value: 'en', label: 'EN' },
-    { value: 'ru', label: 'РУ' }
+    { value: 'ru', label: 'РУ' },
+    { value: 'kz', label: 'KZ' }
   ];
 
   let selectedLanguage: Language = 'en';

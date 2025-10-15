@@ -22,7 +22,7 @@
   let mobileNavOpen = false;
 
   $: currentLanguage = $language;
-  $: locale = currentLanguage === 'ru' ? 'ru-RU' : 'en-US';
+  $: locale = currentLanguage === 'ru' ? 'ru-RU' : currentLanguage === 'kz' ? 'kk-KZ' : 'en-US';
   $: dateFormatter = new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeStyle: 'short' });
   $: scoreKeys = [
     { key: 'endopain', label: $t('doctor.scores.endopain.label'), help: $t('doctor.scores.endopain.help') },
@@ -93,6 +93,17 @@
     kind = null;
     selectedToken = null;
     errorMsg = '';
+  }
+
+  function closeMobileNav() {
+    mobileNavOpen = false;
+  }
+
+  function handleOverlayKey(event: KeyboardEvent) {
+    if (event.key === 'Escape' || event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      closeMobileNav();
+    }
   }
 
   async function handleSearch(event: SubmitEvent) {
@@ -183,9 +194,16 @@
   </div>
 
   {#if mobileNavOpen}
-    <div class="fixed inset-0 z-40 bg-neutral-900/40" on:click={() => (mobileNavOpen = false)}></div>
-    <div class="fixed inset-y-0 left-0 z-50 w-[260px]" on:click|stopPropagation>
-      <Sidebar active="patients" classes="shadow-xl" showClose on:close={() => (mobileNavOpen = false)} />
+    <div
+      class="fixed inset-0 z-40 bg-neutral-900/40"
+      role="button"
+      tabindex="0"
+      aria-label={$t('common.close')}
+      on:click={closeMobileNav}
+      on:keydown={handleOverlayKey}
+    ></div>
+    <div class="fixed inset-y-0 left-0 z-50 w-[260px]" role="dialog" aria-modal="true">
+      <Sidebar active="patients" classes="shadow-xl" showClose on:close={closeMobileNav} />
     </div>
   {/if}
 

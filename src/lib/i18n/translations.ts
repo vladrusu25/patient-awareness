@@ -1,6 +1,6 @@
 ﻿import type { Language } from './types';
 
-type Leaf = Record<Language, string>;
+type Leaf = { en: string; ru: string } & Partial<Record<Language, string>>;
 
 type Node = Leaf | { [key: string]: Node };
 

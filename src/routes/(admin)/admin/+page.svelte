@@ -37,6 +37,13 @@
   function closeMobileNav() {
     mobileNavOpen = false;
   }
+
+  function handleOverlayKey(event: KeyboardEvent) {
+    if (event.key === 'Escape' || event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      closeMobileNav();
+    }
+  }
 </script>
 
 <!-- Mobile header -->
@@ -65,8 +72,15 @@
 </div>
 
 {#if mobileNavOpen}
-  <div class="fixed inset-0 z-40 bg-neutral-900/40" on:click={closeMobileNav}></div>
-  <div class="fixed inset-y-0 left-0 z-50 w-[260px]" on:click|stopPropagation>
+  <div
+    class="fixed inset-0 z-40 bg-neutral-900/40"
+    role="button"
+    tabindex="0"
+    aria-label={$t('common.close')}
+    on:click={closeMobileNav}
+    on:keydown={handleOverlayKey}
+  ></div>
+  <div class="fixed inset-y-0 left-0 z-50 w-[260px]" role="dialog" aria-modal="true">
     <Sidebar items={nav} classes="shadow-xl" showClose on:close={closeMobileNav} />
   </div>
 {/if}
