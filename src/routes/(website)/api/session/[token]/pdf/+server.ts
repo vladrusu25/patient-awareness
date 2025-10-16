@@ -33,7 +33,8 @@ export const POST: RequestHandler = async ({ params, cookies }) => {
   if (!session) throw error(404, 'not_found');
 
   const langCookie = cookies.get('lang');
-  const language: Language = langCookie === 'ru' ? 'ru' : langCookie === 'kz' ? 'kz' : 'en';
+  const language: Language =
+    langCookie === 'ru' ? 'ru' : langCookie === 'kz' ? 'kz' : langCookie === 'hr' ? 'hr' : 'en';
 
   const { downloadUrl } = await buildAndUploadReport(token, language);
   return json({

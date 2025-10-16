@@ -187,9 +187,102 @@ const EXACT_EN_TO_KZ: Record<string, string> = {
   '10 â€“ Worst pain': '10 € «ең жаман ауырсыну'
 };
 
+const EXACT_EN_TO_HR: Record<string, string> = {
+  '1': '1',
+  '2': '2',
+  '3': '3',
+  '4': '4',
+  '5': '5',
+  '6': '6',
+  '7': '7',
+  '8': '8',
+  '9': '9',
+  '0 - No pain': '0 - Nema boli',
+  '10 - Worst pain': '10 - Najgora bol',
+  '10 – Worst pain': '10 – Najgora bol',
+  'Always': 'Uvijek',
+  'Avoidance of social events: 1-5': 'Izbjegavanje društvenih događanja: 1-5',
+  'Avoidance of sport/exercise due to pain: 1-5': 'Izbjegavanje sporta/tjelovježbe zbog boli: 1-5',
+  'Concern/fear about future health: 1-5': 'Zabrinutost/strah za buduće zdravlje: 1-5',
+  'Daily activities limited by pain:': 'Dnevne aktivnosti ograničene bolom:',
+  'Difficulty with family responsibilities: 1-5': 'Poteškoće s obiteljskim obavezama: 1-5',
+  'Do you have lumbar (lower back) pain?': 'Imate li lumbalni (donji dio leđa) bol?',
+  'Do you have menstrual pain?': 'Imate li menstrualne bolove?',
+  'Do you have pain after sexual intercourse?': 'Imate li bolove nakon spolnog odnosa?',
+  'Do you have pain during sexual intercourse?': 'Imate li bolove tijekom spolnog odnosa?',
+  'Do you have pain on urination?': 'Imate li bolove pri mokrenju?',
+  'Do you have spontaneous pelvic pain?': 'Imate li spontanu bol u zdjelici?',
+  'Excellent work - Part 1 complete!': 'Izvrstan rad - 1. dio dovršen!',
+  'Feeling anxious/nervous due to pain: 1-5': 'Osjećaj tjeskobe/nervoze zbog boli: 1-5',
+  'Feeling depressed/low due to symptoms: 1-5': 'Osjećaj potištenosti/slabosti zbog simptoma: 1-5',
+  'Feeling irritable/short-tempered: 1-5': 'Osjećaj razdražljivosti/napadljivosti: 1-5',
+  'Feeling socially isolated: 1-5': 'Osjećaj društvene izoliranosti: 1-5',
+  'Great job - Part 3 complete! We\'re preparing your full report.': 'Sjajno - treći dio dovršen! Pripremamo vaše potpuno izvješće.',
+  'Household activities limited by pain: 1-5': 'Kućanske aktivnosti ograničene bolom: 1-5',
+  'I\'m here to understand your pelvic pain so we can guide next steps. This is quick and private. Let\'s begin.': 'Ovdje sam da razumijem vašu bol u zdjelici kako bismo vas mogli uputiti u sljedeće korake.Ovo je brzo i privatno.Počnimo.',
+  'If yes: Intensity (0-10)': 'Ako da: Intenzitet (0-10)',
+  'Intensity (0-10)': 'Intenzitet (0-10)',
+  'Intensity (0–10)': 'Intenzitet (0-10)',
+  'It only takes a minute and helps doctors spot patterns early.': 'Traje samo minutu i pomaže liječnicima da rano uoče uzorke.',
+  'It takes ~2-3 minutes and really strengthens your report.': 'Traje ~2-3 minute i stvarno ojačava vaše izvješće.',
+  'Limitation of sexual life: 1-5': 'Ograničenje spolnog života: 1-5',
+  'Lower abdominal pain (second half of cycle): 1-5': 'Bol u donjem dijelu trbuha (druga polovica ciklusa): 1-5',
+  'Missed work or school due to pain:': 'Izostanak s posla ili škole zbog boli:',
+  'Need for frequent rest periods: 1-5': 'Potreba za čestim odmorima: 1-5',
+  'Never': 'Nikada',
+  'No': 'Ne',
+  'Often': 'Često',
+  'Pain affecting sexual life:': 'Bol koja utječe na seksualni život:',
+  'Pain affecting social/family life:': 'Bol koja utječe na društveni/obiteljski život:',
+  'Pain during prolonged sitting: 1-5': 'Bol tijekom dugotrajnog sjedenja: 1-5',
+  'Pain during/after sexual intercourse: 1-5': 'Bol tijekom/nakon spolnog odnosa: 1-5',
+  'Pain improves when lying down?': 'Bol se smanjuje kada ležite?',
+  'Pain in lumbar/sacral/inguinal area after exertion: 1-5': 'Bol u lumbalnom/sakralnom/ingvinalnom području nakon napora: 1-5',
+  'Pain with bowel movement during menstruation?': 'Bolovi kod pražnjenja crijeva tijekom menstruacije?',
+  'Pain with bowel movement outside menstruation?': 'Bol kod pražnjenja crijeva izvan menstruacije?',
+  'Pain worsens when standing/walking long periods?': 'Bol se pogoršava tijekom dužeg stajanja/hodanja?',
+  'Painkillers for pelvic pain (past month):': 'Lijekovi protiv bolova u zdjelici (prošli mjesec):',
+  'Part 2 is a quick 5-question screen for pelvic vein involvement (PCS).': 'Drugi dio je brzi pregled s 5 pitanja za provjeru zahvaćenosti zdjeličnih vena (PCS).',
+  'Part 3 is the PVVQ (20 items). It shows how pain affects daily life.': 'Dio 3 je PVVQ (20 stavki).Pokazuje kako bol utječe na svakodnevni život.',
+  'Pelvic heaviness/pressure at end of day?': 'Težina/pritisak u zdjelici na kraju dana?',
+  'Pelvic pain > 6 months?': 'Bol u zdjelici > 6 mjeseci?',
+  'Reduced ability to perform daily physical activity: 1-5': 'Smanjena sposobnost obavljanja dnevne tjelesne aktivnosti: 1-5',
+  'Reduced self-esteem/confidence: 1-5': 'Smanjeno samopoštovanje/pouzdanje: 1-5',
+  'Sometimes': 'Ponekad',
+  'Strain in personal relationships: 1-5': 'Napetost u osobnim odnosima: 1-5',
+  'Tenderness in perineum/vulvar region: 1-5': 'Osjetljivost u regiji perineuma/vulve: 1-5',
+  'Unsure': 'nesigurno',
+  'Varicose veins in vulva/buttocks/thighs?': 'Proširene vene na vulvi/stražnjici/bedrima?',
+  'Work/professional activities limited: 1-5': 'Ograničene radne/profesionalne aktivnosti: 1-5',
+  'Yes': 'Da',
+  'You\'re doing well - keep going!': 'Dobro ti ide - samo tako nastavi!',
+  'Hi! Before we begin, are you new here or do you have a Patient ID?': 'Bok!Prije nego što počnemo, jeste li novi ovdje ili imate ID pacijenta?',
+  'I\'m new': 'nova sam',
+  'I have a Patient ID': 'Imam ID pacijenta',
+  'We don\'t collect personal details. Your Patient ID only links your own assessments.': 'Ne prikupljamo osobne podatke. Vaš ID pacijenta povezuje samo vaše procjene.',
+  'Enter your Patient ID so we can link to your previous assessments (example: A12345).': 'Unesite svoj ID pacijenta kako bismo se mogli povezati s vašim prethodnim procjenama (primjer: A12345).',
+  'A12345': 'A12345',
+  'Nice progress - Part 2 is just 5 quick questions that help identify pelvic vein involvement.': 'Odličan napredak - dio 2 sadrži samo 5 brzih pitanja koja pomažu prepoznati zahvaćenost zdjeličnih vena.',
+  'Great! I\'ve created your Patient ID. Please save it. You\'ll use it next time to see your progress.': 'Odlično! Izradio sam vaš ID pacijenta. Molim vas spremite ga. Sljedeći put ćete ga koristiti kako biste vidjeli svoj napredak.',
+  'Would you like to continue and see if pelvic congestion syndrome (PCS) might be affecting you?': 'Želite li nastaviti i vidjeti utječe li možda na vas sindrom zagušenja zdjelice (PCS)?',
+  'Great work - Part 3 (PVVQ) takes about 2-3 minutes and really strengthens your report.': 'Sjajan rad - dio 3 (PVVQ) traje oko 2-3 minute i zaista osnažuje vaše izvješće.',
+  'Would you like to continue and understand how pelvic pain is impacting your daily life (PVVQ)?': 'Želite li nastaviti i razumjeti kako bol u zdjelici utječe na vaš svakodnevni život (PVVQ)?',
+  'Thanks - you\'ve completed everything needed for now.': 'Hvala - dovršili ste sve što je potrebno za sada.',
+  'We\'re preparing your PDF report next.': 'Sljedeće pripremamo vaše PDF izvješće.',
+  'It takes ~2–3 minutes and really strengthens your report.': 'Traje ~2–3 minute i stvarno osnažuje vaše izvješće.',
+  'Excellent work — Part 1 complete!': 'Izvrstan rad — 1. dio dovršen!',
+  'Great job — Part 3 complete! We’re preparing your full report.': 'Sjajno - treći dio dovršen! Pripremamo vaše potpuno izvješće.',
+  'You’re doing well — keep going!': 'Dobro ti ide - samo tako nastavi!',
+  'Great! I’ve created your Patient ID. Please save it. You’ll use it next time to see your progress.': 'Odlično! Izradio sam vaš ID pacijenta. Molim vas spremite ga. Sljedeći put ćete ga koristiti kako biste vidjeli svoj napredak.',
+  'We don’t collect personal details. Your Patient ID only links your own assessments.': 'Ne prikupljamo osobne podatke. Vaš ID pacijenta povezuje samo vaše procjene.',
+  '10 â€“ Worst pain': '10 – Najgora bol'
+};
+
+
 const EXACT_TRANSLATIONS: Record<Exclude<Language, 'en'>, Record<string, string>> = {
   ru: EXACT_EN_TO_RU,
-  kz: EXACT_EN_TO_KZ
+  kz: EXACT_EN_TO_KZ,
+  hr: EXACT_EN_TO_HR
 };
 
 const REGEX_RULES: RegexRule[] = [
@@ -202,6 +295,9 @@ const REGEX_RULES: RegexRule[] = [
       if (lang === 'kz') {
         return `Пациент ID: ${match[1]} — сақтап қойыңыз немесе скриншот жасаңыз.`;
       }
+      if (lang === 'hr') {
+        return `ID pacijenta: ${match[1]} - spremite ili snimite zaslon.`;
+      }
       return match[0];
     }
   },
@@ -213,6 +309,9 @@ const REGEX_RULES: RegexRule[] = [
       }
       if (lang === 'kz') {
         return `Рахмет! Алдыңғы нәтижелеріңізді байланыстырдық. Пациент ID ${match[1]} дайын — жалғастырайық.`;
+      }
+      if (lang === 'hr') {
+        return `Hvala! Povezali smo vaše prethodne rezultate. ID pacijenta ${match[1]} je spreman - nastavimo.`;
       }
       return match[0];
     }

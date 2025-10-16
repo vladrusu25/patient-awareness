@@ -22,7 +22,14 @@
   let mobileNavOpen = false;
 
   $: currentLanguage = $language;
-  $: locale = currentLanguage === 'ru' ? 'ru-RU' : currentLanguage === 'kz' ? 'kk-KZ' : 'en-US';
+  $: locale =
+    currentLanguage === 'ru'
+      ? 'ru-RU'
+      : currentLanguage === 'kz'
+        ? 'kk-KZ'
+        : currentLanguage === 'hr'
+          ? 'hr-HR'
+          : 'en-US';
   $: dateFormatter = new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeStyle: 'short' });
   $: scoreKeys = [
     { key: 'endopain', label: $t('doctor.scores.endopain.label'), help: $t('doctor.scores.endopain.help') },

@@ -39,6 +39,53 @@ type ReportLocale = {
 const PCS_LABELS_EN = Object.fromEntries(PCS_ITEMS) as Record<string, string>;
 const PVVQ_LABELS_EN = PVVQ_LABELS;
 
+const HR_PART1_LABELS: Record<LabelKey, string> = {
+  q1: 'Spontana bol u zdjelici',
+  q3: 'Menstrualna bol',
+  q5: 'Bol tijekom spolnog odnosa',
+  q7: 'Bol nakon spolnog odnosa',
+  q9: 'Bol pri pražnjenju crijeva tijekom menstruacije',
+  q11: 'Bol pri pražnjenju crijeva izvan menstruacije',
+  q13: 'Bol pri mokrenju',
+  q15: 'Bol u lumbalnom (donjem) dijelu leđa',
+  q17: 'Analgetici za bol u zdjelici (prošli mjesec)',
+  q18: 'Izostanci s posla ili škole zbog boli',
+  q19: 'Dnevne aktivnosti ograničene zbog boli',
+  q20: 'Bol koja utječe na seksualni život',
+  q21: 'Bol koja utječe na društveni/obiteljski život'
+};
+
+const HR_PCS_LABELS: Record<string, string> = {
+  q22_pain_worse_standing: 'Bol se pogoršava pri dugotrajnom stajanju ili hodanju',
+  q23_pain_improves_lying: 'Bol se smanjuje pri ležanju',
+  q24_pelvic_heaviness_end_day: 'Osjećaj težine/pritiska u zdjelici na kraju dana',
+  q25_varicose_vulva_buttocks_thighs: 'Proširene vene na vulvi, stražnjici ili bedrima',
+  q26_pelvic_pain_6months: 'Bol u zdjelici dulja od 6 mjeseci'
+};
+
+const HR_PVVQ_LABELS: Record<string, string> = {
+  q27_lower_abdominal_pain: 'Bol u donjem dijelu trbuha (druga polovica ciklusa)',
+  q28_pain_during_intercourse: 'Bol tijekom/nakon spolnog odnosa',
+  q29_sitting_pain: 'Bol tijekom dugotrajnog sjedenja',
+  q30_lumbosacral_inguinal_exertion_pain: 'Bol u lumbalnom/sakralnom/ingvinalnom području nakon napora',
+  q31_perineum_vulvar_tenderness: 'Osjetljivost u perineumu/vulvarnoj regiji',
+  q32_household_activities_limit: 'Kućanski poslovi ograničeni zbog boli',
+  q33_work_activities_limit: 'Radne/profesionalne aktivnosti ograničene',
+  q34_reduced_physical_activity: 'Smanjena sposobnost obavljanja svakodnevne tjelesne aktivnosti',
+  q35_avoid_sport_exercise: 'Izbjegavanje sporta/tjelovježbe zbog boli',
+  q36_need_frequent_rest: 'Potreba za čestim razdobljima odmora',
+  q37_avoid_social_events: 'Izbjegavanje društvenih događanja',
+  q38_family_responsibilities_difficult: 'Poteškoće s obiteljskim obvezama',
+  q39_limitation_of_sexual_life: 'Ograničenje seksualnog života',
+  q40_feeling_socially_isolated: 'Osjećaj društvene izoliranosti',
+  q41_strain_personal_relationships: 'Napetost u osobnim odnosima',
+  q42_feeling_anxious_due_to_pain: 'Osjećaj tjeskobe/nervoze zbog boli',
+  q43_feeling_depressed_symptoms: 'Osjećaj potištenosti zbog simptoma',
+  q44_concern_about_future_health: 'Zabrinutost/strah za buduće zdravlje',
+  q45_feeling_irritable_short_tempered: 'Osjećaj razdražljivosti/kratkog temperamenta',
+  q46_reduced_self_esteem: 'Smanjeno samopoštovanje/samopouzdanje'
+};
+
 const RU_PART1_LABELS: Record<LabelKey, string> = {
   q1: 'Спонтанная тазовая боль',
   q3: 'Менструальная боль',
@@ -151,6 +198,13 @@ const LIKERT_KZ: LikertTranslations = {
   always: 'Әрқашан'
 };
 
+const LIKERT_HR: LikertTranslations = {
+  never: 'Nikada',
+  sometimes: 'Ponekad',
+  often: 'Često',
+  always: 'Uvijek'
+};
+
 const LOCALES: Record<Language, ReportLocale> = {
   en: {
     summaryTitle: 'Health Assessment Summary',
@@ -250,6 +304,39 @@ const LOCALES: Record<Language, ReportLocale> = {
       part3: (total) => `Дәрігерлік баға (PVVQ, 20-100): ${total}`
     },
     formatPart3Value: (value) => (value ? `${value}/5` : 'Қолданылмайды')
+  },
+  hr: {
+    summaryTitle: 'Sažetak zdravstvene procjene',
+    headers: {
+      assessmentId: 'ID procjene',
+      patientId: 'ID pacijenta',
+      generated: 'Generirano',
+      patientNotProvided: 'Nije navedeno'
+    },
+    bool: {
+      yes: 'Da',
+      no: 'Ne',
+      unsure: 'Nisam sigurna',
+      na: 'N/P'
+    },
+    likert: LIKERT_HR,
+    partTitles: {
+      part1: 'Dio 1. ENDOPAIN-4D',
+      part2: 'Dio 2. PCS probir (5 pitanja)',
+      part3: 'Dio 3. Upitnik o varikozitetima zdjelice (PVVQ, 20 pitanja)'
+    },
+    part3Interpretation:
+      'Niži ukupni rezultat znači bolju kvalitetu života. Zbroj PVVQ (20 stavki) tumači se ovako: 20 – najbolja kvaliteta života; 21–40 – blago narušena; 41–60 – umjereno narušena; 61–80 – teško narušena; 81–100 – izrazito teško narušena.',
+    part1Labels: HR_PART1_LABELS,
+    pcsLabels: HR_PCS_LABELS,
+    pvvqLabels: HR_PVVQ_LABELS,
+    scoring: {
+      part1: (score) => `Rezultat (ENDOPAIN-4D, raspon 0-100): ${score}/100`,
+      part2: (count, yesWord) =>
+        `Rezultat (PCS probir; pozitivan je ako su najmanje 2 odgovora "${yesWord}"): ${count} ${yesWord}`,
+      part3: (total) => `Rezultat (PVVQ, raspon 20-100): ${total}`
+    },
+    formatPart3Value: (value) => (value ? `${value}/5` : 'N/P')
   }
 };
 

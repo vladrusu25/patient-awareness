@@ -3,12 +3,13 @@ import { derived, writable, get } from 'svelte/store';
 import type { Language } from './types';
 import { translations } from './translations';
 import { translationsKz } from './translations.kz';
+import { translationsHr } from './translations.hr';
 
 const DEFAULT_LANGUAGE: Language = 'en';
 const STORAGE_KEY = 'patient-awareness:lang';
 
 function isLanguage(value: unknown): value is Language {
-  return value === 'en' || value === 'ru' || value === 'kz';
+  return value === 'en' || value === 'ru' || value === 'kz' || value === 'hr';
 }
 
 function format(template: string, params?: Record<string, string | number>): string {
@@ -37,6 +38,15 @@ function resolvePathKz(key: string): unknown {
   }, translationsKz as unknown);
 }
 
+function resolvePathHr(key: string): unknown {
+  return key.split('.').reduce<unknown>((acc, part) => {
+    if (typeof acc === 'object' && acc && part in acc) {
+      return (acc as Record<string, unknown>)[part];
+    }
+    return undefined;
+  }, translationsHr as unknown);
+}
+
 function isLeaf(value: unknown): value is Record<Language, string> {
   if (!value || typeof value !== 'object') return false;
   return 'en' in (value as Record<string, unknown>);
@@ -52,28 +62,29 @@ if (browser) {
 
   language.subscribe((value) => {
     window.localStorage.setItem(STORAGE_KEY, value);
-    document.documentElement.lang = value === 'kz' ? 'kk' : value;
+    document.documentElement.lang = value === 'kz' ? 'kk' : value === 'hr' ? 'hr' : value;
   });
 }
 
 export const t = derived(language, ($language) => {
   return (key: string, params?: Record<string, string | number>): string => {
     const resolved = resolvePath(key);
+    let override: unknown = undefined;
     if ($language === 'kz') {
-      const override = resolvePathKz(key);
-      if (typeof override === 'string') {
-        return format(override, params);
-      }
+      override = resolvePathKz(key);
+    } else if ($language === 'hr') {
+      override = resolvePathHr(key);
+    }
+
+    if (typeof override === 'string') {
+      return format(override, params);
     }
     if (typeof resolved === 'string') {
       return format(resolved, params);
     }
     if (isLeaf(resolved)) {
-      if ($language === 'kz') {
-        const override = resolvePathKz(key);
-        if (typeof override === 'string') {
-          return format(override, params);
-        }
+      if (typeof override === 'string') {
+        return format(override, params);
       }
       const template = resolved[$language] ?? resolved.en;
       return format(template, params);

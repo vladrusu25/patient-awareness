@@ -1,7 +1,7 @@
 import { json, type RequestHandler } from '@sveltejs/kit';
 import type { Language } from '$lib/i18n/types';
 
-const SUPPORTED = new Set<Language>(['en', 'ru', 'kz']);
+const SUPPORTED = new Set<Language>(['en', 'ru', 'kz', 'hr']);
 const COOKIE_NAME = 'lang';
 const ONE_YEAR = 60 * 60 * 24 * 365;
 

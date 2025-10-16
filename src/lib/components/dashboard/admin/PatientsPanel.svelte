@@ -4,7 +4,8 @@
 
   export let patients: PatientLike[] = [];
 
-  $: locale = $language === 'ru' ? 'ru-RU' : $language === 'kz' ? 'kk-KZ' : 'en-US';
+  $: locale =
+    $language === 'ru' ? 'ru-RU' : $language === 'kz' ? 'kk-KZ' : $language === 'hr' ? 'hr-HR' : 'en-US';
   $: rtf = new Intl.RelativeTimeFormat(locale, { numeric: 'auto' });
   $: dateFormatter = new Intl.DateTimeFormat(locale, { year: 'numeric', month: 'short', day: 'numeric' });
 
