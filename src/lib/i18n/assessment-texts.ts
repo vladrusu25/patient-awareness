@@ -278,11 +278,105 @@ const EXACT_EN_TO_HR: Record<string, string> = {
   '10 â€“ Worst pain': '10 – Najgora bol'
 };
 
+const EXACT_EN_TO_SK: Record<string, string> = {
+  '1': '1',
+  '2': '2',
+  '3': '3',
+  '4': '4',
+  '5': '5',
+  '6': '6',
+  '7': '7',
+  '8': '8',
+  '9': '9',
+  '0 - No pain': '0 - Bez bolesti',
+  '10 - Worst pain': '10 - Najhoršia bolesť',
+  '10 – Worst pain': '10 - Najhoršia bolesť',
+  'Always': 'Vždy',
+  'Avoidance of social events: 1-5': 'Vyhýbanie sa spoločenským udalostiam: 1-5',
+  'Avoidance of sport/exercise due to pain: 1-5': 'Vyhýbanie sa športu/cvičeniu kvôli bolesti: 1-5',
+  'Concern/fear about future health: 1-5': 'Obava/strach o budúce zdravie: 1-5',
+  'Daily activities limited by pain:': 'Denné aktivity obmedzené bolesťou:',
+  'Difficulty with family responsibilities: 1-5': 'Ťažkosti s rodinnými povinnosťami: 1-5',
+  'Do you have lumbar (lower back) pain?': 'Máte bolesti v krížovej oblasti (spodnej časti chrbta)?',
+  'Do you have menstrual pain?': 'Máte menštruačné bolesti?',
+  'Do you have pain after sexual intercourse?': 'Máte bolesti po pohlavnom styku?',
+  'Do you have pain during sexual intercourse?': 'Máte bolesti pri pohlavnom styku?',
+  'Do you have pain on urination?': 'Máte bolesti pri močení?',
+  'Do you have spontaneous pelvic pain?': 'Máte spontánne bolesti panvy?',
+  'Excellent work - Part 1 complete!': 'Skvelá práca - 1. časť dokončená!',
+  'Feeling anxious/nervous due to pain: 1-5': 'Pocit úzkosti/nervóznosti v dôsledku bolesti: 1-5',
+  'Feeling depressed/low due to symptoms: 1-5': 'Pocit depresie/nízke v dôsledku symptómov: 1-5',
+  'Feeling irritable/short-tempered: 1-5': 'Pocit podráždenosti/vzrušenosti: 1-5',
+  'Feeling socially isolated: 1-5': 'Pocit sociálnej izolácie: 1-5',
+  'Great job - Part 3 complete! We\'re preparing your full report.': 'Skvelá práca – 3. časť dokončená! ',
+  'Household activities limited by pain: 1-5': 'Aktivity v domácnosti obmedzené bolesťou: 1-5',
+  'I\'m here to understand your pelvic pain so we can guide next steps. This is quick and private. Let\'s begin.': 'Som tu, aby som pochopil vašu panvovú bolesť, aby sme mohli viesť ďalšie kroky. ',
+  'If yes: Intensity (0-10)': 'Ak áno: Intenzita (0-10)',
+  'Intensity (0-10)': 'Intenzita (0-10)',
+  'Intensity (0–10)': 'Intenzita (0–10)',
+  'It only takes a minute and helps doctors spot patterns early.': 'Trvá to len minútu a pomáha lekárom včas rozpoznať vzorce.',
+  'It takes ~2-3 minutes and really strengthens your report.': 'Trvá to ~2-3 minúty a skutočne posilní vašu správu.',
+  'Limitation of sexual life: 1-5': 'Obmedzenie sexuálneho života: 1-5',
+  'Lower abdominal pain (second half of cycle): 1-5': 'Bolesť v podbrušku (druhá polovica cyklu): 1-5',
+  'Missed work or school due to pain:': 'Zmeškanie práce alebo školy kvôli bolesti:',
+  'Need for frequent rest periods: 1-5': 'Potreba častých prestávok na odpočinok: 1-5',
+  'Never': 'Nikdy',
+  'No': 'Nie',
+  'Often': 'Často',
+  'Pain affecting sexual life:': 'Bolesť ovplyvňujúca sexuálny život:',
+  'Pain affecting social/family life:': 'Bolesť ovplyvňujúca spoločenský/rodinný život:',
+  'Pain during prolonged sitting: 1-5': 'Bolesť pri dlhšom sedení: 1-5',
+  'Pain during/after sexual intercourse: 1-5': 'Bolesť počas/po pohlavnom styku: 1-5',
+  'Pain improves when lying down?': 'Zlepšuje sa bolesť pri ležaní?',
+  'Pain in lumbar/sacral/inguinal area after exertion: 1-5': 'Bolesť v driekovej/sakrálnej/inguinálnej oblasti po námahe: 1-5',
+  'Pain with bowel movement during menstruation?': 'Bolesť s pohybom čriev počas menštruácie?',
+  'Pain with bowel movement outside menstruation?': 'Bolesť s pohybom čriev mimo menštruácie?',
+  'Pain worsens when standing/walking long periods?': 'Zhoršuje sa bolesť pri dlhom státí/chôdzi?',
+  'Painkillers for pelvic pain (past month):': 'Lieky proti bolesti panvy (posledný mesiac):',
+  'Part 2 is a quick 5-question screen for pelvic vein involvement (PCS).': 'Časť 2 je rýchly 5-otázkový screening pre postihnutie panvových žíl (PCS).',
+  'Part 3 is the PVVQ (20 items). It shows how pain affects daily life.': 'Časť 3 je PVVQ (20 položiek). ',
+  'Pelvic heaviness/pressure at end of day?': 'Ťažkosť/tlak panvy na konci dňa?',
+  'Pelvic pain > 6 months?': 'Bolesť panvy > 6 mesiacov?',
+  'Reduced ability to perform daily physical activity: 1-5': 'Znížená schopnosť vykonávať každodennú fyzickú aktivitu: 1-5',
+  'Reduced self-esteem/confidence: 1-5': 'Znížená sebaúcta/dôvera: 1-5',
+  'Sometimes': 'Niekedy',
+  'Strain in personal relationships: 1-5': 'Napätie v osobných vzťahoch: 1-5',
+  'Tenderness in perineum/vulvar region: 1-5': 'Citlivosť v perineu/vulválnej oblasti: 1-5',
+  'Unsure': 'neistý',
+  'Varicose veins in vulva/buttocks/thighs?': 'Kŕčové žily na vulve/zadku/stehnách?',
+  'Work/professional activities limited: 1-5': 'Pracovné/profesionálne činnosti obmedzené: 1-5',
+  'Yes': 'Áno',
+  'You\'re doing well - keep going!': 'Ide ti to dobre - pokračuj!',
+  'Hi! Before we begin, are you new here or do you have a Patient ID?': 'Ahoj! Skôr než začneme, ste tu prvýkrát alebo máte ID pacienta?',
+  'I\'m new': 'Som tu prvýkrát',
+  'I have a Patient ID': 'Mám ID pacienta',
+  'We don\'t collect personal details. Your Patient ID only links your own assessments.': 'Nezhromažďujeme osobné údaje. ',
+  'Enter your Patient ID so we can link to your previous assessments (example: A12345).': 'Zadajte svoje ID pacienta, aby sme mohli prepojiť vaše predchádzajúce hodnotenia (príklad: A12345).',
+  'A12345': 'A12345',
+  'Nice progress - Part 2 is just 5 quick questions that help identify pelvic vein involvement.': 'Pekný pokrok - Časť 2 je len 5 rýchlych otázok, ktoré pomáhajú identifikovať postihnutie panvových žíl.',
+  'Great! I\'ve created your Patient ID. Please save it. You\'ll use it next time to see your progress.': 'Skvelé! ',
+  'Would you like to continue and see if pelvic congestion syndrome (PCS) might be affecting you?': 'Chceli by ste pokračovať a zistiť, či vás syndróm prekrvenia panvy (PCS) neovplyvňuje?',
+  'Great work - Part 3 (PVVQ) takes about 2-3 minutes and really strengthens your report.': 'Skvelá práca – 3. časť (PVVQ) trvá asi 2-3 minúty a skutočne posilní vašu správu.',
+  'Would you like to continue and understand how pelvic pain is impacting your daily life (PVVQ)?': 'Chceli by ste pokračovať a pochopiť, ako bolesť panvy ovplyvňuje váš každodenný život (PVVQ)?',
+  'Thanks - you\'ve completed everything needed for now.': 'Ďakujeme - zatiaľ ste dokončili všetko potrebné.',
+  'We\'re preparing your PDF report next.': 'Ďalej pripravujeme vašu správu vo formáte PDF.',
+  'It takes ~2–3 minutes and really strengthens your report.': 'Trvá to približne 2–3 minúty a skutočne posilní vašu správu.',
+  'Excellent work — Part 1 complete!': 'Skvelá práca – 1. časť dokončená!',
+  'Great job — Part 3 complete! We’re preparing your full report.': 'Skvelá práca – 3. časť dokončená! ',
+  'You’re doing well — keep going!': 'Ide ti to dobre – pokračuj!',
+  'Great! I’ve created your Patient ID. Please save it. You’ll use it next time to see your progress.': 'Skvelé! ',
+  'We don’t collect personal details. Your Patient ID only links your own assessments.': 'Nezhromažďujeme osobné údaje. ',
+  '10 â€“ Worst pain': '10 – Najhoršia bolesť',
+};
+
+
+
 
 const EXACT_TRANSLATIONS: Record<Exclude<Language, 'en'>, Record<string, string>> = {
   ru: EXACT_EN_TO_RU,
   kz: EXACT_EN_TO_KZ,
-  hr: EXACT_EN_TO_HR
+  hr: EXACT_EN_TO_HR,
+  sk: EXACT_EN_TO_SK
 };
 
 const REGEX_RULES: RegexRule[] = [
@@ -298,6 +392,9 @@ const REGEX_RULES: RegexRule[] = [
       if (lang === 'hr') {
         return `ID pacijenta: ${match[1]} - spremite ili snimite zaslon.`;
       }
+      if (lang === 'sk') {
+        return `ID pacienta: ${match[1]} - uložte si ho alebo urobte snímku obrazovky.`;
+      }
       return match[0];
     }
   },
@@ -312,6 +409,9 @@ const REGEX_RULES: RegexRule[] = [
       }
       if (lang === 'hr') {
         return `Hvala! Povezali smo vaše prethodne rezultate. ID pacijenta ${match[1]} je spreman - nastavimo.`;
+      }
+      if (lang === 'sk') {
+        return `Ďakujeme! Prepojili sme vaše predchádzajúce výsledky. ID pacienta ${match[1]} je pripravené - pokračujme.`;
       }
       return match[0];
     }

@@ -10,7 +10,8 @@
     { value: 'en', label: 'EN' },
     { value: 'ru', label: 'RU' },
     { value: 'kz', label: 'KZ' },
-    { value: 'hr', label: 'HR' }
+    { value: 'hr', label: 'HR' },
+    { value: 'sk', label: 'SK' }
   ];
 
   let selectedLanguage: Language = 'en';

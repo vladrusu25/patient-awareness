@@ -29,7 +29,9 @@
         ? 'kk-KZ'
         : currentLanguage === 'hr'
           ? 'hr-HR'
-          : 'en-US';
+          : currentLanguage === 'sk'
+            ? 'sk-SK'
+            : 'en-US';
   $: dateFormatter = new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeStyle: 'short' });
   $: scoreKeys = [
     { key: 'endopain', label: $t('doctor.scores.endopain.label'), help: $t('doctor.scores.endopain.help') },

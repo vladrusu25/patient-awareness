@@ -14,7 +14,7 @@ export const translations: Record<string, Node> = {
     close: { en: 'Close', ru: 'Закрыть' },
     selectLanguage: { en: 'Language', ru: 'Язык' },
     english: { en: 'English', ru: 'Английский' },
-    russian: { en: 'Russian', ru: 'Русский' }
+    slovak: { en: 'Slovak', ru: 'Словацкий' }
   },
   nav: {
     home: { en: 'Home', ru: 'Главная' },
@@ -929,6 +929,7 @@ export const translations: Record<string, Node> = {
     }
   }
 };
+
 
 
 

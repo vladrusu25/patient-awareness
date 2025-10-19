@@ -4,12 +4,13 @@ import type { Language } from './types';
 import { translations } from './translations';
 import { translationsKz } from './translations.kz';
 import { translationsHr } from './translations.hr';
+import { translationsSk } from './translations.sk';
 
 const DEFAULT_LANGUAGE: Language = 'en';
 const STORAGE_KEY = 'patient-awareness:lang';
 
 function isLanguage(value: unknown): value is Language {
-  return value === 'en' || value === 'ru' || value === 'kz' || value === 'hr';
+  return value === 'en' || value === 'ru' || value === 'kz' || value === 'hr' || value === 'sk';
 }
 
 function format(template: string, params?: Record<string, string | number>): string {
@@ -47,6 +48,15 @@ function resolvePathHr(key: string): unknown {
   }, translationsHr as unknown);
 }
 
+function resolvePathSk(key: string): unknown {
+  return key.split('.').reduce<unknown>((acc, part) => {
+    if (typeof acc === 'object' && acc && part in acc) {
+      return (acc as Record<string, unknown>)[part];
+    }
+    return undefined;
+  }, translationsSk as unknown);
+}
+
 function isLeaf(value: unknown): value is Record<Language, string> {
   if (!value || typeof value !== 'object') return false;
   return 'en' in (value as Record<string, unknown>);
@@ -62,7 +72,8 @@ if (browser) {
 
   language.subscribe((value) => {
     window.localStorage.setItem(STORAGE_KEY, value);
-    document.documentElement.lang = value === 'kz' ? 'kk' : value === 'hr' ? 'hr' : value;
+    document.documentElement.lang =
+      value === 'kz' ? 'kk' : value === 'hr' ? 'hr' : value === 'sk' ? 'sk' : value;
   });
 }
 
@@ -74,6 +85,8 @@ export const t = derived(language, ($language) => {
       override = resolvePathKz(key);
     } else if ($language === 'hr') {
       override = resolvePathHr(key);
+    } else if ($language === 'sk') {
+      override = resolvePathSk(key);
     }
 
     if (typeof override === 'string') {

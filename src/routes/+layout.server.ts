@@ -1,7 +1,7 @@
 ﻿import type { LayoutServerLoad } from './$types';
 
-const isSupported = (value: string | undefined | null): value is 'en' | 'ru' | 'kz' | 'hr' =>
-  value === 'en' || value === 'ru' || value === 'kz' || value === 'hr';
+const isSupported = (value: string | undefined | null): value is 'en' | 'ru' | 'kz' | 'hr' | 'sk' =>
+  value === 'en' || value === 'ru' || value === 'kz' || value === 'hr' || value === 'sk';
 
 export const load: LayoutServerLoad = async ({ cookies }) => {
   const cookie = cookies.get('lang');

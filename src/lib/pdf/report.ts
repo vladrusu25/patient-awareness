@@ -58,7 +58,7 @@ export async function renderSummaryPdf(opts: {
     console.warn('Falling back to standard PDF fonts:', err);
     fontRegular = await doc.embedFont(StandardFonts.Helvetica);
     fontBold = await doc.embedFont(StandardFonts.HelveticaBold);
-    if (language === 'ru' || language === 'kz' || language === 'hr') {
+    if (language === 'ru' || language === 'kz' || language === 'hr' || language === 'sk') {
       throw new Error('Custom font required for non-Latin PDF output');
     }
   }
@@ -233,9 +233,11 @@ function formatDateTime(d: Date, language: Language) {
         ? 'ru-RU'
         : language === 'kz'
           ? 'kk-KZ'
-          : language === 'hr'
+        : language === 'hr'
             ? 'hr-HR'
-            : 'en-GB';
+            : language === 'sk'
+              ? 'sk-SK'
+              : 'en-GB';
     return new Intl.DateTimeFormat(locale, {
       year: 'numeric',
       month: '2-digit',

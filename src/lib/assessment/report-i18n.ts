@@ -86,6 +86,53 @@ const HR_PVVQ_LABELS: Record<string, string> = {
   q46_reduced_self_esteem: 'Smanjeno samopoštovanje/samopouzdanje'
 };
 
+const SK_PART1_LABELS: Record<LabelKey, string> = {
+  q1: 'Spontánna bol panvy',
+  q3: 'Menštruačná bol',
+  q5: 'Bolesť počas pohlavného styku',
+  q7: 'Bolesť po pohlavnom styku',
+  q9: 'Bolesť pri vyprázdňovaní čriev počas menštruácie',
+  q11: 'Bolesť pri vyprázdňovaní čriev mimo menštruácie',
+  q13: 'Bolesť pri močení',
+  q15: 'Bolesť v driekovej (krížovej) oblasti',
+  q17: 'Analgetiká na bolesť panvy (posledný mesiac)',
+  q18: 'Absencie v práci alebo škole kvôli bolesti',
+  q19: 'Každodenné aktivity obmedzené bolesťou',
+  q20: 'Bolesť ovplyvňujúca sexuálny život',
+  q21: 'Bolesť ovplyvňujúca spoločenský/rodinný život'
+};
+
+const SK_PCS_LABELS: Record<string, string> = {
+  q22_pain_worse_standing: 'Bolesť sa zhoršuje pri dlhom státí alebo chôdzi',
+  q23_pain_improves_lying: 'Bolesť ustupuje v ľahu',
+  q24_pelvic_heaviness_end_day: 'Pocit ťažoby/tlaku v panve na konci dňa',
+  q25_varicose_vulva_buttocks_thighs: 'Kŕčové žily na vulve, zadku alebo stehnách',
+  q26_pelvic_pain_6months: 'Bolesť panvy dlhšia ako 6 mesiacov'
+};
+
+const SK_PVVQ_LABELS: Record<string, string> = {
+  q27_lower_abdominal_pain: 'Bolesť v podbrušku (druhá polovica cyklu)',
+  q28_pain_during_intercourse: 'Bolesť počas alebo po pohlavnom styku',
+  q29_sitting_pain: 'Bolesť pri dlhom sedení',
+  q30_lumbosacral_inguinal_exertion_pain: 'Bolesť v driekovej/sakrálnej/trieslovej oblasti po námahe',
+  q31_perineum_vulvar_tenderness: 'Citlivosť v hrádzi alebo vo vulve',
+  q32_household_activities_limit: 'Domáce práce obmedzené bolesťou',
+  q33_work_activities_limit: 'Pracovné/profesijné aktivity obmedzené',
+  q34_reduced_physical_activity: 'Znížená schopnosť vykonávať každodennú fyzickú aktivitu',
+  q35_avoid_sport_exercise: 'Vyhýbanie sa športu/cvičeniu kvôli bolesti',
+  q36_need_frequent_rest: 'Potreba častých prestávok na oddych',
+  q37_avoid_social_events: 'Vyhýbanie sa spoločenským udalostiam',
+  q38_family_responsibilities_difficult: 'Ťažkosti s rodinnými povinnosťami',
+  q39_limitation_of_sexual_life: 'Obmedzenie sexuálneho života',
+  q40_feeling_socially_isolated: 'Pocit spoločenskej izolácie',
+  q41_strain_personal_relationships: 'Napätie v osobných vzťahoch',
+  q42_feeling_anxious_due_to_pain: 'Pocit úzkosti/nervozity kvôli bolesti',
+  q43_feeling_depressed_symptoms: 'Pocit depresie kvôli symptómom',
+  q44_concern_about_future_health: 'Obavy/strach o budúce zdravie',
+  q45_feeling_irritable_short_tempered: 'Pocit podráždenosti/krátka trpezlivosť',
+  q46_reduced_self_esteem: 'Znížené sebavedomie/sebaúcta'
+};
+
 const RU_PART1_LABELS: Record<LabelKey, string> = {
   q1: 'Спонтанная тазовая боль',
   q3: 'Менструальная боль',
@@ -203,6 +250,13 @@ const LIKERT_HR: LikertTranslations = {
   sometimes: 'Ponekad',
   often: 'Često',
   always: 'Uvijek'
+};
+
+const LIKERT_SK: LikertTranslations = {
+  never: 'Nikdy',
+  sometimes: 'Niekedy',
+  often: 'Často',
+  always: 'Vždy'
 };
 
 const LOCALES: Record<Language, ReportLocale> = {
@@ -337,6 +391,39 @@ const LOCALES: Record<Language, ReportLocale> = {
       part3: (total) => `Rezultat (PVVQ, raspon 20-100): ${total}`
     },
     formatPart3Value: (value) => (value ? `${value}/5` : 'N/P')
+  },
+  sk: {
+    summaryTitle: 'Súhrn zdravotného hodnotenia',
+    headers: {
+      assessmentId: 'ID hodnotenia',
+      patientId: 'ID pacienta',
+      generated: 'Vygenerované',
+      patientNotProvided: 'Neuvádzané'
+    },
+    bool: {
+      yes: 'Áno',
+      no: 'Nie',
+      unsure: 'Neisté',
+      na: 'N/A'
+    },
+    likert: LIKERT_SK,
+    partTitles: {
+      part1: 'Časť 1. ENDOPAIN-4D',
+      part2: 'Časť 2. Skríning PCS (5 otázok)',
+      part3: 'Časť 3. Dotazník panvových varixov (PVVQ, 20 otázok)'
+    },
+    part3Interpretation:
+      'Nižší celkový výsledok znamená lepšiu kvalitu života. Súčet PVVQ (20 položiek) interpretujeme takto: 20 – najlepšia kvalita života; 21–40 – mierne zhoršená; 41–60 – stredne zhoršená; 61–80 – výrazne zhoršená; 81–100 – závažné zhoršenie.',
+    part1Labels: SK_PART1_LABELS,
+    pcsLabels: SK_PCS_LABELS,
+    pvvqLabels: SK_PVVQ_LABELS,
+    scoring: {
+      part1: (score) => `Skóre (ENDOPAIN-4D, rozsah 0-100): ${score}/100`,
+      part2: (count, yesWord) =>
+        `Skóre (skríning PCS; pozitívny pri aspoň 2 odpovediach "${yesWord}"): ${count} ${yesWord}`,
+      part3: (total) => `Skóre (PVVQ, rozsah 20-100): ${total}`
+    },
+    formatPart3Value: (value) => (value ? `${value}/5` : 'N/A')
   }
 };
 
