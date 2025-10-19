@@ -4,17 +4,23 @@ import { error, json } from '@sveltejs/kit';
 import { supa } from '$lib/server/supabase';
 import { composeSteps } from '$lib/assessment/composer';
 
-export const GET: RequestHandler = async ({ params }) => {
-  const token = params.token;
-  if (!token) throw error(400, 'Missing token');
+const TOKEN_RE = /^(?:[A-Z0-9]{10}|[A-Z0-9]{16})$/;
+
+export const GET: RequestHandler = async ({ params, url }) => {
+  const token = params.token?.trim().toUpperCase() ?? '';
+  if (!TOKEN_RE.test(token)) throw error(400, 'invalid_token');
+
+  const secretParam = url.searchParams.get('s');
+  const secret = secretParam && secretParam.trim().length ? secretParam.trim() : null;
 
   const { data: session } = await supa
     .from('sessions')
-    .select('id, clinic_id, patient_id')
+    .select('id, clinic_id, patient_id, token_secret')
     .eq('public_token', token)
     .maybeSingle();
 
   if (!session) throw error(404, 'Session not found');
+  if (session.token_secret && session.token_secret !== secret) throw error(403, 'Forbidden');
 
   let patientPublicId: string | null = null;
   if (session.patient_id) {

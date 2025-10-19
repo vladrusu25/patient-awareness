@@ -7,9 +7,9 @@ import type { Role, AuthUser } from '$lib/types/auth';
 const SESSION_COOKIE = 'pa_session';
 const SESSION_TTL_SEC = 60 * 60; // 1h
 
-// --- Users (for now you will only call with role='admin')
+// --- Users
 export async function findUserByUsername(role: Role, username: string) {
-  const table = role === 'admin' ? 'admin_users' : 'doctor_users'; // doctor table not created yet
+  const table = role === 'admin' ? 'admin_users' : 'doctor_users';
   const { data } = await supa
     .from(table)
     .select('id, username, password_hash')
@@ -27,42 +27,82 @@ export async function verifyPassword(hash: string, plain: string) {
 export async function createSession(userId: string, role: Role) {
   const id = randomUUID();
   const expires_at = new Date(Date.now() + SESSION_TTL_SEC * 1000).toISOString();
-  const { error } = await supa
-    .from('admin_sessions')             // keep your existing table; later: unify/rename if desired
-    .insert({ id, user_id: userId, role, expires_at }); // add 'role' column when you’re ready
-  if (error) throw new Error(error.message);
+
+  if (role === 'admin') {
+    const { error } = await supa.from('admin_sessions').insert({ id, user_id: userId, role, expires_at });
+    if (error) throw new Error(error.message);
+  } else {
+    const { error } = await supa.from('doctor_sessions').insert({ id, user_id: userId, expires_at });
+    if (error) throw new Error(error.message);
+  }
+
   return { id, expires_at };
 }
 
-// Session lookup joins the right user table based on the stored role
+function isExpired(expires_at: string) {
+  return new Date(expires_at).getTime() <= Date.now();
+}
+
 export async function getSession(sessionId: string) {
-  // Read session row (expects a 'role' column; until you add it, default 'admin')
-  const { data: s } = await supa
+  const { data: adminSession } = await supa
     .from('admin_sessions')
     .select('id, user_id, role, expires_at')
     .eq('id', sessionId)
     .maybeSingle();
-  if (!s) return null;
-  if (new Date(s.expires_at).getTime() <= Date.now()) {
-    await supa.from('admin_sessions').delete().eq('id', s.id);
+
+  if (adminSession) {
+    if (isExpired(adminSession.expires_at)) {
+      await supa.from('admin_sessions').delete().eq('id', adminSession.id);
+      return null;
+    }
+
+    const { data: adminUser } = await supa
+      .from('admin_users')
+      .select('id, username')
+      .eq('id', adminSession.user_id)
+      .maybeSingle();
+
+    if (!adminUser) return null;
+
+    const role: Role = (adminSession.role ?? 'admin') as Role;
+    return { id: adminSession.id, user: { id: adminUser.id, username: adminUser.username, role } as AuthUser };
+  }
+
+  const { data: doctorSession } = await supa
+    .from('doctor_sessions')
+    .select('id, user_id, expires_at')
+    .eq('id', sessionId)
+    .maybeSingle();
+
+  if (!doctorSession) return null;
+  if (isExpired(doctorSession.expires_at)) {
+    await supa.from('doctor_sessions').delete().eq('id', doctorSession.id);
     return null;
   }
-  const role: Role = (s.role ?? 'admin') as Role;
 
-  // Resolve the user from the proper table
-  const table = role === 'admin' ? 'admin_users' : 'doctor_users';
-  const { data: u } = await supa
-    .from(table)
-    .select('id, username')
-    .eq('id', s.user_id)
+  const { data: doctorUser } = await supa
+    .from('doctor_users')
+    .select('id, username, doctor_code, region, link_secret')
+    .eq('id', doctorSession.user_id)
     .maybeSingle();
-  if (!u) return null;
 
-  return { id: s.id, user: { ...u, role } as AuthUser };
+  if (!doctorUser) return null;
+
+  const user: AuthUser = {
+    id: doctorUser.id,
+    username: doctorUser.username,
+    role: 'doctor',
+    doctorCode: doctorUser.doctor_code ?? undefined,
+    region: doctorUser.region ?? undefined,
+    linkSecret: doctorUser.link_secret ?? undefined
+  };
+
+  return { id: doctorSession.id, user };
 }
 
 export async function destroySession(sessionId: string) {
   await supa.from('admin_sessions').delete().eq('id', sessionId);
+  await supa.from('doctor_sessions').delete().eq('id', sessionId);
 }
 
 export function sessionCookieHeader(id: string) {

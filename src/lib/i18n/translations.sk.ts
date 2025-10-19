@@ -72,18 +72,20 @@ export const translationsSk = {
   pdfSearch: {
     title: 'Nájdite svoje PDF',
     description:
-      'Zadajte svoj 16-znakový token (napr. <code class="px-1 rounded bg-neutral-50">AB2C...</code>), aby ste získali správu.',
-    placeholder: 'Zadajte token (16 znakov)',
+      'Zadajte token (10 alebo 16 znakov, napr. <code class="px-1 rounded bg-neutral-50">AB2C...</code>), aby ste získali správu.',
+    placeholder: 'Zadajte svoj token (10 alebo 16 znakov)',
     search: 'Hľadať',
     searching: 'Hľadám...',
     found: 'PDF nájdené – pripravené na stiahnutie.',
     download: 'Stiahnuť PDF',
     previewTitle: 'Náhľad PDF',
     errors: {
-      invalidFormat: 'Token musí mať 16 znakov (A-Z, 0-9).',
+      invalidFormat: 'Token musí mať 10 alebo 16 znakov (A-Z, 0-9).',
       notFound: 'Neplatný token – neexistuje.',
       rateLimited: 'Príliš veľa pokusov. Skúste znova o {{seconds}} s.',
       noPdf: 'Správa ešte nie je k dispozícii. Skúste to neskôr.',
+      protected:
+        'Táto správa je dostupná len cez súkromný odkaz lekára. Požiadajte svojho lekára o QR kód alebo odkaz.',
       generic: 'Vyskytla sa chyba – skúste to znova.'
     }
   },

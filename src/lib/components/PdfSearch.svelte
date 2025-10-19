@@ -14,9 +14,9 @@
     isLoading = true;
 
     try {
-      // Check if the token is valid (16 characters)
-      if (token.trim().length !== 16) {
-        errorMessage = 'Please enter a valid token (16 characters).';
+      const normalized = token.trim().toUpperCase();
+      if (!/^(?:[A-Z0-9]{10}|[A-Z0-9]{16})$/.test(normalized)) {
+        errorMessage = 'Please enter a valid token (10 or 16 characters).';
         isLoading = false;
         return;
       }
@@ -25,7 +25,7 @@
       const { data, error } = await supa
         .storage
         .from('health-assessment-pdfs')
-        .download(`${token.trim()}.pdf`);
+        .download(`${normalized}.pdf`);
 
       if (error) {
         errorMessage = 'No PDF found for this token.';
@@ -52,7 +52,7 @@
       bind:value={token}
       type="text"
       class="w-full p-2 border border-gray-300 rounded"
-      placeholder="Enter your 16-character token"
+      placeholder="Enter your token (10 or 16 characters)"
       on:input={searchPdf}
     />
     {#if errorMessage}

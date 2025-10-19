@@ -8,7 +8,10 @@
 
   export let data: PageData;
 
-  const navBase = [{ href: '/admin', labelKey: 'admin.nav.overview', active: true }];
+  const navBase = [
+    { href: '/admin', labelKey: 'admin.nav.overview', active: true },
+    { href: '/admin/doctors', labelKey: 'admin.nav.doctors', active: false }
+  ];
   let mobileNavOpen = false;
 
   $: nav = navBase.map((item) => ({ ...item, label: $t(item.labelKey) }));

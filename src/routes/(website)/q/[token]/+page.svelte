@@ -6,6 +6,7 @@
   export let data: {
     notFound: boolean;
     token: string;
+    secret: string | null;
     sessionId: string | null;
     steps: { steps: any[] };
     previous: { step_key: string; value_json: any }[];
@@ -27,6 +28,7 @@
     <section class="rounded-2xl bg-white p-5 shadow">
       <StepRenderer
         token={data.token}
+        secret={data.secret}
         steps={data.steps}
         previous={data.previous}
       />

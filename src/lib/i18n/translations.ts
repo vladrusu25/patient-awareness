@@ -91,21 +91,25 @@ export const translations: Record<string, Node> = {
   pdfSearch: {
     title: { en: 'Find your PDF report', ru: 'Найдите свой PDF-отчёт' },
     description: {
-      en: 'Enter your 16-character token (e.g. <code class="px-1 rounded bg-neutral-50">AB2C...</code>) to retrieve your report.',
-      ru: 'Введите свой 16-значный токен (например, <code class="px-1 rounded bg-neutral-50">AB2C...</code>), чтобы получить отчёт.'
+      en: 'Enter your token (10 or 16 characters, e.g. <code class="px-1 rounded bg-neutral-50">AB2C...</code>) to retrieve your report.',
+      ru: 'Введите токен (10 или 16 символов, например <code class="px-1 rounded bg-neutral-50">AB2C...</code>), чтобы получить отчёт.'
     },
-    placeholder: { en: 'Enter your token (16 characters)', ru: 'Введите токен (16 символов)' },
+    placeholder: { en: 'Enter your token (10 or 16 characters)', ru: 'Введите токен (10 или 16 символов)' },
     search: { en: 'Search', ru: 'Найти' },
     searching: { en: 'Searching...', ru: 'Поиск...' },
-    found: { en: 'Found PDF - ready to download.', ru: 'PDF найден — готов к загрузке.' },
+    found: { en: 'Found PDF — ready to download.', ru: 'PDF найден — готов к загрузке.' },
     download: { en: 'Download PDF', ru: 'Скачать PDF' },
     previewTitle: { en: 'PDF preview', ru: 'Предпросмотр PDF' },
     errors: {
-      invalidFormat: { en: 'Token must be 16 characters (A-Z, 0-9).', ru: 'Токен должен содержать 16 символов (A-Z, 0-9).' },
-      notFound: { en: 'Invalid token - this token does not exist.', ru: 'Недействительный токен — такого токена не существует.' },
+      invalidFormat: { en: 'Token must be 10 or 16 characters (A-Z, 0-9).', ru: 'Токен должен содержать 10 или 16 символов (A-Z, 0-9).' },
+      notFound: { en: 'Invalid token — this token does not exist.', ru: 'Недействительный токен — такого токена не существует.' },
       rateLimited: { en: 'Too many attempts. Try again in {{seconds}} seconds.', ru: 'Слишком много попыток. Повторите через {{seconds}} секунд.' },
       noPdf: { en: 'Report not available yet. Please try again later.', ru: 'Отчёт пока недоступен. Попробуйте позже.' },
-      generic: { en: 'An error occurred - please try again.', ru: 'Произошла ошибка — попробуйте ещё раз.' }
+      protected: {
+        en: 'This report is only available via the private doctor link. Please ask your doctor for their QR code or link.',
+        ru: 'Этот отчёт доступен только по приватной ссылке врача. Попросите у врача его QR‑код или ссылку.'
+      },
+      generic: { en: 'An error occurred — please try again.', ru: 'Произошла ошибка — попробуйте ещё раз.' }
     }
   },
   knowledge: {
@@ -658,6 +662,11 @@ export const translations: Record<string, Node> = {
   auth: {
     adminTitle: { en: 'Admin login', ru: 'Вход для администратора' },
     adminSubtitle: { en: 'Sign in to access the dashboard.', ru: 'Войдите, чтобы получить доступ к панели.' },
+    doctorTitle: { en: 'Doctor login', ru: 'Вход для врача' },
+    doctorSubtitle: {
+      en: 'Access your patient dashboard with the credentials provided by the admin.',
+      ru: 'Используйте выданные администратором данные, чтобы открыть панель пациента.'
+    },
     username: { en: 'Username', ru: 'Имя пользователя' },
     password: { en: 'Password', ru: 'Пароль' },
     signIn: { en: 'Sign in', ru: 'Войти' },
@@ -772,7 +781,8 @@ export const translations: Record<string, Node> = {
 ,
   admin: {
     nav: {
-      overview: { en: 'Overview', ru: 'Обзор' }
+      overview: { en: 'Overview', ru: 'Обзор' },
+      doctors: { en: 'Doctors', ru: 'Врачи' }
     },
     range: {
       selectLabel: { en: 'Date range', ru: 'Период' },
@@ -820,6 +830,49 @@ export const translations: Record<string, Node> = {
       },
       tooltip: { en: '{{label}}: Endopain {{x}}, PVVQ {{y}}', ru: '{{label}}: Endopain {{x}}, PVVQ {{y}}' },
       empty: { en: 'Not enough data yet.', ru: 'Недостаточно данных.' }
+    },
+    doctors: {
+      title: { en: 'Doctor access', ru: 'Доступ врачей' },
+      subtitle: { en: 'Create logins and share links for each doctor.', ru: 'Создавайте логины и приватные ссылки для врачей.' },
+      created: { en: 'Doctor {{code}} created successfully.', ru: 'Доктор {{code}} успешно создан.' },
+      errors: {
+        invalidInput: { en: 'Check the username, password, and region.', ru: 'Проверьте логин, пароль и регион.' },
+        usernameTaken: { en: 'That username is already in use.', ru: 'Такой логин уже используется.' },
+        resourceExhausted: { en: 'Could not allocate a new doctor ID. Please try again.', ru: 'Не удалось выделить новый ID врача. Попробуйте снова.' },
+        generic: { en: 'Unable to create doctor credentials. Please try again.', ru: 'Не удалось создать учетную запись врача. Попробуйте снова.' }
+      },
+      createTitle: { en: 'Create doctor credentials', ru: 'Создать учетную запись врача' },
+      createHint: { en: 'Set a username, password, and default region. The doctor receives a private link and QR code to share with patients.', ru: 'Укажите логин, пароль и регион. Врач получит приватную ссылку и QR-код для пациентов.' },
+      username: { en: 'Username', ru: 'Логин' },
+      password: { en: 'Password', ru: 'Пароль' },
+      passwordHint: { en: 'Minimum 8 characters. Share securely with the doctor.', ru: 'Минимум 8 символов. Передавайте врачу безопасным способом.' },
+      regionLabel: { en: 'Region / language', ru: 'Регион / язык' },
+      regionHint: { en: 'Determines the language doctors see in their dashboard.', ru: 'Определяет язык интерфейса врача.' },
+      region: {
+        en: { en: 'Poland (English)', ru: 'Польша (англ.)' },
+        ru: { en: 'Russia (Russian)', ru: 'Россия (рус.)' },
+        kz: { en: 'Kazakhstan (Kazakh)', ru: 'Казахстан (каз.)' },
+        hr: { en: 'Croatia (Croatian)', ru: 'Хорватия (хорв.)' },
+        sk: { en: 'Slovakia (Slovak)', ru: 'Словакия (словац.)' }
+      },
+      createSubmit: { en: 'Create doctor', ru: 'Создать врача' },
+      instructions: {
+        title: { en: 'How it works', ru: 'Как это работает' },
+        line1: { en: 'Each doctor receives a three-character ID and private share link.', ru: 'Каждый врач получает трёхсимвольный ID и приватную ссылку.' },
+        line2: { en: 'Share the link or QR code so patients are linked automatically.', ru: 'Передавайте ссылку или QR-код, чтобы пациенты автоматически связывались с врачом.' },
+        line3: { en: 'You can reset passwords or revoke access any time via Supabase.', ru: 'Вы можете сбросить пароль или закрыть доступ через Supabase.' }
+      },
+      listTitle: { en: 'Active doctors', ru: 'Активные врачи' },
+      listCount: { en: '{{count}} total', ru: 'Всего: {{count}}' },
+      empty: { en: 'No doctors yet. Create the first credentials above.', ru: 'Врачи ещё не созданы. Создайте первую учетную запись выше.' },
+      doctorId: { en: 'Doctor ID', ru: 'ID врача' },
+      createdAt: { en: 'Created', ru: 'Создан' },
+      usernameLabel: { en: 'Username', ru: 'Логин' },
+      shareLink: { en: 'Share link', ru: 'Ссылка для пациентов' },
+      copyLink: { en: 'Copy link', ru: 'Скопировать ссылку' },
+      copied: { en: 'Copied!', ru: 'Скопировано!' },
+      openLink: { en: 'Open link', ru: 'Открыть ссылку' },
+      qrAlt: { en: 'QR code for doctor {{code}}', ru: 'QR-код для врача {{code}}' }
     }
   },
   contactPage: {
@@ -866,6 +919,44 @@ export const translations: Record<string, Node> = {
       }
     }
   },
+  doctor_invite: {
+    meta: { en: 'Doctor ID {{code}}', ru: 'ID врача {{code}}' },
+    title: { en: 'Start your assessment', ru: 'Начните опрос' },
+    subtitle: {
+      en: 'Answer a few questions to generate a personalized report linked to your doctor.',
+      ru: 'Ответьте на несколько вопросов, чтобы получить персональный отчет, привязанный к вашему врачу.'
+    },
+    newTitle: { en: 'New patient', ru: 'Новый пациент' },
+    newDescription: {
+      en: 'We will create a new patient ID that is linked to this doctor. You can reuse it next time.',
+      ru: 'Мы создадим новый ID пациента, связанный с этим врачом. Его можно использовать в следующий раз.'
+    },
+    returningTitle: { en: 'Returning patient', ru: 'Возвращающийся пациент' },
+    returningDescription: {
+      en: 'Enter your existing patient ID to continue where you left off.',
+      ru: 'Введите существующий ID пациента, чтобы продолжить с того места, где остановились.'
+    },
+    buttons: {
+      new: { en: 'Start as new patient', ru: 'Начать как новый пациент' },
+      returning: { en: 'Continue with my ID', ru: 'Продолжить с моим ID' },
+      loading: { en: 'Please wait...', ru: 'Пожалуйста, подождите...' }
+    },
+    errors: {
+      patientFormat: { en: 'Patient ID should look like A12AB123.', ru: 'ID пациента должен выглядеть как A12AB123.' },
+      patientNotFound: { en: 'We could not find that patient ID. Please double-check the letters and digits.', ru: 'Мы не нашли такой ID пациента. Проверьте буквы и цифры.' },
+      assessmentLimit: { en: 'This patient has reached the maximum number of linked assessments.', ru: 'Для этого пациента достигнут лимит связанных опросов.' },
+      linkExpired: { en: 'This link is no longer valid. Please request a new QR code from your doctor.', ru: 'Срок действия ссылки истек. Попросите у врача новый QR-код.' },
+      generic: { en: 'Unable to start the session. Please try again.', ru: 'Не удалось начать сессию. Попробуйте еще раз.' },
+      network: { en: 'Network error. Please try again.', ru: 'Ошибка сети. Попробуйте еще раз.' }
+    },
+    patientLabel: { en: 'Patient ID', ru: 'ID пациента' },
+    patientPlaceholder: { en: 'A12AB123', ru: 'A12AB123' },
+    patientHint: { en: 'Example format: A12AB123', ru: 'Пример формата: A12AB123' },
+    footer: {
+      en: 'Your answers remain private. You can stop at any time and download a PDF report at the end.',
+      ru: 'Ваши ответы остаются конфиденциальными. Вы можете остановиться в любой момент и скачать PDF-отчет.'
+    }
+  },
   doctor: {
     sidebar: {
       patients: { en: 'Assessments', ru: 'Оценки' },
@@ -873,12 +964,22 @@ export const translations: Record<string, Node> = {
       qrHint: { en: 'Scan to connect patients to you', ru: 'Отсканируйте, чтобы пациенты могли подключиться к вам' },
       share: { en: 'Share QR', ru: 'Поделиться QR' }
     },
+    profile: {
+      idLabel: { en: 'Doctor ID', ru: 'ID врача' },
+      copy: { en: 'Copy share link', ru: 'Скопировать ссылку' },
+      copied: { en: 'Copied!', ru: 'Скопировано!' },
+      shareHint: {
+        en: 'Share this private link or QR code so new patients are linked to you automatically.',
+        ru: 'Передавайте эту приватную ссылку или QR-код, чтобы новые пациенты автоматически связывались с вами.'
+      },
+      qrAlt: { en: 'QR code for doctor {{code}}', ru: 'QR-код для врача {{code}}' }
+    },
     header: {
       title: { en: 'Doctor Dashboard', ru: 'Панель врача' },
       subtitle: { en: 'Search assessments by patient or assessment ID.', ru: 'Ищите оценки по пациенту или идентификатору оценки.' }
     },
     search: {
-      placeholder: { en: 'Enter assessment token (16 chars) or patient ID (e.g. A12345)', ru: 'Введите токен оценки (16 символов) или ID пациента (например, A12345)' },
+      placeholder: { en: 'Enter assessment token (10 or 16 chars) or patient ID (e.g. A12AB123)', ru: 'Введите токен оценки (10 или 16 символов) или ID пациента (например, A12AB123)' },
       button: { en: 'Search', ru: 'Поиск' },
       buttonLoading: { en: 'Searching...', ru: 'Поиск...' },
       clear: { en: 'Clear', ru: 'Очистить' },

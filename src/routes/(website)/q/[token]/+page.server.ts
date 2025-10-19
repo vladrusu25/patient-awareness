@@ -2,13 +2,20 @@ import type { PageServerLoad } from './$types';
 import { error } from '@sveltejs/kit';
 import { supa } from '$lib/server/supabase';
 
-export const load: PageServerLoad = async ({ params }) => {
-  const { token } = params;
+const TOKEN_RE = /^(?:[A-Z0-9]{10}|[A-Z0-9]{16})$/;
 
-  // 1) Find the session by public token
+export const load: PageServerLoad = async ({ params, url }) => {
+  const token = params.token?.trim().toUpperCase() ?? '';
+  if (!TOKEN_RE.test(token)) {
+    return { notFound: true, token, steps: { steps: [] }, previous: [], secret: null };
+  }
+
+  const secretParam = url.searchParams.get('s');
+  const secret = secretParam && secretParam.trim().length ? secretParam.trim() : null;
+
   const { data: session, error: sessionErr } = await supa
     .from('sessions')
-    .select('id, template_id, status')
+    .select('id, template_id, status, token_secret')
     .eq('public_token', token)
     .maybeSingle();
 
@@ -17,17 +24,10 @@ export const load: PageServerLoad = async ({ params }) => {
     throw error(500, 'Failed to load session');
   }
 
-  if (!session) {
-    // Token not found – your +page.svelte can handle notFound === true
-    return { notFound: true, token, steps: { steps: [] }, previous: [] };
+  if (!session || (session.token_secret && session.token_secret !== secret)) {
+    return { notFound: true, token, steps: { steps: [] }, previous: [], secret: null };
   }
 
-  // Optional: block inactive/closed sessions
-  // if (session.status && session.status !== 'active') {
-  //   return { notFound: true, token, steps: { steps: [] }, previous: [] };
-  // }
-
-  // 2) Get the template steps
   const { data: tmpl, error: tmplErr } = await supa
     .from('questionnaire_templates')
     .select('steps_json')
@@ -39,7 +39,6 @@ export const load: PageServerLoad = async ({ params }) => {
     throw error(500, 'Failed to load questionnaire template');
   }
 
-  // 3) Load previous answers in chronological order
   const { data: prev, error: ansErr } = await supa
     .from('answers')
     .select('step_key, value_json, created_at')
@@ -54,6 +53,7 @@ export const load: PageServerLoad = async ({ params }) => {
   return {
     notFound: false,
     token,
+    secret,
     sessionId: session.id,
     steps: tmpl?.steps_json ?? { steps: [] },
     previous: prev ?? []

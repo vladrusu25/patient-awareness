@@ -9,14 +9,39 @@ import { getReportLocale } from '$lib/assessment/report-i18n';
 
 const BUCKET = 'pdf-results';
 
-export async function fetchSessionByToken(token: string) {
+type SessionRow = {
+  id: string;
+  created_at: string;
+  patient_id: string | null;
+  status: string | null;
+  token_secret: string | null;
+  doctor_user_id: string | null;
+};
+
+export async function fetchSessionByToken(
+  token: string,
+  options: { secret?: string | null; bypassSecret?: boolean } = {}
+) {
+  const normalized = token.trim().toUpperCase();
   const { data, error } = await supa
     .from('sessions')
-    .select('id, created_at, patient_id, status')
-    .eq('public_token', token)
-    .single();
+    .select('id, created_at, patient_id, status, token_secret, doctor_user_id')
+    .eq('public_token', normalized)
+    .maybeSingle();
   if (error || !data) return null;
-  return data as { id: string; created_at: string; patient_id: string | null; status: string | null };
+
+  const session = data as SessionRow;
+
+  if (!options.bypassSecret) {
+    const expected = session.token_secret ?? null;
+    const provided = options.secret ?? null;
+
+    if (expected && expected !== provided) {
+      return null;
+    }
+  }
+
+  return session;
 }
 
 export async function fetchAnswers(sessionId: string) {
@@ -48,8 +73,12 @@ async function fetchPatientPublicId(patientId: string): Promise<string | null> {
 }
 
 /** Build/Upload report for a token; returns signed download URL */
-export async function buildAndUploadReport(token: string, language: Language = 'en') {
-  const session = await fetchSessionByToken(token);
+export async function buildAndUploadReport(
+  token: string,
+  language: Language = 'en',
+  options: { secret?: string | null } = {}
+) {
+  const session = await fetchSessionByToken(token, { secret: options.secret ?? null });
   if (!session) throw new Error('session_not_found');
 
   const patientPublicId = session.patient_id ? await fetchPatientPublicId(session.patient_id) : null;
@@ -142,10 +171,10 @@ export async function markSessionEnded(sessionId: string) {
   await markSessionStatus(sessionId, 'ended');
 }
 
-export async function markSessionEndedByToken(token: string) {
+export async function markSessionEndedByToken(token: string, options: { secret?: string | null } = {}) {
   const normalized = token.trim().toUpperCase();
   if (!normalized) return false;
-  const session = await fetchSessionByToken(normalized);
+  const session = await fetchSessionByToken(normalized, { secret: options.secret ?? null });
   if (!session) return false;
   if (session.status !== 'ended') {
     await markSessionEnded(session.id);

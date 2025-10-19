@@ -1,9 +1,8 @@
 import type { RequestHandler } from './$types';
 import { supa } from '$lib/server/supabase';
-import { customAlphabet } from 'nanoid';
 import { SITE_COUNTRY } from '$env/static/private';
-
-const nano = customAlphabet('ABCDEFGHJKLMNPQRSTUVWXYZ23456789', 16); // unguessable token
+import { resolveSiteOrigin } from '$lib/config/site';
+import { generateStandaloneToken } from '$lib/server/token.server';
 
 export const POST: RequestHandler = async ({ request, url }) => {
   // optional clinicId in body; version default 'v1'
@@ -22,7 +21,7 @@ export const POST: RequestHandler = async ({ request, url }) => {
     return new Response(JSON.stringify({ error: 'Template not found' }), { status: 404 });
   }
 
-  const publicToken = nano();
+  const publicToken = generateStandaloneToken();
   const country = SITE_COUNTRY || 'PL';
 
   const { data: session, error } = await supa
@@ -40,7 +39,8 @@ export const POST: RequestHandler = async ({ request, url }) => {
     return new Response(JSON.stringify({ error: error.message }), { status: 500 });
   }
 
-  const link = new URL(`/q/${session.public_token}`, url).toString();
+  const origin = resolveSiteOrigin(url.origin);
+  const link = `${origin}/session/${session.public_token}`;
   return new Response(JSON.stringify({ token: session.public_token, url: link }), {
     headers: { 'content-type': 'application/json' }
   });

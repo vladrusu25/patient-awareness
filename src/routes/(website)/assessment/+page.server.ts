@@ -1,12 +1,12 @@
 ﻿import type { Actions, PageServerLoad } from './$types';
 import { error, redirect } from '@sveltejs/kit';
 import { supa } from '$lib/server/supabase';
-import { customAlphabet } from 'nanoid';
+import { generateStandaloneToken } from '$lib/server/token.server';
 
-const nanoid = customAlphabet('ABCDEFGHJKLMNPQRSTUVWXYZ23456789', 16);
-
-export const load: PageServerLoad = async ({ cookies }) => {
-  return { token: cookies.get('pa_token') ?? null };
+export const load: PageServerLoad = async ({ cookies, url }) => {
+  const secretParam = url.searchParams.get('s');
+  const secret = secretParam && secretParam.trim().length ? secretParam.trim() : null;
+  return { token: cookies.get('pa_token') ?? null, secret };
 };
 
 export const actions: Actions = {
@@ -21,7 +21,7 @@ export const actions: Actions = {
     if (tmplErr) throw error(500, 'Failed to load template');
     if (!tmpl) throw error(500, 'No questionnaire template configured');
 
-    const token = nanoid();
+    const token = generateStandaloneToken();
     const { error: insErr } = await supa
       .from('sessions')
       .insert({

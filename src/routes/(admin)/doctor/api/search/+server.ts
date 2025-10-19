@@ -2,7 +2,12 @@ import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { classifyQuery, doctorLookup } from '$lib/services/doctor.server';
 
-export const GET: RequestHandler = async ({ url }) => {
+export const GET: RequestHandler = async ({ url, locals }) => {
+  const user = locals.auth?.user;
+  if (!user) {
+    return json({ ok: false, code: 'unauthorized', message: 'Unauthorized' }, { status: 401 });
+  }
+
   const raw = url.searchParams.get('q') ?? '';
   const query = raw.trim();
 
@@ -22,7 +27,8 @@ export const GET: RequestHandler = async ({ url }) => {
   }
 
   try {
-    const result = await doctorLookup(query);
+    const doctorId = user.role === 'doctor' ? user.id : null;
+    const result = await doctorLookup(query, { doctorId });
     if (!result) {
       return json(
         { ok: false, code: 'not_found', message: 'No results for that identifier.' },

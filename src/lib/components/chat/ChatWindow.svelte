@@ -21,6 +21,11 @@
 
   export let title: string | null = null;
   export let token: string;
+  export let secret: string | null = null;
+
+  $: apiBase = `/api/session/${encodeURIComponent(token)}`;
+  const withSecret = (url: string) =>
+    secret ? `${url}${url.includes('?') ? '&' : '?'}s=${encodeURIComponent(secret)}` : url;
 
   let rawSteps: Step[] = [];
   let steps: Step[] = [];
@@ -168,7 +173,7 @@ onDestroy(() => {
     history.push({ side: 'left', text: $t('chat.preparingReport') });
     await tick(); scrollToLatestPrompt();
 
-    const res = await generateReportAndGetUrls(token);
+    const res = await generateReportAndGetUrls(token, secret ?? undefined);
     if (res.ok) {
       pdfUrl = res.downloadUrl;
       pdfStatus = 'ready';
@@ -189,7 +194,7 @@ onDestroy(() => {
 
   async function refetchSteps(): Promise<boolean> {
     try {
-      const res = await fetch(`/api/session/${encodeURIComponent(token)}/steps?ts=${Date.now()}`, {
+      const res = await fetch(withSecret(`${apiBase}/steps?ts=${Date.now()}`), {
         headers: { 'cache-control': 'no-store' }
       });
       if (res.ok) {
@@ -222,7 +227,7 @@ onDestroy(() => {
 
     let payload: any = null;
     try {
-      const res = await fetch(`/api/session/${encodeURIComponent(token)}/answer`, {
+      const res = await fetch(withSecret(`${apiBase}/answer`), {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({ step_key: step.key, value })
@@ -276,7 +281,7 @@ onDestroy(() => {
   }
 
   onMount(async () => {
-    const res = await fetch(`/api/session/${encodeURIComponent(token)}/steps`);
+    const res = await fetch(withSecret(`${apiBase}/steps`));
     const data = await res.json();
     answers = (data?.answers ?? {}) as Record<string, unknown>;
     rawSteps = (data?.steps ?? []) as Step[];

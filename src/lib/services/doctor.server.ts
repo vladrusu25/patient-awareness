@@ -1,8 +1,8 @@
 import { supa } from '$lib/server/supabase';
 import { fetchSessionByToken } from '$lib/server/report.service';
 
-const TOKEN_RE = /^[A-Z0-9]{16}$/;
-const PATIENT_RE = /^[A-Z][0-9]{5}$/;
+const TOKEN_RE = /^(?:[A-Z0-9]{10}|[A-Z0-9]{16})$/;
+const PATIENT_RE = /^(?:[A-Z][0-9]{5}|[A-Z][0-9]{2}[A-Z]{2}[0-9]{3})$/;
 const BUCKET = 'pdf-results';
 
 type ScoreRow = {
@@ -18,6 +18,8 @@ type SessionRow = {
   public_token: string;
   created_at: string;
   patient_id: string | null;
+  doctor_user_id: string | null;
+  token_secret: string | null;
   session_scores: ScoreRow | ScoreRow[] | null;
 };
 
@@ -26,6 +28,7 @@ type PatientRow = {
   public_id: string;
   first_seen_at: string | null;
   last_seen_at: string | null;
+  doctor_user_id: string | null;
 };
 
 export type ScoreSummary = {
@@ -109,7 +112,7 @@ export function classifyQuery(raw: string): 'assessment' | 'patient' | null {
 async function fetchPatientByPublicId(publicId: string): Promise<PatientRow | null> {
   const { data, error } = await supa
     .from('patients')
-    .select('id, public_id, first_seen_at, last_seen_at')
+    .select('id, public_id, first_seen_at, last_seen_at, doctor_user_id')
     .eq('public_id', publicId)
     .maybeSingle();
 
@@ -138,12 +141,19 @@ async function getDownloadUrl(token: string): Promise<string | null> {
   return data?.signedUrl ?? null;
 }
 
-export async function lookupAssessment(tokenRaw: string): Promise<DoctorLookupAssessment | null> {
+export async function lookupAssessment(
+  tokenRaw: string,
+  opts: { doctorId?: string | null } = {}
+): Promise<DoctorLookupAssessment | null> {
   const token = tokenRaw.trim().toUpperCase();
   if (!TOKEN_RE.test(token)) return null;
 
-  const session = await fetchSessionByToken(token);
+  const session = await fetchSessionByToken(token, { bypassSecret: true });
   if (!session) return null;
+  if (opts.doctorId && session.doctor_user_id && session.doctor_user_id !== opts.doctorId) {
+    return null;
+  }
+  const secretSuffix = session.token_secret ? `?s=${encodeURIComponent(session.token_secret)}` : '';
 
   const { data: scoreData, error } = await supa
     .from('session_scores')
@@ -160,7 +170,7 @@ export async function lookupAssessment(tokenRaw: string): Promise<DoctorLookupAs
     sessionId: session.id,
     token,
     createdAt: session.created_at,
-    viewUrl: `/api/session/${encodeURIComponent(token)}/pdf`,
+    viewUrl: `/api/session/${encodeURIComponent(token)}/pdf${secretSuffix}`,
     downloadUrl,
     scores,
     delta: null,
@@ -168,22 +178,49 @@ export async function lookupAssessment(tokenRaw: string): Promise<DoctorLookupAs
   };
 }
 
-export async function lookupPatient(publicIdRaw: string): Promise<PatientAssessments | null> {
+export async function lookupPatient(
+  publicIdRaw: string,
+  opts: { doctorId?: string | null } = {}
+): Promise<PatientAssessments | null> {
   const publicId = publicIdRaw.trim().toUpperCase();
   if (!PATIENT_RE.test(publicId)) return null;
 
   const patient = await fetchPatientByPublicId(publicId);
   if (!patient) return null;
 
-  const { data, error } = await supa
+  if (opts.doctorId) {
+    if (patient.doctor_user_id && patient.doctor_user_id !== opts.doctorId) {
+      return null;
+    }
+  }
+
+  let sessionQuery = supa
     .from('sessions')
-    .select('id, public_token, created_at, patient_id, session_scores(endopain_global, pcs_yes_count, pcs_positive, pvvq_total, computed_at)')
+    .select(
+      'id, public_token, created_at, patient_id, doctor_user_id, token_secret, session_scores(endopain_global, pcs_yes_count, pcs_positive, pvvq_total, computed_at)'
+    )
     .eq('patient_id', patient.id)
     .order('created_at', { ascending: true });
 
-  if (error) throw new Error(error.message);
+  if (opts.doctorId) {
+    if (patient.doctor_user_id === opts.doctorId) {
+      sessionQuery = sessionQuery.eq('doctor_user_id', opts.doctorId);
+    } else if (patient.doctor_user_id == null) {
+      sessionQuery = sessionQuery.is('doctor_user_id', null);
+    }
+  }
 
-  const rows = (data ?? []) as unknown as SessionRow[];
+  const { data, error } = await sessionQuery;
+
+  let rows = (data ?? []) as unknown as SessionRow[];
+  if (opts.doctorId) {
+    rows = rows.filter((row) => {
+      if (patient.doctor_user_id === opts.doctorId) {
+        return row.doctor_user_id === opts.doctorId;
+      }
+      return row.doctor_user_id == null;
+    });
+  }
   const ordered = rows.map((row) => {
     const score = unpackScore(row.session_scores);
     const scores = toScoreSummary(score);
@@ -191,7 +228,9 @@ export async function lookupPatient(publicIdRaw: string): Promise<PatientAssessm
       sessionId: row.id,
       token: row.public_token,
       createdAt: row.created_at,
-      viewUrl: `/api/session/${encodeURIComponent(row.public_token)}/pdf`,
+      viewUrl: `/api/session/${encodeURIComponent(row.public_token)}/pdf${
+        row.token_secret ? `?s=${encodeURIComponent(row.token_secret)}` : ''
+      }`,
       downloadUrl: null as string | null,
       scores,
       delta: null as ScoreDelta | null
@@ -232,16 +271,19 @@ export async function lookupPatient(publicIdRaw: string): Promise<PatientAssessm
   };
 }
 
-export async function doctorLookup(raw: string): Promise<DoctorLookupResult | null> {
+export async function doctorLookup(
+  raw: string,
+  opts: { doctorId?: string | null } = {}
+): Promise<DoctorLookupResult | null> {
   const mode = classifyQuery(raw);
   if (mode === 'assessment') {
-    const assessment = await lookupAssessment(raw);
+    const assessment = await lookupAssessment(raw, opts);
     if (!assessment) return null;
     return { type: 'assessment', assessment };
   }
 
   if (mode === 'patient') {
-    const patient = await lookupPatient(raw);
+    const patient = await lookupPatient(raw, opts);
     if (!patient) return null;
     return { type: 'patient', patient };
   }

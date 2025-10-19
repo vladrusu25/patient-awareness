@@ -66,18 +66,19 @@ export const translationsHr = {
   },
   pdfSearch: {
     title: "Pronađite svoje PDF izvješće",
-    description: "Unesite svoj token od 16 znakova (npr. AB2C... ) da biste dohvatili svoje izvješće.",
-    placeholder: "Unesite svoj token (16 znakova)",
+    description: "Unesite token (10 ili 16 znakova, npr. AB2C...) kako biste dohvatili svoje izvješće.",
+    placeholder: "Unesite svoj token (10 ili 16 znakova)",
     search: "Pretraživanje",
     searching: "Pretraživanje...",
     found: "Pronađen PDF - spreman za preuzimanje.",
     download: "Preuzmite PDF",
     previewTitle: "PDF pregled",
     errors: {
-      invalidFormat: "Token mora imati 16 znakova (AZ, 0-9).",
+      invalidFormat: "Token mora imati 10 ili 16 znakova (A-Z, 0-9).",
       notFound: "Nevažeći token - ovaj token ne postoji.",
-      rateLimited: "Previše pokušaja.Pokušajte ponovno za {{seconds}} sekundi.",
-      noPdf: "Izvješće još nije dostupno.Pokušajte ponovno kasnije.",
+      rateLimited: "Previše pokušaja. Pokušajte ponovno za {{seconds}} sekundi.",
+      noPdf: "Izvješće još nije dostupno. Pokušajte ponovno kasnije.",
+      protected: "Ovaj izvještaj dostupan je samo putem privatne poveznice liječnika. Zamolite liječnika za QR kod ili poveznicu.",
       generic: "Došlo je do pogreške - pokušajte ponovo."
     }
   },

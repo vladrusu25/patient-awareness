@@ -1,13 +1,14 @@
 <script lang="ts">
-  import Sidebar from '$lib/components/dashboard/doctor/Sidebar.svelte';
-  import type {
+import Sidebar from '$lib/components/dashboard/doctor/Sidebar.svelte';
+import type {
     DoctorLookupResult,
     PatientAssessments,
     ScoreSummary
   } from '$lib/services/doctor.server';
-  import { base } from '$app/paths';
-  import { t, language } from '$lib/i18n';
-  import type { Language } from '$lib/i18n/types';
+import { base } from '$app/paths';
+import { t, language } from '$lib/i18n';
+import type { Language } from '$lib/i18n/types';
+import type { PageData } from './$types';
 
   type ScoreKey = 'endopain' | 'pvvq' | 'pcsYes';
   let scoreKeys: Array<{ key: ScoreKey; label: string; help: string }> = [];
@@ -20,6 +21,16 @@
   let selectedToken: string | null = null;
   let currentLanguage: Language = 'en';
   let mobileNavOpen = false;
+
+  export let data: PageData;
+
+  const shareOrigin = data.shareOrigin.replace(/\/$/, '');
+  const doctorProfile = data.doctorProfile ?? null;
+    let shareLink: string | null = null;
+  $: shareLink =
+    doctorProfile ? `${shareOrigin}/doctor/${doctorProfile.doctor_code}?k=${doctorProfile.link_secret}` : null;
+  $: qrValue = shareLink ?? `${shareOrigin}/doctor/login`;
+
 
   $: currentLanguage = $language;
   $: locale =
@@ -212,12 +223,18 @@
       on:keydown={handleOverlayKey}
     ></div>
     <div class="fixed inset-y-0 left-0 z-50 w-[260px]" role="dialog" aria-modal="true">
-      <Sidebar active="patients" classes="shadow-xl" showClose on:close={closeMobileNav} />
+      <Sidebar
+        active="patients"
+        classes="shadow-xl"
+        showClose
+        on:close={closeMobileNav}
+        qrData={qrValue}
+      />
     </div>
   {/if}
 
   <div class="lg:flex">
-    <Sidebar active="patients" classes="hidden lg:block" />
+    <Sidebar active="patients" classes="hidden lg:block" qrData={qrValue} />
 
     <main class="flex-1 min-h-screen">
       <header class="hidden h-16 px-6 border-b border-neutral-100 bg-white lg:flex lg:items-center lg:justify-between">
@@ -232,6 +249,7 @@
           <h1 class="font-heading text-xl text-neutral-800">{texts.headerTitle}</h1>
           <p class="mt-1 text-sm text-neutral-500">{texts.headerSubtitle}</p>
         </div>
+
         <section class="rounded-2xl border border-neutral-100 bg-white p-5 shadow-sm">
           <form class="flex flex-col gap-3 sm:flex-row sm:items-center" on:submit|preventDefault={handleSearch}>
             <div class="relative flex-1">

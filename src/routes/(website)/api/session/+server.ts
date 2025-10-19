@@ -1,10 +1,8 @@
 import type { RequestHandler } from './$types';
 import { json, error } from '@sveltejs/kit';
 import { supa } from '$lib/server/supabase';
-import { customAlphabet } from 'nanoid';
+import { generateStandaloneToken } from '$lib/server/token.server';
 import { markSessionEndedByToken } from '$lib/server/report.service';
-
-const nanoid = customAlphabet('ABCDEFGHJKLMNPQRSTUVWXYZ23456789', 16);
 
 // Creates a session with the latest questionnaire template.
 // Sets an httpOnly cookie "pa_token" and returns { token }.
@@ -30,7 +28,7 @@ export const POST: RequestHandler = async ({ cookies }) => {
   if (!tmpl) throw error(500, 'No questionnaire template configured');
 
   // 2) create session
-  const token = nanoid();
+  const token = generateStandaloneToken();
   const { error: insertErr } = await supa
     .from('sessions')
     .insert({

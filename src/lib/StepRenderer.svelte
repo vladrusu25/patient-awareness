@@ -10,8 +10,13 @@
     | { key: string; type: 'single'; prompt: string; options: { value: string; label: string }[] };
 
   export let token: string;
+  export let secret: string | null = null;
   export let steps: { steps: Step[] };
   export let previous: { step_key: string; value_json: any }[] = [];
+
+  $: apiBase = `/api/session/${encodeURIComponent(token)}`;
+  const apiUrl = (path: string) =>
+    secret ? `${apiBase}/${path}?s=${encodeURIComponent(secret)}` : `${apiBase}/${path}`;
 
   const answered = new Map(previous.map((a) => [a.step_key, a.value_json]));
   let localizedSteps: Step[] = [];
@@ -37,7 +42,7 @@
   let localValue: any = null;
 
   async function save(step: Step, value: any) {
-    await fetch(`/api/session/${token}/answer`, {
+    await fetch(apiUrl('answer'), {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({ step_key: step.key, value })

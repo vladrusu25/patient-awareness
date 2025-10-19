@@ -7,9 +7,19 @@ import { createPatientForSession, attachPatientByPublicId } from '$lib/server/pa
 
 const STATUS_KEY = 'p0_patient_status';
 const PATIENT_ID_KEY = 'p0_patient_id_entry';
+const TOKEN_RE = /^(?:[A-Z0-9]{10}|[A-Z0-9]{16})$/;
+const LEGACY_PATIENT_RE = /^[A-Z][0-9]{5}$/;
+const DOCTOR_PATIENT_RE = /^[A-Z][0-9]{2}[A-Z]{2}[0-9]{3}$/;
 
-export const POST: RequestHandler = async ({ params, request }) => {
-  const token = params.token;
+export const POST: RequestHandler = async ({ params, request, url }) => {
+  const token = params.token?.trim().toUpperCase() ?? '';
+  if (!TOKEN_RE.test(token)) {
+    return json({ error: 'Invalid token' }, { status: 400 });
+  }
+
+  const secretParam = url.searchParams.get('s');
+  const secret = secretParam && secretParam.trim().length ? secretParam.trim() : null;
+
   const body = await request.json().catch(() => ({}));
   const { step_key, value } = body;
 
@@ -19,12 +29,16 @@ export const POST: RequestHandler = async ({ params, request }) => {
 
   const { data: session, error: sErr } = await supa
     .from('sessions')
-    .select('id, clinic_id, patient_id')
+    .select('id, clinic_id, patient_id, token_secret')
     .eq('public_token', token)
     .maybeSingle();
 
   if (sErr || !session) {
     return json({ error: 'Invalid token' }, { status: 404 });
+  }
+
+  if (session.token_secret && session.token_secret !== secret) {
+    return json({ error: 'Forbidden' }, { status: 403 });
   }
 
   let valueToPersist: unknown = value ?? null;
@@ -54,8 +68,8 @@ export const POST: RequestHandler = async ({ params, request }) => {
     return json({ ok: false, message: 'Please enter your Customer ID.' }, { status: 400 });
   }
 
-  if (!/^[A-Z][0-9]{5}$/.test(normalized)) {
-    return json({ ok: false, message: 'That ID doesn’t match the format A12345. Please check and try again.' }, { status: 400 });
+  if (!LEGACY_PATIENT_RE.test(normalized) && !DOCTOR_PATIENT_RE.test(normalized)) {
+    return json({ ok: false, message: 'That ID format is not recognized. Please check and try again.' }, { status: 400 });
   }
 
     const attached = await attachPatientByPublicId(

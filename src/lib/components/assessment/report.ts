@@ -3,9 +3,11 @@ export type GenerateReportResult =
   | { ok: true; viewUrl: string; downloadUrl: string | null; ttlSeconds: number }
   | { ok: false; status: number; code?: string; message?: string };
 
-export async function generateReportAndGetUrls(token: string): Promise<GenerateReportResult> {
+export async function generateReportAndGetUrls(token: string, secret?: string | null): Promise<GenerateReportResult> {
   try {
-    const res = await fetch(`/api/session/${encodeURIComponent(token)}/pdf`, {
+    const base = `/api/session/${encodeURIComponent(token)}/pdf`;
+    const url = secret ? `${base}?s=${encodeURIComponent(secret)}` : base;
+    const res = await fetch(url, {
       method: 'POST',
       headers: { 'cache-control': 'no-store' }
     });

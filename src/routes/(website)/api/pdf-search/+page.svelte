@@ -2,7 +2,7 @@
   import { t } from '$lib/i18n';
   import Footer from "$lib/components/Footer.svelte";
 
-  const TOKEN_PATTERN = /^[A-Z0-9]{16}$/;
+  const TOKEN_PATTERN = /^(?:[A-Z0-9]{10}|[A-Z0-9]{16})$/;
 
   let token = '';
   let loading = false;

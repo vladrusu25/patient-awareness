@@ -5,20 +5,22 @@ import { supa } from '$lib/server/supabase';
 import { enforceFixedWindow, hashIp } from '$lib/server/rateLimit.server';
 
 const BUCKET = 'pdf-results';
-const TOKEN_RE = /^[A-Z0-9]{16}$/;
+const TOKEN_RE = /^(?:[A-Z0-9]{10}|[A-Z0-9]{16})$/;
 
 export const GET: RequestHandler = async (event) => {
   const token = event.params.token?.trim().toUpperCase() ?? '';
 
-  // 1) format check (fast fail)
   if (!TOKEN_RE.test(token)) {
     return json(
-      { ok: false, code: 'invalid_format', message: 'Token must be 16 characters [A–Z0–9].' },
+      {
+        ok: false,
+        code: 'invalid_format',
+        message: 'Token must be 10 or 16 characters (A-Z, 0-9).'
+      },
       { status: 400, headers: { 'Cache-Control': 'no-store' } }
     );
   }
 
-  // 2) RATE LIMIT per IP (10 req / min)
   {
     const ip = event.getClientAddress?.() || '0.0.0.0';
     const key = `pdf-search:${hashIp(ip)}`;
@@ -31,12 +33,11 @@ export const GET: RequestHandler = async (event) => {
     }
   }
 
-  // 3) verify session exists for this token
   const { data: sess } = await supa
     .from('sessions')
-    .select('id')
+    .select('id, token_secret')
     .eq('public_token', token)
-    .single();
+    .maybeSingle();
 
   if (!sess) {
     return json(
@@ -45,13 +46,11 @@ export const GET: RequestHandler = async (event) => {
     );
   }
 
-  // 4) signed download (and same-origin view route if you use it)
   const objectPath = `assessment-${token}.pdf`;
+  const viewUrl = sess.token_secret
+    ? `/api/session/${encodeURIComponent(token)}/pdf?s=${encodeURIComponent(sess.token_secret)}`
+    : `/api/session/${encodeURIComponent(token)}/pdf`;
 
-  // View (inline preview) served by /api/session/[token]/pdf (GET)
-  const viewUrl = `/api/session/${encodeURIComponent(token)}/pdf`;
-
-  // Download (signed)
   const { data: dlSigned, error: signErr } = await supa
     .storage.from(BUCKET)
     .createSignedUrl(objectPath, 60 * 10, { download: `patient-report-${token}.pdf` });
@@ -68,6 +67,3 @@ export const GET: RequestHandler = async (event) => {
     { status: 200, headers: { 'Cache-Control': 'no-store' } }
   );
 };
-// Note: this is a public endpoint; do NOT return sensitive info
-// The token is a short-lived random value that only the user should know
-// (it’s included in the PDF report URL and email they receive)

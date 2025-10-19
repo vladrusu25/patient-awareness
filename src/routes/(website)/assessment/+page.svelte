@@ -5,7 +5,7 @@
   import ValueProps from '$lib/components/ValueProps.svelte';
 	import Testimonials from '$lib/components/Testimonials.svelte';
 	import Footer from '$lib/components/Footer.svelte';
-  export let data: { token: string | null };
+  export let data: { token: string | null; secret: string | null };
 
   onMount(() => {
     if (data.token && location.hash !== '#chat') {
@@ -20,7 +20,7 @@
   </section>
 {:else}
   <section id="chat" class="bg-neutral-25 py-10 px-4">
-    <ChatWindow token={data.token}/>
+    <ChatWindow token={data.token} secret={data.secret} />
   </section>
 {/if} 
 <div class="border-t border-neutral-100">
