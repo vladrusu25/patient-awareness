@@ -11,6 +11,10 @@ const TOKEN_RE = /^(?:[A-Z0-9]{10}|[A-Z0-9]{16})$/;
 const LEGACY_PATIENT_RE = /^[A-Z][0-9]{5}$/;
 const DOCTOR_PATIENT_RE = /^[A-Z][0-9]{2}[A-Z]{2}[0-9]{3}$/;
 
+function buildDoctorToken(patientPublicId: string, counter: number): string {
+  return `${patientPublicId}${counter.toString().padStart(2, '0')}`;
+}
+
 export const POST: RequestHandler = async ({ params, request, url }) => {
   const token = params.token?.trim().toUpperCase() ?? '';
   if (!TOKEN_RE.test(token)) {
@@ -29,7 +33,7 @@ export const POST: RequestHandler = async ({ params, request, url }) => {
 
   const { data: session, error: sErr } = await supa
     .from('sessions')
-    .select('id, clinic_id, patient_id, token_secret')
+    .select('id, clinic_id, patient_id, token_secret, doctor_user_id, token_counter')
     .eq('public_token', token)
     .maybeSingle();
 
@@ -63,14 +67,18 @@ export const POST: RequestHandler = async ({ params, request, url }) => {
     if (typeof value !== 'string') {
       return json({ ok: false, message: 'Patient ID must be a string.' }, { status: 400 });
     }
+
     const normalized = value.trim().toUpperCase().replace(/\s+/g, '');
     if (!normalized) {
-    return json({ ok: false, message: 'Please enter your Customer ID.' }, { status: 400 });
-  }
+      return json({ ok: false, message: 'Please enter your Customer ID.' }, { status: 400 });
+    }
 
-  if (!LEGACY_PATIENT_RE.test(normalized) && !DOCTOR_PATIENT_RE.test(normalized)) {
-    return json({ ok: false, message: 'That ID format is not recognized. Please check and try again.' }, { status: 400 });
-  }
+    if (!LEGACY_PATIENT_RE.test(normalized) && !DOCTOR_PATIENT_RE.test(normalized)) {
+      return json(
+        { ok: false, message: 'That ID format is not recognized. Please check and try again.' },
+        { status: 400 }
+      );
+    }
 
     const attached = await attachPatientByPublicId(
       session.id,
@@ -80,12 +88,57 @@ export const POST: RequestHandler = async ({ params, request, url }) => {
     );
 
     if (!attached) {
-    return json({ ok: false, message: 'We couldn’t find that ID. Please check the letters and digits and try again.' }, { status: 404 });
-  }
+      return json(
+        { ok: false, message: "We couldn't find that ID. Please check the letters and digits and try again." },
+        { status: 404 }
+      );
+    }
 
     valueToPersist = normalized;
     responsePayload.patientPublicId = attached.publicId;
     session.patient_id = attached.patientId;
+    session.doctor_user_id = attached.doctorUserId ?? session.doctor_user_id ?? null;
+
+    if (attached.doctorUserId) {
+      try {
+        const { count: existingCount, error: countErr } = await supa
+          .from('sessions')
+          .select('id', { count: 'exact', head: true })
+          .eq('patient_id', attached.patientId)
+          .eq('doctor_user_id', attached.doctorUserId)
+          .neq('id', session.id);
+
+        if (countErr) {
+          console.error('failed to count existing sessions for patient', countErr.message ?? countErr);
+        } else {
+          const counter = (existingCount ?? 0) + 1;
+          if (counter <= 99) {
+            const desiredToken = buildDoctorToken(attached.publicId, counter);
+            if (token !== desiredToken) {
+              const { error: updateErr } = await supa
+                .from('sessions')
+                .update({ public_token: desiredToken, token_counter: counter })
+                .eq('id', session.id);
+
+              if (updateErr) {
+                console.error('failed to align session token for doctor patient', updateErr.message ?? updateErr);
+              } else {
+                const redirectPath = `/session/${encodeURIComponent(desiredToken)}${
+                  session.token_secret
+                    ? `?s=${encodeURIComponent(session.token_secret as string)}`
+                    : ''
+                }`;
+                responsePayload.redirectTo = redirectPath;
+              }
+            } else if ((session.token_counter ?? null) !== counter) {
+              await supa.from('sessions').update({ token_counter: counter }).eq('id', session.id);
+            }
+          }
+        }
+      } catch (err: any) {
+        console.error('doctor patient token sync failed', err?.message ?? err);
+      }
+    }
   }
 
   const { error } = await supa

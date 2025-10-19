@@ -1,6 +1,6 @@
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-import { classifyQuery, doctorLookup } from '$lib/services/doctor.server';
+import { classifyQuery, doctorLookup, DoctorAccessError } from '$lib/services/doctor.server';
 
 export const GET: RequestHandler = async ({ url, locals }) => {
   const user = locals.auth?.user;
@@ -41,6 +41,13 @@ export const GET: RequestHandler = async ({ url, locals }) => {
       { status: 200, headers: { 'Cache-Control': 'no-store' } }
     );
   } catch (err) {
+    if (err instanceof DoctorAccessError) {
+      const code = err.resource === 'assessment' ? 'forbidden_assessment' : 'forbidden_patient';
+      return json(
+        { ok: false, code, message: err.message },
+        { status: 403, headers: { 'Cache-Control': 'no-store' } }
+      );
+    }
     console.error('doctor lookup failed', err);
     return json(
       { ok: false, code: 'server_error', message: 'Unable to complete lookup.' },

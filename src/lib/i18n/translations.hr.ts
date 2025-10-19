@@ -507,6 +507,7 @@ export const translationsHr = {
       errors: {
         emptyInput: "Unesite token procjene ili ID pacijenta.",
         notFound: "Nema pronađenih rezultata.",
+        noAccess: "Nemate pristup ovom pacijentu.",
         unreachable: "Nije moguće doći do usluge traženja."
       }
     },

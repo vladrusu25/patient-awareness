@@ -49,15 +49,22 @@ export async function createPatientForSession(
   throw new Error('Unable to allocate unique patient ID');
 }
 
+type PatientLookupRow = {
+  id: string;
+  public_id: string;
+  clinic_id: string | null;
+  doctor_user_id: string | null;
+};
+
 export async function attachPatientByPublicId(
   sessionId: string,
   clinicId: string | null,
   existingPatientId: string | null,
   publicId: string
-): Promise<{ patientId: string; publicId: string } | null> {
+): Promise<{ patientId: string; publicId: string; doctorUserId: string | null } | null> {
   let query = supa
     .from('patients')
-    .select('id, public_id, clinic_id')
+    .select('id, public_id, clinic_id, doctor_user_id')
     .eq('public_id', publicId)
     .limit(1);
 
@@ -65,14 +72,21 @@ export async function attachPatientByPublicId(
     query = query.eq('clinic_id', clinicId);
   }
 
-  const { data } = await query.maybeSingle();
+  const { data } = await query.maybeSingle<PatientLookupRow>();
   if (!data) return null;
 
+  const sessionUpdate: Record<string, unknown> = {};
   if (existingPatientId !== data.id) {
-    await supa.from('sessions').update({ patient_id: data.id }).eq('id', sessionId);
+    sessionUpdate.patient_id = data.id;
+  }
+  if (data.doctor_user_id) {
+    sessionUpdate.doctor_user_id = data.doctor_user_id;
+  }
+  if (Object.keys(sessionUpdate).length > 0) {
+    await supa.from('sessions').update(sessionUpdate).eq('id', sessionId);
   }
 
   await supa.from('patients').update({ last_seen_at: new Date().toISOString() }).eq('id', data.id);
 
-  return { patientId: data.id, publicId: data.public_id };
+  return { patientId: data.id, publicId: data.public_id, doctorUserId: data.doctor_user_id };
 }

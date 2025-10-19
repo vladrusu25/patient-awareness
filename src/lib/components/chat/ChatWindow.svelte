@@ -233,6 +233,10 @@ onDestroy(() => {
         body: JSON.stringify({ step_key: step.key, value })
       });
       payload = await res.json().catch(() => ({}));
+      if (res.ok && payload?.redirectTo) {
+        location.replace(payload.redirectTo as string);
+        return;
+      }
       if (!res.ok || payload?.ok !== true) {
         throw new Error(payload?.message ?? payload?.error ?? $t('chat.answerFailed'));
       }

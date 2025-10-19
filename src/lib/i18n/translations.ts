@@ -989,6 +989,7 @@ export const translations: Record<string, Node> = {
       errors: {
         emptyInput: { en: 'Enter an assessment token or patient ID.', ru: 'Введите токен оценки или ID пациента.' },
         notFound: { en: 'No results found.', ru: 'Ничего не найдено.' },
+        noAccess: { en: 'You do not have access to this patient.', ru: 'У вас нет доступа к этому пациенту.' },
         unreachable: { en: 'Unable to reach lookup service.', ru: 'Не удалось связаться со службой поиска.' }
       }
     },

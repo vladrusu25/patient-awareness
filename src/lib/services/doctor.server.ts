@@ -74,6 +74,13 @@ export type DoctorLookupResult =
   | { type: 'assessment'; assessment: DoctorLookupAssessment }
   | { type: 'patient'; patient: PatientAssessments };
 
+export class DoctorAccessError extends Error {
+  constructor(public readonly resource: 'assessment' | 'patient', message?: string) {
+    super(message ?? `Doctor does not have access to this ${resource}.`);
+    this.name = 'DoctorAccessError';
+  }
+}
+
 function unpackScore(score: SessionRow['session_scores']): ScoreRow | null {
   if (!score) return null;
   return Array.isArray(score) ? score[0] ?? null : score;
@@ -151,7 +158,7 @@ export async function lookupAssessment(
   const session = await fetchSessionByToken(token, { bypassSecret: true });
   if (!session) return null;
   if (opts.doctorId && session.doctor_user_id && session.doctor_user_id !== opts.doctorId) {
-    return null;
+    throw new DoctorAccessError('assessment', 'Doctor does not have access to this assessment.');
   }
   const secretSuffix = session.token_secret ? `?s=${encodeURIComponent(session.token_secret)}` : '';
 
@@ -190,7 +197,7 @@ export async function lookupPatient(
 
   if (opts.doctorId) {
     if (patient.doctor_user_id && patient.doctor_user_id !== opts.doctorId) {
-      return null;
+      throw new DoctorAccessError('patient', 'Doctor does not have access to this patient.');
     }
   }
 

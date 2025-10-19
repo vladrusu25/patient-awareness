@@ -564,6 +564,7 @@ export const translationsSk = {
       errors: {
         emptyInput: 'Zadajte token hodnotenia alebo ID pacienta.',
         notFound: 'Nenašli sa žiadne výsledky.',
+        noAccess: 'K tomuto pacientovi nemáte prístup.',
         unreachable: 'Nedá sa pripojiť k službe vyhľadávania.'
       }
     },

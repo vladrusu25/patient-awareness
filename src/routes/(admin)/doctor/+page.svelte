@@ -89,15 +89,25 @@ import type { PageData } from './$types';
       const res = await fetch(`${base}/doctor/api/search?q=${encodeURIComponent(value)}`, {
         headers: { 'cache-control': 'no-store' }
       });
-      const data = (await res.json().catch(() => null)) || { result: null, kind: null };
-      if (!res.ok || !data || !data.ok) {
-        errorMsg = $t('doctor.search.errors.notFound');
+      const payload = (await res.json().catch(() => null)) as {
+        ok?: boolean;
+        code?: string;
+        kind?: 'assessment' | 'patient';
+        result?: DoctorLookupResult;
+      } | null;
+      if (!res.ok || !payload || payload.ok !== true) {
+        const code = payload?.code ?? (res.status === 403 ? 'forbidden_patient' : undefined);
+        if (code === 'forbidden_patient' || code === 'forbidden_assessment') {
+          errorMsg = $t('doctor.search.errors.noAccess');
+        } else {
+          errorMsg = $t('doctor.search.errors.notFound');
+        }
         lookup = null;
         kind = null;
         return;
       }
-      lookup = data?.result as DoctorLookupResult || null;
-      kind = data?.kind as 'assessment' | 'patient' || null;
+      lookup = (payload.result ?? null) as DoctorLookupResult | null;
+      kind = (payload.kind ?? null) as 'assessment' | 'patient' | null;
     } catch (err) {
       console.error(err);
       errorMsg = $t('doctor.search.errors.unreachable');
