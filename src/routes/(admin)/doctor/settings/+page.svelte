@@ -137,9 +137,10 @@
       on:click={closeMobileNav}
       on:keydown={handleOverlayKey}
     ></div>
-    <div class="fixed inset-y-0 left-0 z-50 w-[260px]" role="dialog" aria-modal="true">
+    <div class="fixed inset-y-0 left-0 z-50 flex max-w-full pl-0 pr-4 sm:pr-6" role="dialog" aria-modal="true">
       <Sidebar
         active="settings"
+        variant="mobile"
         classes="shadow-xl"
         showClose
         on:close={closeMobileNav}

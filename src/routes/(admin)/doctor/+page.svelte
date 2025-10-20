@@ -41,6 +41,7 @@ import { get } from 'svelte/store';
   $: shareLink =
     doctorProfile ? `${shareOrigin}/doctor/${doctorProfile.doctor_code}?k=${doctorProfile.link_secret}` : null;
   $: qrValue = shareLink ?? `${shareOrigin}/doctor/login`;
+  $: canAccessSettings = doctorProfile !== null;
 
   function translateWithFallback(key: string, fallback: string): string {
     const value = $t(key);
@@ -259,10 +260,12 @@ import { get } from 'svelte/store';
       on:click={closeMobileNav}
       on:keydown={handleOverlayKey}
     ></div>
-    <div class="fixed inset-y-0 left-0 z-50 w-[260px]" role="dialog" aria-modal="true">
+    <div class="fixed inset-y-0 left-0 z-50 flex max-w-full pl-0 pr-4 sm:pr-6" role="dialog" aria-modal="true">
       <Sidebar
         active="patients"
+        variant="mobile"
         classes="shadow-xl"
+        showSettings={canAccessSettings}
         showClose
         on:close={closeMobileNav}
         qrData={qrValue}
@@ -276,6 +279,7 @@ import { get } from 'svelte/store';
     <Sidebar
       active="patients"
       classes="hidden lg:block"
+      showSettings={canAccessSettings}
       qrData={qrValue}
       doctorName={doctorName}
       doctorCode={doctorCode}
