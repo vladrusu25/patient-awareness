@@ -6,9 +6,11 @@ import type {
     ScoreSummary
   } from '$lib/services/doctor.server';
 import { base } from '$app/paths';
-import { t, language } from '$lib/i18n';
+import { t, language, switchLanguage } from '$lib/i18n';
 import type { Language } from '$lib/i18n/types';
 import type { PageData } from './$types';
+import { onMount } from 'svelte';
+import { get } from 'svelte/store';
 
   type ScoreKey = 'endopain' | 'pvvq' | 'pcsYes';
   let scoreKeys: Array<{ key: ScoreKey; label: string; help: string }> = [];
@@ -26,10 +28,35 @@ import type { PageData } from './$types';
 
   const shareOrigin = data.shareOrigin.replace(/\/$/, '');
   const doctorProfile = data.doctorProfile ?? null;
-    let shareLink: string | null = null;
+  $: doctorCode = doctorProfile?.doctor_code ?? null;
+  $: doctorName =
+    doctorProfile
+      ? [doctorProfile.first_name ?? '', doctorProfile.last_name ?? '']
+          .map((part) => part.trim())
+          .filter(Boolean)
+          .join(' ') || null
+      : null;
+  $: doctorDisplay = doctorName ?? doctorCode ?? null;
+  let shareLink: string | null = null;
   $: shareLink =
     doctorProfile ? `${shareOrigin}/doctor/${doctorProfile.doctor_code}?k=${doctorProfile.link_secret}` : null;
   $: qrValue = shareLink ?? `${shareOrigin}/doctor/login`;
+
+  function translateWithFallback(key: string, fallback: string): string {
+    const value = $t(key);
+    return value === key ? fallback : value;
+  }
+
+  $: doctorLabel = translateWithFallback('doctor.profile.nameLabel', 'Doctor');
+
+  onMount(async () => {
+    if (doctorProfile?.region) {
+      const current = get(language);
+      if (current !== doctorProfile.region) {
+        await switchLanguage(doctorProfile.region as Language);
+      }
+    }
+  });
 
 
   $: currentLanguage = $language;
@@ -239,18 +266,31 @@ import type { PageData } from './$types';
         showClose
         on:close={closeMobileNav}
         qrData={qrValue}
+        doctorName={doctorName}
+        doctorCode={doctorCode}
       />
     </div>
   {/if}
 
   <div class="lg:flex">
-    <Sidebar active="patients" classes="hidden lg:block" qrData={qrValue} />
+    <Sidebar
+      active="patients"
+      classes="hidden lg:block"
+      qrData={qrValue}
+      doctorName={doctorName}
+      doctorCode={doctorCode}
+    />
 
     <main class="flex-1 min-h-screen">
       <header class="hidden h-16 px-6 border-b border-neutral-100 bg-white lg:flex lg:items-center lg:justify-between">
         <div>
           <h1 class="font-heading text-xl text-neutral-800">{texts.headerTitle}</h1>
           <p class="text-sm text-neutral-500">{texts.headerSubtitle}</p>
+          {#if doctorDisplay}
+            <p class="mt-1 text-xs text-neutral-500">
+              {doctorLabel}: {doctorDisplay}
+            </p>
+          {/if}
         </div>
       </header>
 
@@ -258,6 +298,11 @@ import type { PageData } from './$types';
         <div class="lg:hidden">
           <h1 class="font-heading text-xl text-neutral-800">{texts.headerTitle}</h1>
           <p class="mt-1 text-sm text-neutral-500">{texts.headerSubtitle}</p>
+          {#if doctorDisplay}
+            <p class="mt-1 text-xs text-neutral-500">
+              {doctorLabel}: {doctorDisplay}
+            </p>
+          {/if}
         </div>
 
         <section class="rounded-2xl border border-neutral-100 bg-white p-5 shadow-sm">
@@ -554,6 +599,13 @@ import type { PageData } from './$types';
     </main>
   </div>
 </div>
+
+
+
+
+
+
+
 
 
 

@@ -37,11 +37,13 @@ async function loadFontData() {
 export async function renderSummaryPdf(opts: {
   token: string;
   patientId?: string | null;
+  doctorName?: string | null;
   generatedAt: Date;
   pages: PdfPageSpec[];  // one element per part you want to render
   language?: Language;
 }): Promise<Uint8Array> {
-  const { token, patientId, generatedAt, pages } = opts;
+  const { token, patientId, generatedAt, pages, doctorName: rawDoctorName } = opts;
+  const doctorName = rawDoctorName && rawDoctorName.trim().length ? rawDoctorName.trim() : null;
   const language: Language = opts.language ?? 'en';
   const doc = await PDFDocument.create();
   const locale = getReportLocale(language);
@@ -108,6 +110,13 @@ export async function renderSummaryPdf(opts: {
       x, y, size: metaSize, font: fontRegular, color: subGray
     });
     y -= 14;
+    if (doctorName) {
+      const doctorLabel = locale.headers.doctorName ?? 'Doctor';
+      page.drawText(`${doctorLabel}: ${doctorName}`, {
+        x, y, size: metaSize, font: fontRegular, color: subGray
+      });
+      y -= 14;
+    }
     page.drawText(`${locale.headers.generated}: ${dt}`, {
       x, y, size: metaSize, font: fontRegular, color: subGray
     });

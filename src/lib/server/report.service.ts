@@ -72,6 +72,23 @@ async function fetchPatientPublicId(patientId: string): Promise<string | null> {
   return data?.public_id ?? null;
 }
 
+async function fetchDoctorIdentity(
+  doctorId: string
+): Promise<{ code: string | null; fullName: string | null } | null> {
+  const { data } = await supa
+    .from('doctor_users')
+    .select('doctor_code, first_name, last_name')
+    .eq('id', doctorId)
+    .maybeSingle();
+
+  if (!data) return null;
+  const first = typeof (data as any).first_name === 'string' ? ((data as any).first_name as string).trim() : '';
+  const last = typeof (data as any).last_name === 'string' ? ((data as any).last_name as string).trim() : '';
+  const fullName = [first, last].filter(Boolean).join(' ') || null;
+  const code = typeof (data as any).doctor_code === 'string' ? ((data as any).doctor_code as string) : null;
+  return { code, fullName };
+}
+
 /** Build/Upload report for a token; returns signed download URL */
 export async function buildAndUploadReport(
   token: string,
@@ -82,6 +99,13 @@ export async function buildAndUploadReport(
   if (!session) throw new Error('session_not_found');
 
   const patientPublicId = session.patient_id ? await fetchPatientPublicId(session.patient_id) : null;
+  let doctorDisplay: string | null = null;
+  if (session.doctor_user_id) {
+    const doctor = await fetchDoctorIdentity(session.doctor_user_id);
+    if (doctor) {
+      doctorDisplay = doctor.fullName ?? doctor.code ?? null;
+    }
+  }
   const answers = await fetchAnswers(session.id);
 
   const pages: Array<{ title: string; lines: string[]; scoring?: string; intro?: string[] }> = [];
@@ -123,6 +147,7 @@ export async function buildAndUploadReport(
   const bytes = await renderSummaryPdf({
     token,
     patientId: patientPublicId,
+    doctorName: doctorDisplay,
     generatedAt: new Date(session.created_at),
     pages,
     language

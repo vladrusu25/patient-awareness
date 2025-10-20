@@ -11,7 +11,15 @@ import {
 const CreateSchema = z.object({
   username: z.string().trim().min(3).max(64),
   password: z.string().min(8).max(256),
-  region: z.enum(['en', 'ru', 'kz', 'hr', 'sk'])
+  region: z.enum(['en', 'ru', 'kz', 'hr', 'sk']),
+  firstName: z
+    .string()
+    .optional()
+    .transform((value) => (value && value.trim().length ? value.trim() : undefined)),
+  lastName: z
+    .string()
+    .optional()
+    .transform((value) => (value && value.trim().length ? value.trim() : undefined))
 });
 
 export const load: PageServerLoad = async (event) => {
@@ -44,6 +52,8 @@ export const actions: Actions = {
         username: string;
         password: string;
         region: DoctorRegion;
+        firstName?: string;
+        lastName?: string;
       });
     } catch (err: any) {
       const message: string = err?.message ?? 'create_failed';

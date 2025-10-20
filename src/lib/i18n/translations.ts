@@ -921,6 +921,7 @@ export const translations: Record<string, Node> = {
   },
   doctor_invite: {
     meta: { en: 'Doctor ID {{code}}', ru: 'ID врача {{code}}' },
+    metaNamed: { en: '{{name}} — Doctor ID {{code}}', ru: '{{name}} — ID врача {{code}}' },
     title: { en: 'Start your assessment', ru: 'Начните опрос' },
     subtitle: {
       en: 'Answer a few questions to generate a personalized report linked to your doctor.',
@@ -960,6 +961,7 @@ export const translations: Record<string, Node> = {
   doctor: {
     sidebar: {
       patients: { en: 'Assessments', ru: 'Оценки' },
+      settings: { en: 'Settings', ru: 'Настройки' },
       qrTitle: { en: 'Personal QR', ru: 'Персональный QR' },
       qrHint: { en: 'Scan to connect patients to you', ru: 'Отсканируйте, чтобы пациенты могли подключиться к вам' },
       share: { en: 'Share QR', ru: 'Поделиться QR' }
@@ -973,6 +975,45 @@ export const translations: Record<string, Node> = {
         ru: 'Передавайте эту приватную ссылку или QR-код, чтобы новые пациенты автоматически связывались с вами.'
       },
       qrAlt: { en: 'QR code for doctor {{code}}', ru: 'QR-код для врача {{code}}' }
+    },
+    settings: {
+      title: { en: 'Dashboard settings', ru: 'Настройки кабинета' },
+      subtitle: {
+        en: 'Choose the default language you see when opening your doctor dashboard.',
+        ru: 'Выберите язык, который будет загружаться при открытии кабинета врача.'
+      },
+      languageTitle: { en: 'Dashboard language', ru: 'Язык кабинета' },
+      languageHint: {
+        en: 'This language loads automatically each time you log in. You can still switch temporarily using the language selector in the header.',
+        ru: 'Этот язык загружается автоматически при каждом входе. Вы можете временно переключаться с помощью выбора языка в шапке.'
+      },
+      languageLabel: { en: 'Preferred language', ru: 'Предпочитаемый язык' },
+      submit: { en: 'Save changes', ru: 'Сохранить изменения' },
+      tipsTitle: { en: 'Helpful tips', ru: 'Полезные советы' },
+      tipsApply: {
+        en: 'Changes apply immediately to new pages you open.',
+        ru: 'Изменения применяются сразу для новых страниц, которые вы открываете.'
+      },
+      tipsSelector: {
+        en: 'The header language selector only affects the current session.',
+        ru: 'Переключатель языка в шапке влияет только на текущую сессию.'
+      },
+      tipsSupport: {
+        en: 'If you need another language, contact support.',
+        ru: 'Если нужен другой язык, свяжитесь со службой поддержки.'
+      },
+      success: { en: 'Language updated to {{language}}', ru: 'Язык обновлён на {{language}}' },
+      errors: {
+        invalidRegion: { en: 'Please select a valid language.', ru: 'Пожалуйста, выберите доступный язык.' },
+        updateFailed: {
+          en: 'Could not update the language. Please try again.',
+          ru: 'Не удалось обновить язык. Попробуйте снова.'
+        },
+        unauthorized: {
+          en: 'You are not authorized to change this setting.',
+          ru: 'У вас нет прав для изменения этого параметра.'
+        }
+      }
     },
     header: {
       title: { en: 'Doctor Dashboard', ru: 'Панель врача' },
@@ -1031,8 +1072,5 @@ export const translations: Record<string, Node> = {
     }
   }
 };
-
-
-
 
 

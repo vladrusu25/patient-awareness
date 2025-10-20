@@ -9,6 +9,7 @@ type ReportLocale = {
   headers: {
     assessmentId: string;
     patientId: string;
+    doctorName?: string;
     generated: string;
     patientNotProvided: string;
   };
@@ -265,6 +266,7 @@ const LOCALES: Record<Language, ReportLocale> = {
     headers: {
       assessmentId: 'Assessment ID',
       patientId: 'Patient ID',
+      doctorName: 'Doctor',
       generated: 'Generated',
       patientNotProvided: 'Not provided'
     },

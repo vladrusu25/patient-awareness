@@ -14,6 +14,8 @@ type DoctorRow = {
   doctor_code: string;
   region: DoctorRegion;
   link_secret: string;
+  first_name: string | null;
+  last_name: string | null;
 };
 
 type PatientRow = {
@@ -116,7 +118,7 @@ async function fetchDoctorByCode(code: string): Promise<DoctorRow | null> {
   if (!/^[A-Z][0-9]{2}$/.test(normalized)) return null;
   const { data } = await supa
     .from('doctor_users')
-    .select('id, username, doctor_code, region, link_secret')
+    .select('id, username, doctor_code, region, link_secret, first_name, last_name')
     .eq('doctor_code', normalized)
     .maybeSingle();
   return (data as DoctorRow | null) ?? null;
@@ -128,14 +130,16 @@ export async function getDoctorShareInfo(code: string, secret: string) {
   return {
     id: doctor.id,
     doctorCode: doctor.doctor_code,
-    region: doctor.region
+    region: doctor.region,
+    firstName: doctor.first_name,
+    lastName: doctor.last_name
   };
 }
 
 export async function getDoctorById(id: string): Promise<DoctorRow | null> {
   const { data, error } = await supa
     .from('doctor_users')
-    .select('id, username, doctor_code, region, link_secret')
+    .select('id, username, doctor_code, region, link_secret, first_name, last_name')
     .eq('id', id)
     .maybeSingle();
   if (error) throw new Error(error.message);
@@ -165,7 +169,7 @@ export type DoctorUser = DoctorRow & { created_at?: string };
 export async function listDoctorUsers(): Promise<DoctorUser[]> {
   const { data, error } = await supa
     .from('doctor_users')
-    .select('id, username, doctor_code, region, link_secret, created_at')
+    .select('id, username, doctor_code, region, link_secret, first_name, last_name, created_at')
     .order('created_at', { ascending: true });
   if (error) throw new Error(error.message);
   return (data ?? []) as DoctorUser[];
@@ -175,10 +179,14 @@ export async function createDoctorUser(input: {
   username: string;
   password: string;
   region: DoctorRegion;
+  firstName?: string | null;
+  lastName?: string | null;
 }): Promise<DoctorUser> {
   const username = input.username.trim().toLowerCase();
   const password = input.password;
   const region = input.region;
+  const firstName = input.firstName?.trim() || null;
+  const lastName = input.lastName?.trim() || null;
 
   if (!username || !password) throw new Error('missing_credentials');
   assertRegion(region);
@@ -194,13 +202,24 @@ export async function createDoctorUser(input: {
       password_hash,
       doctor_code: doctorCode,
       region,
-      link_secret: linkSecret
+      link_secret: linkSecret,
+      first_name: firstName,
+      last_name: lastName
     })
-    .select('id, username, doctor_code, region, link_secret, created_at')
+    .select('id, username, doctor_code, region, link_secret, first_name, last_name, created_at')
     .single();
 
   if (error || !data) throw new Error(error?.message ?? 'create_failed');
   return data as DoctorUser;
+}
+
+export async function updateDoctorRegion(id: string, region: DoctorRegion): Promise<void> {
+  assertRegion(region);
+  const { error } = await supa
+    .from('doctor_users')
+    .update({ region })
+    .eq('id', id);
+  if (error) throw new Error(error.message);
 }
 
 export async function startDoctorSession(params: {

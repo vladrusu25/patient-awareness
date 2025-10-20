@@ -1,6 +1,9 @@
 <script lang="ts">
-  import { t } from '$lib/i18n';
+  import { t, language, switchLanguage } from '$lib/i18n';
+  import type { Language } from '$lib/i18n/types';
   import type { PageData } from './$types';
+  import { onMount } from 'svelte';
+  import { get } from 'svelte/store';
 
   export let data: PageData;
 
@@ -9,6 +12,18 @@
   let patientId = '';
   let error: string | null = null;
   let submitting: 'new' | 'returning' | null = null;
+
+  $: doctorMeta = data.doctorName
+    ? $t('doctor_invite.metaNamed', { name: data.doctorName, code: data.doctorCode })
+    : $t('doctor_invite.meta', { code: data.doctorCode });
+
+  onMount(async () => {
+    if (!data.region) return;
+    const current = get(language) as Language;
+    if (current !== (data.region as Language)) {
+      await switchLanguage(data.region as Language);
+    }
+  });
 
   async function startSession(mode: 'new' | 'returning') {
     if (submitting) return;
@@ -73,7 +88,7 @@
 <main class="mx-auto max-w-xl px-6 py-16 space-y-8">
   <header class="space-y-2 text-center">
     <p class="text-xs uppercase text-neutral-500 tracking-wide">
-      {$t('doctor_invite.meta', { code: data.doctorCode })}
+      {doctorMeta}
     </p>
     <h1 class="text-3xl font-heading font-semibold text-neutral-900">
       {$t('doctor_invite.title')}

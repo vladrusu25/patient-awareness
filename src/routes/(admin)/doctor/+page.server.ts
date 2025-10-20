@@ -8,6 +8,8 @@ export const load: PageServerLoad = async ({ locals, url }) => {
     doctor_code: string;
     link_secret: string;
     region: string;
+    first_name: string | null;
+    last_name: string | null;
   } | null = null;
 
   if (user?.role === 'doctor') {
@@ -16,7 +18,9 @@ export const load: PageServerLoad = async ({ locals, url }) => {
       doctorProfile = {
         doctor_code: record.doctor_code,
         link_secret: record.link_secret,
-        region: record.region
+        region: record.region,
+        first_name: record.first_name ?? null,
+        last_name: record.last_name ?? null
       };
     }
   }

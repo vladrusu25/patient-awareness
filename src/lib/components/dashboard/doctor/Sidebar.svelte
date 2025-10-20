@@ -1,16 +1,52 @@
 ﻿<script lang="ts">
-  import { createEventDispatcher } from 'svelte';
-  import { t } from '$lib/i18n';
+  import { createEventDispatcher, onDestroy } from 'svelte';
+  import { t, language } from '$lib/i18n';
+  import type { Language } from '$lib/i18n/types';
 
-  export let active: 'patients' = 'patients';
+  export let active: 'patients' | 'settings' = 'patients';
   export let qrData = 'https://your.app/join?ref=doctor-123';
   export let classes = '';
   export let showClose = false;
+  export let doctorName: string | null = null;
+  export let doctorCode: string | null = null;
   const dispatch = createEventDispatcher();
+
+  const SETTINGS_FALLBACK: Record<Language, string> = {
+    en: 'Settings',
+    ru: 'Настройки',
+    kz: 'Settings',
+    hr: 'Settings',
+    sk: 'Settings'
+  };
+
+  const NAME_FALLBACK: Record<Language, string> = {
+    en: 'Doctor',
+    ru: 'Врач',
+    kz: 'Doctor',
+    hr: 'Doctor',
+    sk: 'Doctor'
+  };
+
+  let currentLanguage: Language = 'en';
+  const unsubscribeLang = language.subscribe((value) => {
+    currentLanguage = value as Language;
+  });
+
+  onDestroy(() => {
+    unsubscribeLang();
+  });
+
+  const translateWithFallback = (key: string, fallback: string) => {
+    const value = $t(key);
+    return value === key ? fallback : value;
+  };
+
+  $: displayName =
+    doctorName && doctorName.trim().length ? doctorName.trim() : null;
 </script>
 
 <aside class={`w-[260px] shrink-0 border-r border-neutral-100 bg-neutral-25/60 overflow-y-auto ${classes}`}>
-  <div class="px-5 h-16 flex items-center justify-between gap-3 bg-white border-b border-neutral-100">
+  <div class="px-5 h-16 flex items-center justify-between gap-3 bg-white">
     <div class="flex items-center gap-3">
       <img
         src="/images/logo.png"
@@ -41,6 +77,17 @@
     {/if}
   </div>
 
+  {#if displayName || doctorCode}
+    <div class="px-5 py-3 bg-white">
+      <p class="text-xs uppercase text-neutral-500 font-medium">
+        {translateWithFallback('doctor.profile.nameLabel', NAME_FALLBACK[currentLanguage] ?? 'Doctor')}
+      </p>
+      <p class="text-sm font-semibold text-neutral-800">
+        {displayName ?? doctorCode}
+      </p>
+    </div>
+  {/if}
+
   <nav class="px-3 pt-2 space-y-1">
     <a href="/doctor" class="flex items-center gap-3 rounded-xl px-3 py-2"
        class:bg-white={active==='patients'} class:shadow-sm={active==='patients'}>
@@ -48,6 +95,17 @@
         <svg viewBox="0 0 24 24" class="h-4 w-4" fill="currentColor"><path d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5Zm-7 9a7 7 0 0 1 14 0z"/></svg>
       </div>
       <span class="font-heading text-neutral-800">{$t('doctor.sidebar.patients')}</span>
+    </a>
+    <a href="/doctor/settings" class="flex items-center gap-3 rounded-xl px-3 py-2"
+       class:bg-white={active==='settings'} class:shadow-sm={active==='settings'}>
+      <div class="h-8 w-8 grid place-items-center rounded-lg bg-primary/10 text-primary">
+        <svg viewBox="0 0 24 24" class="h-4 w-4" fill="currentColor">
+          <path d="M19.14 12.94a7.07 7.07 0 0 0 .05-.94 7.07 7.07 0 0 0-.05-.94l2.11-1.65a.5.5 0 0 0 .12-.64l-2-3.46a.5.5 0 0 0-.6-.22l-2.49 1a6.86 6.86 0 0 0-1.63-.94l-.38-2.65A.5.5 0 0 0 13.87 3h-3.74a.5.5 0 0 0-.5.43l-.38 2.65a6.86 6.86 0 0 0-1.63.94l-2.49-1a.5.5 0 0 0-.6.22l-2 3.46a.5.5 0 0 0 .12.64L4.86 11.06a7.07 7.07 0 0 0-.05.94 7.07 7.07 0 0 0 .05.94l-2.11 1.65a.5.5 0 0 0-.12.64l2 3.46a.5.5 0 0 0 .6.22l2.49-1a6.86 6.86 0 0 0 1.63.94l.38 2.65a.5.5 0 0 0 .5.43h3.74a.5.5 0 0 0 .5-.43l.38-2.65a6.86 6.86 0 0 0 1.63-.94l2.49 1a.5.5 0 0 0 .6-.22l2-3.46a.5.5 0 0 0-.12-.64Zm-7.14 2.56a3.5 3.5 0 1 1 3.5-3.5 3.5 3.5 0 0 1-3.5 3.5Z"/>
+        </svg>
+      </div>
+      <span class="font-heading text-neutral-800">
+        {translateWithFallback('doctor.sidebar.settings', SETTINGS_FALLBACK[currentLanguage] ?? SETTINGS_FALLBACK.en)}
+      </span>
     </a>
   </nav>
 

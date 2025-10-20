@@ -518,6 +518,15 @@ export const translationsSk = {
       },
       tooltip: '{{label}}: Endopain {{x}}, PVVQ {{y}}',
       empty: 'Zatiaľ nie je dostatok údajov.'
+    },
+    doctors: {
+      region: {
+        en: 'Poľsko (angličtina)',
+        ru: 'Rusko (ruština)',
+        kz: 'Kazachstan (kazaština)',
+        hr: 'Chorvátsko (chorvátčina)',
+        sk: 'Slovensko (slovenčina)'
+      }
     }
   },
   contactPage: {
@@ -542,12 +551,69 @@ export const translationsSk = {
       messageRequired: 'Napíšte, s čím vám môžeme pomôcť.'
     }
   },
+  doctor_invite: {
+    meta: 'ID lekára {{code}}',
+    metaNamed: '{{name}} — ID lekára {{code}}',
+    title: 'Spustite svoje hodnotenie',
+    subtitle:
+      'Odpovedzte na niekoľko otázok a získajte personalizovanú správu prepojenú s vaším lekárom.',
+    newTitle: 'Nový pacient',
+    newDescription:
+      'Vytvoríme nové ID pacienta prepojené s týmto lekárom. Nabudúce ho môžete znova použiť.',
+    returningTitle: 'Vraciaci sa pacient',
+    returningDescription:
+      'Zadajte svoje existujúce ID pacienta, aby ste pokračovali tam, kde ste skončili.',
+    buttons: {
+      new: 'Začať ako nový pacient',
+      returning: 'Pokračovať s mojím ID',
+      loading: 'Prosím, čakajte...'
+    },
+    errors: {
+      patientFormat: 'ID pacienta by malo vyzerať ako A12AB123.',
+      patientNotFound: 'Toto ID pacienta sme nenašli. Skontrolujte písmená a číslice.',
+      assessmentLimit: 'Tento pacient dosiahol maximálny počet prepojených hodnotení.',
+      linkExpired: 'Táto prepojená adresa už nie je platná. Požiadajte svojho lekára o nový QR kód.',
+      generic: 'Reláciu sa nepodarilo spustiť. Skúste to znova.',
+      network: 'Chyba siete. Skúste to znova.'
+    },
+    patientLabel: 'ID pacienta',
+    patientPlaceholder: 'A12AB123',
+    patientHint: 'Príklad formátu: A12AB123',
+    footer:
+      'Vaše odpovede zostávajú súkromné. Môžete kedykoľvek prestať a na konci si stiahnuť PDF správu.'
+  },
   doctor: {
     sidebar: {
       patients: 'Hodnotenia',
+      settings: 'Nastavenia',
       qrTitle: 'Osobné QR',
       qrHint: 'Naskenujte pre priradenie pacientov k vám',
       share: 'Zdieľať QR'
+    },
+    profile: {
+      idLabel: 'ID lekára',
+      copy: 'Kopírovať odkaz na zdieľanie',
+      copied: 'Skopírované!',
+      shareHint: 'Zdieľajte tento súkromný odkaz alebo QR kód, aby sa noví pacienti automaticky priradili k vám.',
+      qrAlt: 'QR kód pre lekára {{code}}'
+    },
+    settings: {
+      title: 'Nastavenia panela',
+      subtitle: 'Vyberte predvolený jazyk, ktorý sa zobrazí pri otvorení lekárskeho panela.',
+      languageTitle: 'Jazyk panela',
+      languageHint: 'Tento jazyk sa načíta automaticky pri každom prihlásení. Stále ho môžete dočasne zmeniť pomocou prepínača jazyka v hlavičke.',
+      languageLabel: 'Preferovaný jazyk',
+      submit: 'Uložiť zmeny',
+      tipsTitle: 'Užitočné tipy',
+      tipsApply: 'Zmeny sa okamžite použijú na nové stránky, ktoré otvoríte.',
+      tipsSelector: 'Prepínač jazyka v hlavičke ovplyvňuje iba aktuálne sedenie.',
+      tipsSupport: 'Ak potrebujete iný jazyk, kontaktujte podporu.',
+      success: 'Jazyk bol zmenený na {{language}}',
+      errors: {
+        invalidRegion: 'Vyberte platný jazyk.',
+        updateFailed: 'Jazyk sa nepodarilo aktualizovať. Skúste to znova.',
+        unauthorized: 'Nemáte oprávnenie meniť toto nastavenie.'
+      }
     },
     header: {
       title: 'Lekársky prehľad',

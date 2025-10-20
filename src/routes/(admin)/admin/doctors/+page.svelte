@@ -30,6 +30,24 @@
   $: shareBase = data.origin.replace(/\/$/, '');
   $: createdCode = data.createdCode ?? null;
 
+  type EnhancedDoctor = PageData['doctors'][number] & { fullName: string | null };
+
+  const computeDoctorFullName = (doctor: PageData['doctors'][number]): string | null => {
+    const first = typeof doctor.first_name === 'string' ? doctor.first_name.trim() : '';
+    const last = typeof doctor.last_name === 'string' ? doctor.last_name.trim() : '';
+    const full = [first, last].filter(Boolean).join(' ');
+    return full.length ? full : null;
+  };
+
+  let doctors: EnhancedDoctor[] = (data.doctors ?? []).map((doctor) => ({
+    ...doctor,
+    fullName: computeDoctorFullName(doctor)
+  }));
+  $: doctors = (data.doctors ?? []).map((doctor) => ({
+    ...doctor,
+    fullName: computeDoctorFullName(doctor)
+  }));
+
   let copiedLink: string | null = null;
   let copyTimeout: ReturnType<typeof setTimeout> | null = null;
 
@@ -62,6 +80,18 @@
             : creationErrorKey
               ? $t('admin.doctors.errors.generic')
               : null;
+
+  function translateKey(key: string, fallback: string): string {
+    const value = $t(key);
+    return value === key ? fallback : value;
+  }
+
+  $: firstNameLabel = translateKey('admin.doctors.firstName', 'First name');
+  $: lastNameLabel = translateKey('admin.doctors.lastName', 'Last name');
+  $: optionalLabel = translateKey('admin.doctors.optional', 'optional');
+  $: doctorIdLabel = translateKey('admin.doctors.doctorId', 'Doctor ID');
+  $: doctorNameLabel = translateKey('admin.doctors.nameLabel', 'Doctor name');
+  $: idInlineLabel = translateKey('admin.doctors.idInline', 'Doctor ID {{code}}');
 </script>
 
 <div class="lg:flex lg:h-full lg:gap-6 lg:overflow-hidden">
@@ -107,6 +137,33 @@
               autocomplete="off"
               required
             />
+          </div>
+
+          <div class="grid gap-3 sm:grid-cols-2">
+            <div class="space-y-1">
+              <label class="text-sm font-medium text-neutral-800" for="firstName">
+                {firstNameLabel}
+                <span class="text-xs text-neutral-500">({optionalLabel})</span>
+              </label>
+              <input
+                id="firstName"
+                name="firstName"
+                class="w-full rounded-lg border border-neutral-300 px-3 py-2 outline-none focus:ring-2 focus:ring-mint-400"
+                autocomplete="off"
+              />
+            </div>
+            <div class="space-y-1">
+              <label class="text-sm font-medium text-neutral-800" for="lastName">
+                {lastNameLabel}
+                <span class="text-xs text-neutral-500">({optionalLabel})</span>
+              </label>
+              <input
+                id="lastName"
+                name="lastName"
+                class="w-full rounded-lg border border-neutral-300 px-3 py-2 outline-none focus:ring-2 focus:ring-mint-400"
+                autocomplete="off"
+              />
+            </div>
           </div>
 
           <div class="space-y-1">
@@ -170,16 +227,16 @@
           <h2 class="text-lg font-semibold text-neutral-900">
             {$t('admin.doctors.listTitle')}
           </h2>
-          <span class="text-sm text-neutral-500">{$t('admin.doctors.listCount', { count: data.doctors.length })}</span>
+          <span class="text-sm text-neutral-500">{$t('admin.doctors.listCount', { count: doctors.length })}</span>
         </div>
 
-        {#if data.doctors.length === 0}
+        {#if doctors.length === 0}
           <div class="rounded-xl border border-dashed border-neutral-200 bg-neutral-25 px-4 py-8 text-center text-sm text-neutral-500">
             {$t('admin.doctors.empty')}
           </div>
         {:else}
           <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-            {#each data.doctors as doctor}
+            {#each doctors as doctor}
               {#key doctor.id}
                 <article
                   class={`rounded-2xl border bg-white p-5 shadow-sm transition ${
@@ -189,11 +246,16 @@
                   <div class="flex items-start justify-between gap-3">
                     <div>
                       <p class="text-xs uppercase text-neutral-500 font-medium">
-                        {$t('admin.doctors.doctorId')}
+                        {doctor.fullName ? doctorNameLabel : doctorIdLabel}
                       </p>
                       <p class="text-xl font-heading text-neutral-900">
-                        {doctor.doctor_code}
+                        {doctor.fullName ?? doctor.doctor_code}
                       </p>
+                      {#if doctor.fullName}
+                        <p class="mt-1 text-xs text-neutral-500">
+                          {idInlineLabel.replace('{{code}}', doctor.doctor_code)}
+                        </p>
+                      {/if}
                     </div>
                     <div class="text-right">
                       <p class="text-xs uppercase text-neutral-500 font-medium">
@@ -206,6 +268,20 @@
                   </div>
 
                   <dl class="mt-4 space-y-3 text-sm text-neutral-700">
+                    {#if doctor.fullName}
+                      <div>
+                        <dt class="text-neutral-500 uppercase text-xs font-medium">
+                          {doctorNameLabel}
+                        </dt>
+                        <dd class="font-medium">{doctor.fullName}</dd>
+                      </div>
+                    {/if}
+                    <div>
+                      <dt class="text-neutral-500 uppercase text-xs font-medium">
+                        {doctorIdLabel}
+                      </dt>
+                      <dd class="font-medium">{doctor.doctor_code}</dd>
+                    </div>
                     <div>
                       <dt class="text-neutral-500 uppercase text-xs font-medium">
                         {$t('admin.doctors.usernameLabel')}
@@ -271,3 +347,4 @@
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
   }
 </style>
+

@@ -463,6 +463,15 @@ export const translationsHr = {
       },
       tooltip: "{{label}}: Endopain {{x}}, PVVQ {{y}}",
       empty: "Još nema dovoljno podataka."
+    },
+    doctors: {
+      region: {
+        en: "Poljska (engleski)",
+        ru: "Rusija (ruski)",
+        kz: "Kazahstan (kazaški)",
+        hr: "Hrvatska (hrvatski)",
+        sk: "Slovačka (slovački)"
+      }
     }
   },
   contactPage: {
@@ -485,12 +494,65 @@ export const translationsHr = {
       messageRequired: "Javite nam kako možemo pomoći."
     }
   },
+  doctor_invite: {
+    meta: "ID liječnika {{code}}",
+    metaNamed: "{{name}} — ID liječnika {{code}}",
+    title: "Započnite svoju procjenu",
+    subtitle: "Odgovorite na nekoliko pitanja kako biste dobili personalizirano izvješće povezano s vašim liječnikom.",
+    newTitle: "Novi pacijent",
+    newDescription: "Stvorit ćemo novi ID pacijenta povezan s ovim liječnikom. Možete ga ponovno koristiti sljedeći put.",
+    returningTitle: "Povratni pacijent",
+    returningDescription: "Unesite svoj postojeći ID pacijenta kako biste nastavili gdje ste stali.",
+    buttons: {
+      new: "Započni kao novi pacijent",
+      returning: "Nastavi s mojim ID-om",
+      loading: "Pričekajte..."
+    },
+    errors: {
+      patientFormat: "ID pacijenta treba izgledati kao A12AB123.",
+      patientNotFound: "Nismo pronašli taj ID pacijenta. Provjerite slova i brojke.",
+      assessmentLimit: "Ovaj je pacijent dosegnuo najveći broj povezanih procjena.",
+      linkExpired: "Ova poveznica više nije valjana. Zatražite novi QR kod od svog liječnika.",
+      generic: "Nismo mogli pokrenuti sesiju. Pokušajte ponovno.",
+      network: "Pogreška mreže. Pokušajte ponovno."
+    },
+    patientLabel: "ID pacijenta",
+    patientPlaceholder: "A12AB123",
+    patientHint: "Primjer formata: A12AB123",
+    footer: "Vaši odgovori ostaju privatni. Možete stati u bilo kojem trenutku i na kraju preuzeti PDF izvješće."
+  },
   doctor: {
     sidebar: {
       patients: "Procjene",
+      settings: "Postavke",
       qrTitle: "Osobni QR",
       qrHint: "Skenirajte za povezivanje pacijenata s vama",
       share: "Podijeli QR"
+    },
+    profile: {
+      idLabel: "ID liječnika",
+      copy: "Kopiraj poveznicu za dijeljenje",
+      copied: "Kopirano!",
+      shareHint: "Podijelite ovu privatnu poveznicu ili QR kod kako bi novi pacijenti bili automatski povezani s vama.",
+      qrAlt: "QR kod za liječnika {{code}}"
+    },
+    settings: {
+      title: "Postavke nadzorne ploče",
+      subtitle: "Odaberite zadani jezik koji se prikazuje kada otvorite liječničku nadzornu ploču.",
+      languageTitle: "Jezik nadzorne ploče",
+      languageHint: "Ovaj se jezik automatski učitava pri svakoj prijavi. I dalje možete privremeno promijeniti jezik pomoću izbornika u zaglavlju.",
+      languageLabel: "Preferirani jezik",
+      submit: "Spremi promjene",
+      tipsTitle: "Korisni savjeti",
+      tipsApply: "Promjene se odmah primjenjuju na nove stranice koje otvorite.",
+      tipsSelector: "Preklopnik jezika u zaglavlju utječe samo na trenutnu sesiju.",
+      tipsSupport: "Ako trebate drugi jezik, obratite se podršci.",
+      success: "Jezik je promijenjen u {{language}}",
+      errors: {
+        invalidRegion: "Odaberite valjani jezik.",
+        updateFailed: "Jezik nije moguće ažurirati. Pokušajte ponovno.",
+        unauthorized: "Nemate ovlasti promijeniti ovu postavku."
+      }
     },
     header: {
       title: "Nadzorna ploča liječnika",
