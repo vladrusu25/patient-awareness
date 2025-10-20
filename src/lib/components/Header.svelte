@@ -1,9 +1,11 @@
 ﻿<script lang="ts">
   import { page } from '$app/stores';
   import { browser } from '$app/environment';
-  import { t, language, switchLanguage } from '$lib/i18n';
-  import type { Language } from '$lib/i18n/types';
-  import { onMount } from 'svelte';
+import { t, language, switchLanguage } from '$lib/i18n';
+import type { Language } from '$lib/i18n/types';
+import { onMount } from 'svelte';
+import { fade, scale, slide } from 'svelte/transition';
+import { quintOut } from 'svelte/easing';
 
   type MenuLink = { href: string; labelKey: string };
   type NavItem =
@@ -295,8 +297,9 @@
     </div>
 
     <button
-      class="md:hidden inline-flex items-center justify-center rounded-lg p-2 text-neutral-700
+      class="md:hidden inline-flex items-center justify-center rounded-lg p-2 text-neutral-700 transition-transform transition-colors duration-300 ease-out
              hover:bg-neutral-25 focus:outline-none focus:ring-2 focus:ring-mint-400"
+      class:scale-95={mobileOpen}
       aria-label={$t('header.toggleMenu')}
       aria-expanded={mobileOpen}
       on:click={() => {
@@ -306,20 +309,46 @@
       }}
     >
       {#if !mobileOpen}
-        <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-          <path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-        </svg>
+        <span class="inline-flex" in:fade={{ duration: 180 }} out:fade={{ duration: 120 }}>
+          <svg
+            class="h-6 w-6"
+            viewBox="0 0 24 24"
+            fill="none"
+            aria-hidden="true"
+            in:scale|local={{ duration: 220, easing: quintOut, start: 0.85 }}
+            out:scale|local={{ duration: 220, easing: quintOut, start: 0.85 }}
+          >
+            <path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+          </svg>
+        </span>
       {:else}
-        <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-          <path d="M6 6l12 12M6 18L18 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-        </svg>
+        <span class="inline-flex" in:fade={{ duration: 180 }} out:fade={{ duration: 120 }}>
+          <svg
+            class="h-6 w-6"
+            viewBox="0 0 24 24"
+            fill="none"
+            aria-hidden="true"
+            in:scale|local={{ duration: 220, easing: quintOut, start: 0.85 }}
+            out:scale|local={{ duration: 220, easing: quintOut, start: 0.85 }}
+          >
+            <path d="M6 6l12 12M6 18L18 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+          </svg>
+        </span>
       {/if}
     </button>
   </div>
 
   {#if mobileOpen}
-    <div class="md:hidden border-t border-neutral-100 bg-white">
-      <nav class="mx-auto max-w-[1280px] px-6 py-3 flex flex-col gap-2">
+    <div
+      class="md:hidden border-t border-neutral-100 bg-white"
+      in:fade={{ duration: 140 }}
+      out:fade={{ duration: 140 }}
+    >
+      <nav
+        class="mx-auto max-w-[1280px] px-6 py-3 flex flex-col gap-2"
+        in:slide|local={{ duration: 260, easing: quintOut }}
+        out:slide|local={{ duration: 220, easing: quintOut }}
+      >
         {#each navItems as item}
           {#if item.type === 'link'}
             <a
@@ -343,7 +372,7 @@
               >
                 <span>{$t(item.labelKey)}</span>
                 <svg
-                  class="h-4 w-4 transition-transform duration-200"
+                  class="h-4 w-4 transition-transform duration-300 ease-out"
                   class:rotate-180={openMobileMenu === item.id}
                   viewBox="0 0 20 20"
                   fill="none"
@@ -359,7 +388,11 @@
               </button>
 
               {#if openMobileMenu === item.id}
-                <div class="ml-3 mt-1 flex flex-col gap-1 border-l border-neutral-200 pl-3">
+                <div
+                  class="ml-3 mt-1 flex flex-col gap-1 border-l border-neutral-200 pl-3"
+                  in:slide|local={{ duration: 220, easing: quintOut }}
+                  out:slide|local={{ duration: 200, easing: quintOut }}
+                >
                   {#each item.items as child}
                     <a
                       href={child.href}
@@ -403,7 +436,11 @@
           </button>
 
           {#if mobileLanguageOpen}
-            <div class="mt-2 rounded-lg border border-neutral-200 bg-white shadow-sm">
+            <div
+              class="mt-2 rounded-lg border border-neutral-200 bg-white shadow-sm"
+              in:scale|local={{ duration: 200, easing: quintOut, start: 0.9 }}
+              out:scale|local={{ duration: 160, easing: quintOut, start: 0.9 }}
+            >
               {#each languages as lang}
                 <button
                   type="button"
