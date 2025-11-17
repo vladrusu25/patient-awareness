@@ -99,7 +99,7 @@
     bottomEl?.scrollIntoView({ behavior: 'smooth', block: 'end' });
   };
 
-  const REFETCH_KEYS = new Set(['p0_patient_status', 'p0_patient_id_entry', 'c1_continue_part2', 'c2_continue_part3']);
+  const REFETCH_KEYS = new Set(['p0_patient_status', 'p0_patient_id_entry', 'c2_continue_part3']);
 
 function applyTranslation(lang?: Language) {
   steps = translateSteps(rawSteps, lang ?? get(language));

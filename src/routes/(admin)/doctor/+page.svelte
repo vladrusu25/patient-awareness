@@ -12,7 +12,7 @@ import type { PageData } from './$types';
 import { onMount } from 'svelte';
 import { get } from 'svelte/store';
 
-  type ScoreKey = 'endopain' | 'pvvq' | 'pcsYes';
+  type ScoreKey = 'endopain' | 'pvvq';
   let scoreKeys: Array<{ key: ScoreKey; label: string; help: string }> = [];
 
   let query = '';
@@ -74,8 +74,7 @@ import { get } from 'svelte/store';
   $: dateFormatter = new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeStyle: 'short' });
   $: scoreKeys = [
     { key: 'endopain', label: $t('doctor.scores.endopain.label'), help: $t('doctor.scores.endopain.help') },
-    { key: 'pvvq', label: $t('doctor.scores.pvvq.label'), help: $t('doctor.scores.pvvq.help') },
-    { key: 'pcsYes', label: $t('doctor.scores.pcsYes.label'), help: $t('doctor.scores.pcsYes.help') }
+    { key: 'pvvq', label: $t('doctor.scores.pvvq.label'), help: $t('doctor.scores.pvvq.help') }
   ];
   $: scoreMap = Object.fromEntries(scoreKeys.map((s) => [s.key, s]));
   $: texts = {
@@ -96,10 +95,6 @@ import { get } from 'svelte/store';
       improved: $t('doctor.delta.improved'),
       worsened: $t('doctor.delta.worsened'),
       noValue: $t('doctor.delta.noValue')
-    },
-    pcs: {
-      positive: $t('doctor.scores.pcsYes.positive'),
-      below: $t('doctor.scores.pcsYes.below')
     },
     assessmentInfo: (token: string, suffix: string) => $t('doctor.search.infoAssessment', { token, suffix }),
     assessmentSuffix: (patient: string) => $t('doctor.search.infoAssessmentSuffix', { patient }),
@@ -201,11 +196,6 @@ import { get } from 'svelte/store';
     const date = new Date(iso);
     if (Number.isNaN(date.getTime())) return texts.notAvailable;
     return dateFormatter.format(date);
-  }
-
-  function pcsBadge(score: ScoreSummary): string {
-    if (score.pcsYes == null) return 'bg-neutral-100 text-neutral-600';
-    return score.pcsYes >= 2 ? 'bg-red-50 text-red-700' : 'bg-emerald-50 text-emerald-700';
   }
 
   $: patientData =
@@ -413,7 +403,7 @@ import { get } from 'svelte/store';
                 </div>
               </div>
 
-              <div class="mt-5 grid gap-4 md:grid-cols-3">
+              <div class="mt-5 grid gap-4 md:grid-cols-2">
                 {#each scoreKeys as item}
                   <div class="rounded-xl border border-neutral-100 bg-neutral-25/60 p-4">
                     <p class="text-xs uppercase text-neutral-500">{item.label}</p>
@@ -421,11 +411,6 @@ import { get } from 'svelte/store';
                       {formatNumber(lookup.assessment.scores[item.key])}
                     </p>
                     <p class="text-xs text-neutral-500">{item.help}</p>
-                    {#if item.key === 'pcsYes'}
-                      <span class={`mt-3 inline-flex items-center gap-1 rounded-full px-2 py-1 text-xs font-medium ${pcsBadge(lookup.assessment.scores)}`}>
-                        {lookup.assessment.scores.pcsYes != null && lookup.assessment.scores.pcsYes >= 2 ? texts.pcs.positive : texts.pcs.below}
-                      </span>
-                    {/if}
                   </div>
                 {/each}
               </div>
@@ -455,14 +440,14 @@ import { get } from 'svelte/store';
                   </div>
                   {#if patientData.latestSummary?.changeFromPrevious}
                     <div class={`rounded-xl px-4 py-2 text-sm font-medium ${deltaTone(patientData.latestSummary.changeFromPrevious.endopain ?? null)}`}>
-                      Endopain {deltaValue(patientData.latestSummary.changeFromPrevious.endopain ?? null)}
+                      {scoreMap.endopain?.label} {deltaValue(patientData.latestSummary.changeFromPrevious.endopain ?? null)}
                     </div>
                   {/if}
                 </div>
               </div>
 
               {#if patientData.latestSummary?.scores}
-                <div class="mt-4 grid gap-3 sm:grid-cols-3">
+                <div class="mt-4 grid gap-3 sm:grid-cols-2">
                   {#each scoreKeys as item}
                     <div class="rounded-xl border border-neutral-100 bg-neutral-25/60 p-4">
                       <p class="text-xs uppercase text-neutral-500">{texts.latestMetric(item.label)}</p>
@@ -510,12 +495,6 @@ import { get } from 'svelte/store';
                         <span>{scoreMap.pvvq?.label}</span>
                         <span class="font-medium text-neutral-800">{formatNumber(assessment.scores.pvvq)}</span>
                       </div>
-                      <div class="flex items-center justify-between">
-                        <span>{scoreMap.pcsYes?.label}</span>
-                        <span class={`inline-flex items-center gap-1 rounded-full px-2 py-1 ${pcsBadge(assessment.scores)}`}>
-                          {formatNumber(assessment.scores.pcsYes)}
-                        </span>
-                      </div>
                     </div>
                   </button>
                 {/each}
@@ -551,7 +530,7 @@ import { get } from 'svelte/store';
                       </div>
                     </div>
 
-                    <div class="mt-4 grid gap-3 sm:grid-cols-3">
+                    <div class="mt-4 grid gap-3 sm:grid-cols-2">
                       {#each scoreKeys as item}
                         <div class="rounded-xl border border-neutral-100 bg-neutral-25/60 p-4">
                           <p class="text-xs uppercase text-neutral-500">{item.label}</p>
@@ -559,24 +538,11 @@ import { get } from 'svelte/store';
                             {formatNumber(selectedAssessment.scores[item.key])}
                           </p>
                           <p class="text-xs text-neutral-500">{item.help}</p>
-                          {#if item.key === 'pcsYes'}
-                            <span class={`mt-3 inline-flex items-center gap-1 rounded-full px-2 py-1 text-xs font-medium ${pcsBadge(selectedAssessment.scores)}`}>
-                              {selectedAssessment.scores.pcsYes != null && selectedAssessment.scores.pcsYes >= 2 ? texts.pcs.positive : texts.pcs.below}
+                          {#if selectedAssessment.delta?.[item.key] != null}
+                            <span class={`mt-3 inline-flex items-center gap-2 rounded-full px-2 py-1 text-xs font-medium ${deltaTone(selectedAssessment.delta?.[item.key] ?? null)}`}>
+                              {deltaLabel(selectedAssessment.delta?.[item.key] ?? null)}
+                              <span>{deltaValue(selectedAssessment.delta?.[item.key] ?? null)}</span>
                             </span>
-                          {:else if item.key === 'endopain'}
-                            {#if selectedAssessment.delta?.endopain != null}
-                              <span class={`mt-3 inline-flex items-center gap-2 rounded-full px-2 py-1 text-xs font-medium ${deltaTone(selectedAssessment.delta.endopain)}`}>
-                                {deltaLabel(selectedAssessment.delta.endopain)}
-                                <span>{deltaValue(selectedAssessment.delta.endopain)}</span>
-                              </span>
-                            {/if}
-                          {:else if item.key === 'pvvq'}
-                            {#if selectedAssessment.delta?.pvvq != null}
-                              <span class={`mt-3 inline-flex items-center gap-2 rounded-full px-2 py-1 text-xs font-medium ${deltaTone(selectedAssessment.delta.pvvq)}`}>
-                                {deltaLabel(selectedAssessment.delta.pvvq)}
-                                <span>{deltaValue(selectedAssessment.delta.pvvq)}</span>
-                              </span>
-                            {/if}
                           {/if}
                         </div>
                       {/each}
@@ -603,16 +569,5 @@ import { get } from 'svelte/store';
     </main>
   </div>
 </div>
-
-
-
-
-
-
-
-
-
-
-
 
 

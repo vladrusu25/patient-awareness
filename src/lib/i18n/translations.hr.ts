@@ -1,4 +1,4 @@
-export const translationsHr = {
+﻿export const translationsHr = {
   common: {
     brand: "Smart Health",
     privacyTagline: "privatno po dizajnu",
@@ -458,7 +458,7 @@ export const translationsHr = {
         fit: "Linija trenda"
       },
       axes: {
-        x: "ENDOPAIN-4D Globalni rezultat (0–100)",
+        x: "ENDOPAIN-4D Globalni rezultat (0-310)",
         y: "PVVQ ukupni rezultat (20-100)"
       },
       tooltip: "{{label}}: Endopain {{x}}, PVVQ {{y}}",
@@ -578,18 +578,12 @@ export const translationsHr = {
     },
     scores: {
       endopain: {
-        label: "ENDOPAIN Global",
-        help: "0-100 (niže to bolje)"
+        label: "ENDOPAIN-4D ukupno",
+        help: "0-310 (nize je bolje)"
       },
       pvvq: {
         label: "Ukupno PVVQ",
-        help: "20-100 (niže to bolje)"
-      },
-      pcsYes: {
-        label: "PCS Da Broj",
-        help: "Pozitivno ako je ≥ 2 Da",
-        positive: "Pozitivan ekran",
-        below: "Ispod praga"
+        help: "20-100 (nize je bolje)"
       }
     },
     delta: {
@@ -611,3 +605,6 @@ export const translationsHr = {
     }
   }
 } as const;
+
+
+

@@ -1,4 +1,4 @@
-export const translationsKz = {
+﻿export const translationsKz = {
   common: {
     brand: "Smart Health",
     privacyTagline: "Құпиялылыққа негізделген",
@@ -458,7 +458,7 @@ export const translationsKz = {
         fit: "Тренд сызығы"
       },
       axes: {
-        x: "Endopain-4D ғаламдық балл (0-100)",
+        x: "Endopain-4D ғаламдық балл (0-310)",
         y: "PVVQ жалпы балл (20-100)"
       },
       tooltip: "{{label}}: Endopain {{x}}, PVVQ {{y}}",
@@ -578,18 +578,12 @@ export const translationsKz = {
     },
     scores: {
       endopain: {
-        label: "Эндопин жаһандық",
-        help: "0-100 (Төменнен жақсы)"
+        label: "ENDOPAIN-4D ????? ?????",
+        help: "0-310 (????? ??????? ?????)"
       },
       pvvq: {
-        label: "ПВВВ жалпы",
-        help: "20-100 (Төменнен жақсы)"
-      },
-      pcsYes: {
-        label: "PCS иә санау",
-        help: "Оң, егер ≥ 2 иә болса",
-        positive: "Оң экран",
-        below: "Төмен шегі"
+        label: "PVVQ ????? ?????",
+        help: "20-100 (????? ??????? ?????)"
       }
     },
     delta: {
@@ -611,3 +605,5 @@ export const translationsKz = {
     }
   }
 } as const;
+
+

@@ -179,7 +179,7 @@ export async function renderSummaryPdf(opts: {
       y -= 4;
     }
 
-    // numbered answers (single-line fit with ellipsis)
+    // summary lines (single-line fit with ellipsis)
     const fit = (text: string, maxW: number) => {
       if (fontRegular.widthOfTextAtSize(text, lineSize) <= maxW) return text;
       const ellipsis = '...';
@@ -195,18 +195,19 @@ export async function renderSummaryPdf(opts: {
       return trimmed + ellipsis;
     };
 
-    const numberWidth = fontBold.widthOfTextAtSize('21.', lineSize);
-    const numberGap = 6;
-    const textStartX = x + numberWidth + numberGap;
-    const usableWidth = x + contentWidth - textStartX;
+    spec.lines.forEach((raw) => {
+      const boldMatch = /^\*\*(.+)\*\*$/.exec(raw.trim());
+      const isBold = Boolean(boldMatch);
+      const text = isBold ? boldMatch![1] : raw;
+      const font = isBold ? fontBold : fontRegular;
+      const lineText = fit(text, contentWidth);
 
-    spec.lines.forEach((raw, i) => {
-      const ixStr = `${i + 1}.`;
-      page.drawText(ixStr, {
-        x, y, size: lineSize, font: fontBold, color: gray
-      });
-      page.drawText(fit(raw, usableWidth), {
-        x: textStartX, y, size: lineSize, font: fontRegular, color: gray
+      page.drawText(lineText, {
+        x,
+        y,
+        size: lineSize,
+        font,
+        color: gray
       });
       y -= lineGap;
     });

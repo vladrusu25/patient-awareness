@@ -1,321 +1,2039 @@
-﻿[
+[
   {
     "type": "text",
     "key": "intro",
-    "bot": ["I'm here to understand your pelvic pain so we can guide next steps. This is quick and private. Let's begin."]
+    "bot": [
+      "I'm here to understand your pelvic pain so we can guide next steps. This is quick and private. Let's begin."
+    ]
   },
-
   {
     "type": "single",
-    "key": "q1_spontaneous_pelvic_pain",
-    "prompt": "Do you have spontaneous pelvic pain?",
-    "options": [                                       
-      { "label": "Yes", "value": "yes" },
-      { "label": "No",  "value": "no"  }
+    "key": "q1a_severe_period_pain",
+    "prompt": "Over the past few months, have you regularly had severe, violent pain in the lower abdomen during your period?",
+    "options": [
+      {
+        "label": "Yes",
+        "value": "yes"
+      },
+      {
+        "label": "No",
+        "value": "no"
+      }
     ],
     "progress": true,
-    "nextIf": { "yes": "q2_spontaneous_pelvic_intensity", "no": "q3_menstrual_pain" }
+    "nextIf": {
+      "yes": "q1b_severe_period_pain_usual",
+      "no": "q_periods_currently"
+    }
   },
   {
     "type": "single",
-    "key": "q2_spontaneous_pelvic_intensity",
-    "prompt": "If yes: Intensity (0-10)",
+    "key": "q1b_severe_period_pain_usual",
+    "prompt": "If yes: How would you rate your usual pain during your period? (0-10)",
     "options": [
-      { "label": "0 - No pain", "value": "0" },
-      { "label": "1", "value": "1" },
-      { "label": "2", "value": "2" },
-      { "label": "3", "value": "3" },
-      { "label": "4", "value": "4" },
-      { "label": "5", "value": "5" },
-      { "label": "6", "value": "6" },
-      { "label": "7", "value": "7" },
-      { "label": "8", "value": "8" },
-      { "label": "9", "value": "9" },
-      { "label": "10 - Worst pain", "value": "10" }
+      {
+        "label": "0 - No pain",
+        "value": "0"
+      },
+      {
+        "label": "1",
+        "value": "1"
+      },
+      {
+        "label": "2",
+        "value": "2"
+      },
+      {
+        "label": "3",
+        "value": "3"
+      },
+      {
+        "label": "4",
+        "value": "4"
+      },
+      {
+        "label": "5",
+        "value": "5"
+      },
+      {
+        "label": "6",
+        "value": "6"
+      },
+      {
+        "label": "7",
+        "value": "7"
+      },
+      {
+        "label": "8",
+        "value": "8"
+      },
+      {
+        "label": "9",
+        "value": "9"
+      },
+      {
+        "label": "10 - Worst pain",
+        "value": "10"
+      }
     ],
     "progress": false
   },
-
   {
     "type": "single",
-    "key": "q3_menstrual_pain",
-    "prompt": "Do you have menstrual pain?",
+    "key": "q1c_severe_period_pain_worst",
+    "prompt": "If yes: How would you rate your pain at its worst during your period? (0-10)",
     "options": [
-      { "label": "Yes", "value": "yes" },
-      { "label": "No",  "value": "no"  }
-    ],
-    "progress": true,
-    "nextIf": { "yes": "q4_menstrual_intensity", "no": "q5_dyspareunia_pain" }
-  },
-  {
-    "type": "single",
-    "key": "q4_menstrual_intensity",
-    "prompt": "If yes: Intensity (0-10)",
-    "options": [
-      { "label": "0 - No pain", "value": "0" },
-      { "label": "1", "value": "1" },
-      { "label": "2", "value": "2" },
-      { "label": "3", "value": "3" },
-      { "label": "4", "value": "4" },
-      { "label": "5", "value": "5" },
-      { "label": "6", "value": "6" },
-      { "label": "7", "value": "7" },
-      { "label": "8", "value": "8" },
-      { "label": "9", "value": "9" },
-      { "label": "10 - Worst pain", "value": "10" }
-    ],
-    "progress": false
-  },
-
-  {
-    "type": "single",
-    "key": "q5_dyspareunia_pain",
-    "prompt": "Do you have pain during sexual intercourse?",
-    "options": [
-      { "label": "Yes", "value": "yes" },
-      { "label": "No",  "value": "no"  }
-    ],
-    "progress": true,
-    "nextIf": { "yes": "q6_dyspareunia_intensity", "no": "q7_postcoital_pain" }
-  },
-  {
-    "type": "single",
-    "key": "q6_dyspareunia_intensity",
-    "prompt": "If yes: Intensity (0-10)",
-    "options": [
-      { "label": "0 - No pain", "value": "0" },
-      { "label": "1", "value": "1" },
-      { "label": "2", "value": "2" },
-      { "label": "3", "value": "3" },
-      { "label": "4", "value": "4" },
-      { "label": "5", "value": "5" },
-      { "label": "6", "value": "6" },
-      { "label": "7", "value": "7" },
-      { "label": "8", "value": "8" },
-      { "label": "9", "value": "9" },
-      { "label": "10 - Worst pain", "value": "10" }
+      {
+        "label": "0 - No pain",
+        "value": "0"
+      },
+      {
+        "label": "1",
+        "value": "1"
+      },
+      {
+        "label": "2",
+        "value": "2"
+      },
+      {
+        "label": "3",
+        "value": "3"
+      },
+      {
+        "label": "4",
+        "value": "4"
+      },
+      {
+        "label": "5",
+        "value": "5"
+      },
+      {
+        "label": "6",
+        "value": "6"
+      },
+      {
+        "label": "7",
+        "value": "7"
+      },
+      {
+        "label": "8",
+        "value": "8"
+      },
+      {
+        "label": "9",
+        "value": "9"
+      },
+      {
+        "label": "10 - Worst pain",
+        "value": "10"
+      }
     ],
     "progress": false
   },
-
   {
     "type": "single",
-    "key": "q7_postcoital_pain",
-    "prompt": "Do you have pain after sexual intercourse?",
+    "key": "q_periods_currently",
+    "prompt": "Do you currently have menstrual periods?",
     "options": [
-      { "label": "Yes", "value": "yes" },
-      { "label": "No",  "value": "no"  }
+      {
+        "label": "Yes, I have periods",
+        "value": "yes"
+      },
+      {
+        "label": "No, I do not have periods",
+        "value": "no"
+      }
     ],
-    "progress": true,
-    "nextIf": { "yes": "q8_postcoital_intensity", "no": "q9_bowel_menses_pain" }
+    "progress": false,
+    "nextIf": {
+      "yes": "q2a_between_periods_pain",
+      "no": "q6a_stabbing_pain"
+    }
   },
   {
     "type": "single",
-    "key": "q8_postcoital_intensity",
-    "prompt": "If yes: Intensity (0-10)",
+    "key": "q2a_between_periods_pain",
+    "prompt": "Over the past few months, have you regularly had severe, violent pain in the lower abdomen between periods?",
     "options": [
-      { "label": "0 - No pain", "value": "0" },
-      { "label": "1", "value": "1" },
-      { "label": "2", "value": "2" },
-      { "label": "3", "value": "3" },
-      { "label": "4", "value": "4" },
-      { "label": "5", "value": "5" },
-      { "label": "6", "value": "6" },
-      { "label": "7", "value": "7" },
-      { "label": "8", "value": "8" },
-      { "label": "9", "value": "9" },
-      { "label": "10 - Worst pain", "value": "10" }
+      {
+        "label": "Yes",
+        "value": "yes"
+      },
+      {
+        "label": "No",
+        "value": "no"
+      }
+    ],
+    "progress": true,
+    "nextIf": {
+      "yes": "q2b_between_periods_pain_usual",
+      "no": "q3a_pain_very_intense"
+    }
+  },
+  {
+    "type": "single",
+    "key": "q2b_between_periods_pain_usual",
+    "prompt": "If yes: How would you rate your usual pain between periods? (0-10)",
+    "options": [
+      {
+        "label": "0 - No pain",
+        "value": "0"
+      },
+      {
+        "label": "1",
+        "value": "1"
+      },
+      {
+        "label": "2",
+        "value": "2"
+      },
+      {
+        "label": "3",
+        "value": "3"
+      },
+      {
+        "label": "4",
+        "value": "4"
+      },
+      {
+        "label": "5",
+        "value": "5"
+      },
+      {
+        "label": "6",
+        "value": "6"
+      },
+      {
+        "label": "7",
+        "value": "7"
+      },
+      {
+        "label": "8",
+        "value": "8"
+      },
+      {
+        "label": "9",
+        "value": "9"
+      },
+      {
+        "label": "10 - Worst pain",
+        "value": "10"
+      }
     ],
     "progress": false
   },
-
   {
     "type": "single",
-    "key": "q9_bowel_menses_pain",
-    "prompt": "Pain with bowel movement during menstruation?",
+    "key": "q2c_between_periods_pain_worst",
+    "prompt": "If yes: How would you rate your pain at its worst between periods? (0-10)",
     "options": [
-      { "label": "Yes", "value": "yes" },
-      { "label": "No",  "value": "no"  }
-    ],
-    "progress": true,
-    "nextIf": { "yes": "q10_bowel_menses_intensity", "no": "bot_checkpoint_1" }
-  },
-  {
-    "type": "single",
-    "key": "q10_bowel_menses_intensity",
-    "prompt": "Intensity (0–10)",
-    "options": [
-      { "label": "0 - No pain", "value": "0" },
-      { "label": "1", "value": "1" },
-      { "label": "2", "value": "2" },
-      { "label": "3", "value": "3" },
-      { "label": "4", "value": "4" },
-      { "label": "5", "value": "5" },
-      { "label": "6", "value": "6" },
-      { "label": "7", "value": "7" },
-      { "label": "8", "value": "8" },
-      { "label": "9", "value": "9" },
-      { "label": "10 - Worst pain", "value": "10" }
-    ],
-    "progress": false
-  },
-
-  { "type": "text", "key": "bot_checkpoint_1", "bot": ["You’re doing well — keep going!"] },
-
-  {
-    "type": "single",
-    "key": "q11_bowel_outside_pain",
-    "prompt": "Pain with bowel movement outside menstruation?",
-    "options": [
-      { "label": "Yes", "value": "yes" },
-      { "label": "No",  "value": "no"  }
-    ],
-    "progress": true,
-    "nextIf": { "yes": "q12_bowel_outside_intensity", "no": "q13_urination_pain" }
-  },
-  {
-    "type": "single",
-    "key": "q12_bowel_outside_intensity",
-    "prompt": "Intensity (0–10)",
-    "options": [
-      { "label": "0 - No pain", "value": "0" },
-      { "label": "1", "value": "1" },
-      { "label": "2", "value": "2" },
-      { "label": "3", "value": "3" },
-      { "label": "4", "value": "4" },
-      { "label": "5", "value": "5" },
-      { "label": "6", "value": "6" },
-      { "label": "7", "value": "7" },
-      { "label": "8", "value": "8" },
-      { "label": "9", "value": "9" },
-      { "label": "10 - Worst pain", "value": "10" }
+      {
+        "label": "0 - No pain",
+        "value": "0"
+      },
+      {
+        "label": "1",
+        "value": "1"
+      },
+      {
+        "label": "2",
+        "value": "2"
+      },
+      {
+        "label": "3",
+        "value": "3"
+      },
+      {
+        "label": "4",
+        "value": "4"
+      },
+      {
+        "label": "5",
+        "value": "5"
+      },
+      {
+        "label": "6",
+        "value": "6"
+      },
+      {
+        "label": "7",
+        "value": "7"
+      },
+      {
+        "label": "8",
+        "value": "8"
+      },
+      {
+        "label": "9",
+        "value": "9"
+      },
+      {
+        "label": "10 - Worst pain",
+        "value": "10"
+      }
     ],
     "progress": false
   },
-
   {
     "type": "single",
-    "key": "q13_urination_pain",
-    "prompt": "Do you have pain on urination?",
+    "key": "q3a_pain_very_intense",
+    "prompt": "Is the pain very intense, violent, cannot be ignored, and unbearable?",
     "options": [
-      { "label": "Yes", "value": "yes" },
-      { "label": "No",  "value": "no"  }
+      {
+        "label": "Yes",
+        "value": "yes"
+      },
+      {
+        "label": "No",
+        "value": "no"
+      }
     ],
     "progress": true,
-    "nextIf": { "yes": "q14_urination_intensity", "no": "q15_lumbar_pain" }
+    "nextIf": {
+      "yes": "q3b_pain_very_intense_rating",
+      "no": "q4a_pain_getting_worse"
+    }
   },
   {
     "type": "single",
-    "key": "q14_urination_intensity",
-    "prompt": "Intensity (0–10)",
+    "key": "q3b_pain_very_intense_rating",
+    "prompt": "If yes: How much does this description fit what you feel? (0-10)",
     "options": [
-      { "label": "0 - No pain", "value": "0" },
-      { "label": "1", "value": "1" },
-      { "label": "2", "value": "2" },
-      { "label": "3", "value": "3" },
-      { "label": "4", "value": "4" },
-      { "label": "5", "value": "5" },
-      { "label": "6", "value": "6" },
-      { "label": "7", "value": "7" },
-      { "label": "8", "value": "8" },
-      { "label": "9", "value": "9" },
-      { "label": "10 - Worst pain", "value": "10" }
+      {
+        "label": "0 - Not at all like that",
+        "value": "0"
+      },
+      {
+        "label": "1",
+        "value": "1"
+      },
+      {
+        "label": "2",
+        "value": "2"
+      },
+      {
+        "label": "3",
+        "value": "3"
+      },
+      {
+        "label": "4",
+        "value": "4"
+      },
+      {
+        "label": "5",
+        "value": "5"
+      },
+      {
+        "label": "6",
+        "value": "6"
+      },
+      {
+        "label": "7",
+        "value": "7"
+      },
+      {
+        "label": "8",
+        "value": "8"
+      },
+      {
+        "label": "9",
+        "value": "9"
+      },
+      {
+        "label": "10 - Exactly like that",
+        "value": "10"
+      }
     ],
     "progress": false
   },
-
   {
     "type": "single",
-    "key": "q15_lumbar_pain",
-    "prompt": "Do you have lumbar (lower back) pain?",
+    "key": "q4a_pain_getting_worse",
+    "prompt": "As the years go by, is your pain getting worse?",
     "options": [
-      { "label": "Yes", "value": "yes" },
-      { "label": "No",  "value": "no"  }
+      {
+        "label": "Yes",
+        "value": "yes"
+      },
+      {
+        "label": "No",
+        "value": "no"
+      }
     ],
     "progress": true,
-    "nextIf": { "yes": "q16_lumbar_intensity", "no": "q17_analgesics_freq" }
+    "nextIf": {
+      "yes": "q4b_pain_getting_worse_rating",
+      "no": "q5a_pain_around_period_days"
+    }
   },
   {
     "type": "single",
-    "key": "q16_lumbar_intensity",
-    "prompt": "Intensity (0–10)",
+    "key": "q4b_pain_getting_worse_rating",
+    "prompt": "If yes: How much does this description fit what you feel? (0-10)",
     "options": [
-      { "label": "0 - No pain", "value": "0" },
-      { "label": "1", "value": "1" },
-      { "label": "2", "value": "2" },
-      { "label": "3", "value": "3" },
-      { "label": "4", "value": "4" },
-      { "label": "5", "value": "5" },
-      { "label": "6", "value": "6" },
-      { "label": "7", "value": "7" },
-      { "label": "8", "value": "8" },
-      { "label": "9", "value": "9" },
-      { "label": "10 â€“ Worst pain", "value": "10" }
+      {
+        "label": "0 - Not at all like that",
+        "value": "0"
+      },
+      {
+        "label": "1",
+        "value": "1"
+      },
+      {
+        "label": "2",
+        "value": "2"
+      },
+      {
+        "label": "3",
+        "value": "3"
+      },
+      {
+        "label": "4",
+        "value": "4"
+      },
+      {
+        "label": "5",
+        "value": "5"
+      },
+      {
+        "label": "6",
+        "value": "6"
+      },
+      {
+        "label": "7",
+        "value": "7"
+      },
+      {
+        "label": "8",
+        "value": "8"
+      },
+      {
+        "label": "9",
+        "value": "9"
+      },
+      {
+        "label": "10 - Exactly like that",
+        "value": "10"
+      }
     ],
     "progress": false
   },
-
   {
     "type": "single",
-    "key": "q17_analgesics_freq",
-    "prompt": "Painkillers for pelvic pain (past month):",
+    "key": "q5a_pain_around_period_days",
+    "prompt": "Does the pain come a few days before your period and/or continue for a few days after your period?",
     "options": [
-      { "label": "Never", "value": "never" },
-      { "label": "Sometimes", "value": "sometimes" },
-      { "label": "Often", "value": "often" },
-      { "label": "Always", "value": "always" }
+      {
+        "label": "Yes",
+        "value": "yes"
+      },
+      {
+        "label": "No",
+        "value": "no"
+      }
+    ],
+    "progress": true,
+    "nextIf": {
+      "yes": "q5b_pain_around_period_days_rating",
+      "no": "q6a_stabbing_pain"
+    }
+  },
+  {
+    "type": "single",
+    "key": "q5b_pain_around_period_days_rating",
+    "prompt": "If yes: How much does this description fit what you feel? (0-10)",
+    "options": [
+      {
+        "label": "0 - Not at all like that",
+        "value": "0"
+      },
+      {
+        "label": "1",
+        "value": "1"
+      },
+      {
+        "label": "2",
+        "value": "2"
+      },
+      {
+        "label": "3",
+        "value": "3"
+      },
+      {
+        "label": "4",
+        "value": "4"
+      },
+      {
+        "label": "5",
+        "value": "5"
+      },
+      {
+        "label": "6",
+        "value": "6"
+      },
+      {
+        "label": "7",
+        "value": "7"
+      },
+      {
+        "label": "8",
+        "value": "8"
+      },
+      {
+        "label": "9",
+        "value": "9"
+      },
+      {
+        "label": "10 - Exactly like that",
+        "value": "10"
+      }
+    ],
+    "progress": false
+  },
+  {
+    "type": "single",
+    "key": "q6a_stabbing_pain",
+    "prompt": "Does the pain come and go suddenly, like a stabbing pain?",
+    "options": [
+      {
+        "label": "Yes",
+        "value": "yes"
+      },
+      {
+        "label": "No",
+        "value": "no"
+      }
+    ],
+    "progress": true,
+    "nextIf": {
+      "yes": "q6b_stabbing_pain_rating",
+      "no": "q7a_pain_spreads_back"
+    }
+  },
+  {
+    "type": "single",
+    "key": "q6b_stabbing_pain_rating",
+    "prompt": "If yes: How much does this description fit what you feel? (0-10)",
+    "options": [
+      {
+        "label": "0 - Not at all like that",
+        "value": "0"
+      },
+      {
+        "label": "1",
+        "value": "1"
+      },
+      {
+        "label": "2",
+        "value": "2"
+      },
+      {
+        "label": "3",
+        "value": "3"
+      },
+      {
+        "label": "4",
+        "value": "4"
+      },
+      {
+        "label": "5",
+        "value": "5"
+      },
+      {
+        "label": "6",
+        "value": "6"
+      },
+      {
+        "label": "7",
+        "value": "7"
+      },
+      {
+        "label": "8",
+        "value": "8"
+      },
+      {
+        "label": "9",
+        "value": "9"
+      },
+      {
+        "label": "10 - Exactly like that",
+        "value": "10"
+      }
+    ],
+    "progress": false
+  },
+  {
+    "type": "single",
+    "key": "q7a_pain_spreads_back",
+    "prompt": "Does the pain spread to your lower back?",
+    "options": [
+      {
+        "label": "Yes",
+        "value": "yes"
+      },
+      {
+        "label": "No",
+        "value": "no"
+      }
+    ],
+    "progress": true,
+    "nextIf": {
+      "yes": "q7b_pain_spreads_back_rating",
+      "no": "q8a_pain_spreads_legs_hips"
+    }
+  },
+  {
+    "type": "single",
+    "key": "q7b_pain_spreads_back_rating",
+    "prompt": "If yes: How much does this description fit what you feel? (0-10)",
+    "options": [
+      {
+        "label": "0 - Not at all like that",
+        "value": "0"
+      },
+      {
+        "label": "1",
+        "value": "1"
+      },
+      {
+        "label": "2",
+        "value": "2"
+      },
+      {
+        "label": "3",
+        "value": "3"
+      },
+      {
+        "label": "4",
+        "value": "4"
+      },
+      {
+        "label": "5",
+        "value": "5"
+      },
+      {
+        "label": "6",
+        "value": "6"
+      },
+      {
+        "label": "7",
+        "value": "7"
+      },
+      {
+        "label": "8",
+        "value": "8"
+      },
+      {
+        "label": "9",
+        "value": "9"
+      },
+      {
+        "label": "10 - Exactly like that",
+        "value": "10"
+      }
+    ],
+    "progress": false
+  },
+  {
+    "type": "single",
+    "key": "q8a_pain_spreads_legs_hips",
+    "prompt": "Does the pain spread to your legs and hips?",
+    "options": [
+      {
+        "label": "Yes",
+        "value": "yes"
+      },
+      {
+        "label": "No",
+        "value": "no"
+      }
+    ],
+    "progress": true,
+    "nextIf": {
+      "yes": "q8b_pain_spreads_legs_hips_rating",
+      "no": "q9a_pain_disabling_activities"
+    }
+  },
+  {
+    "type": "single",
+    "key": "q8b_pain_spreads_legs_hips_rating",
+    "prompt": "If yes: How much does this description fit what you feel? (0-10)",
+    "options": [
+      {
+        "label": "0 - Not at all like that",
+        "value": "0"
+      },
+      {
+        "label": "1",
+        "value": "1"
+      },
+      {
+        "label": "2",
+        "value": "2"
+      },
+      {
+        "label": "3",
+        "value": "3"
+      },
+      {
+        "label": "4",
+        "value": "4"
+      },
+      {
+        "label": "5",
+        "value": "5"
+      },
+      {
+        "label": "6",
+        "value": "6"
+      },
+      {
+        "label": "7",
+        "value": "7"
+      },
+      {
+        "label": "8",
+        "value": "8"
+      },
+      {
+        "label": "9",
+        "value": "9"
+      },
+      {
+        "label": "10 - Exactly like that",
+        "value": "10"
+      }
+    ],
+    "progress": false
+  },
+  {
+    "type": "single",
+    "key": "q9a_pain_disabling_activities",
+    "prompt": "Does the pain become disabling for your everyday activities?",
+    "options": [
+      {
+        "label": "Yes",
+        "value": "yes"
+      },
+      {
+        "label": "No",
+        "value": "no"
+      }
+    ],
+    "progress": true,
+    "nextIf": {
+      "yes": "q9b_pain_disabling_activities_discomfort",
+      "no": "q10a_pain_prevents_moving"
+    }
+  },
+  {
+    "type": "single",
+    "key": "q9b_pain_disabling_activities_discomfort",
+    "prompt": "If yes: How much discomfort does this cause you in your daily activities? (0-10)",
+    "options": [
+      {
+        "label": "0 - No discomfort",
+        "value": "0"
+      },
+      {
+        "label": "1",
+        "value": "1"
+      },
+      {
+        "label": "2",
+        "value": "2"
+      },
+      {
+        "label": "3",
+        "value": "3"
+      },
+      {
+        "label": "4",
+        "value": "4"
+      },
+      {
+        "label": "5",
+        "value": "5"
+      },
+      {
+        "label": "6",
+        "value": "6"
+      },
+      {
+        "label": "7",
+        "value": "7"
+      },
+      {
+        "label": "8",
+        "value": "8"
+      },
+      {
+        "label": "9",
+        "value": "9"
+      },
+      {
+        "label": "10 - Worst discomfort imaginable",
+        "value": "10"
+      }
+    ],
+    "progress": false
+  },
+  {
+    "type": "single",
+    "key": "q10a_pain_prevents_moving",
+    "prompt": "Does the pain prevent you from standing, walking, or moving?",
+    "options": [
+      {
+        "label": "Yes",
+        "value": "yes"
+      },
+      {
+        "label": "No",
+        "value": "no"
+      }
+    ],
+    "progress": true,
+    "nextIf": {
+      "yes": "q10b_pain_prevents_moving_discomfort",
+      "no": "q_sexually_active"
+    }
+  },
+  {
+    "type": "single",
+    "key": "q10b_pain_prevents_moving_discomfort",
+    "prompt": "If yes: How much discomfort does this cause you? (0-10)",
+    "options": [
+      {
+        "label": "0 - No discomfort",
+        "value": "0"
+      },
+      {
+        "label": "1",
+        "value": "1"
+      },
+      {
+        "label": "2",
+        "value": "2"
+      },
+      {
+        "label": "3",
+        "value": "3"
+      },
+      {
+        "label": "4",
+        "value": "4"
+      },
+      {
+        "label": "5",
+        "value": "5"
+      },
+      {
+        "label": "6",
+        "value": "6"
+      },
+      {
+        "label": "7",
+        "value": "7"
+      },
+      {
+        "label": "8",
+        "value": "8"
+      },
+      {
+        "label": "9",
+        "value": "9"
+      },
+      {
+        "label": "10 - Worst discomfort imaginable",
+        "value": "10"
+      }
+    ],
+    "progress": false
+  },
+  {
+    "type": "single",
+    "key": "q_sexually_active",
+    "prompt": "Are you currently sexually active?",
+    "options": [
+      {
+        "label": "Yes",
+        "value": "yes"
+      },
+      {
+        "label": "No",
+        "value": "no"
+      }
+    ],
+    "progress": false,
+    "nextIf": {
+      "yes": "q11a_deep_intercourse_pain",
+      "no": "q14a_pain_passing_stool_period"
+    }
+  },
+  {
+    "type": "single",
+    "key": "q11a_deep_intercourse_pain",
+    "prompt": "Do you have severe, sharp, deep internal pain during sexual intercourse?",
+    "options": [
+      {
+        "label": "Yes",
+        "value": "yes"
+      },
+      {
+        "label": "No",
+        "value": "no"
+      }
+    ],
+    "progress": true,
+    "nextIf": {
+      "yes": "q11b_deep_intercourse_pain_usual",
+      "no": "q12a_position_dependent_pain"
+    }
+  },
+  {
+    "type": "single",
+    "key": "q11b_deep_intercourse_pain_usual",
+    "prompt": "If yes: How would you rate your usual pain during intercourse? (0-10)",
+    "options": [
+      {
+        "label": "0 - No pain",
+        "value": "0"
+      },
+      {
+        "label": "1",
+        "value": "1"
+      },
+      {
+        "label": "2",
+        "value": "2"
+      },
+      {
+        "label": "3",
+        "value": "3"
+      },
+      {
+        "label": "4",
+        "value": "4"
+      },
+      {
+        "label": "5",
+        "value": "5"
+      },
+      {
+        "label": "6",
+        "value": "6"
+      },
+      {
+        "label": "7",
+        "value": "7"
+      },
+      {
+        "label": "8",
+        "value": "8"
+      },
+      {
+        "label": "9",
+        "value": "9"
+      },
+      {
+        "label": "10 - Worst pain",
+        "value": "10"
+      }
+    ],
+    "progress": false
+  },
+  {
+    "type": "single",
+    "key": "q11c_deep_intercourse_pain_worst",
+    "prompt": "If yes: How would you rate your pain at its worst during intercourse? (0-10)",
+    "options": [
+      {
+        "label": "0 - No pain",
+        "value": "0"
+      },
+      {
+        "label": "1",
+        "value": "1"
+      },
+      {
+        "label": "2",
+        "value": "2"
+      },
+      {
+        "label": "3",
+        "value": "3"
+      },
+      {
+        "label": "4",
+        "value": "4"
+      },
+      {
+        "label": "5",
+        "value": "5"
+      },
+      {
+        "label": "6",
+        "value": "6"
+      },
+      {
+        "label": "7",
+        "value": "7"
+      },
+      {
+        "label": "8",
+        "value": "8"
+      },
+      {
+        "label": "9",
+        "value": "9"
+      },
+      {
+        "label": "10 - Worst pain",
+        "value": "10"
+      }
+    ],
+    "progress": false
+  },
+  {
+    "type": "single",
+    "key": "q12a_position_dependent_pain",
+    "prompt": "Do you feel pain in certain positions during sexual intercourse?",
+    "options": [
+      {
+        "label": "Yes",
+        "value": "yes"
+      },
+      {
+        "label": "No",
+        "value": "no"
+      }
+    ],
+    "progress": true,
+    "nextIf": {
+      "yes": "q12b_position_dependent_pain_rating",
+      "no": "q13a_intercourse_upsetting_pain"
+    }
+  },
+  {
+    "type": "single",
+    "key": "q12b_position_dependent_pain_rating",
+    "prompt": "If yes: How much does this description fit what you feel? (0-10)",
+    "options": [
+      {
+        "label": "0 - Not at all like that",
+        "value": "0"
+      },
+      {
+        "label": "1",
+        "value": "1"
+      },
+      {
+        "label": "2",
+        "value": "2"
+      },
+      {
+        "label": "3",
+        "value": "3"
+      },
+      {
+        "label": "4",
+        "value": "4"
+      },
+      {
+        "label": "5",
+        "value": "5"
+      },
+      {
+        "label": "6",
+        "value": "6"
+      },
+      {
+        "label": "7",
+        "value": "7"
+      },
+      {
+        "label": "8",
+        "value": "8"
+      },
+      {
+        "label": "9",
+        "value": "9"
+      },
+      {
+        "label": "10 - Exactly like that",
+        "value": "10"
+      }
+    ],
+    "progress": false
+  },
+  {
+    "type": "single",
+    "key": "q13a_intercourse_upsetting_pain",
+    "prompt": "Does the pain upset, prevent, or interrupt sexual intercourse?",
+    "options": [
+      {
+        "label": "Yes",
+        "value": "yes"
+      },
+      {
+        "label": "No",
+        "value": "no"
+      }
+    ],
+    "progress": true,
+    "nextIf": {
+      "yes": "q13b_intercourse_upsetting_discomfort",
+      "no": "q14a_pain_passing_stool_period"
+    }
+  },
+  {
+    "type": "single",
+    "key": "q13b_intercourse_upsetting_discomfort",
+    "prompt": "If yes: How much discomfort does this cause you? (0-10)",
+    "options": [
+      {
+        "label": "0 - No discomfort",
+        "value": "0"
+      },
+      {
+        "label": "1",
+        "value": "1"
+      },
+      {
+        "label": "2",
+        "value": "2"
+      },
+      {
+        "label": "3",
+        "value": "3"
+      },
+      {
+        "label": "4",
+        "value": "4"
+      },
+      {
+        "label": "5",
+        "value": "5"
+      },
+      {
+        "label": "6",
+        "value": "6"
+      },
+      {
+        "label": "7",
+        "value": "7"
+      },
+      {
+        "label": "8",
+        "value": "8"
+      },
+      {
+        "label": "9",
+        "value": "9"
+      },
+      {
+        "label": "10 - Worst discomfort imaginable",
+        "value": "10"
+      }
+    ],
+    "progress": false
+  },
+  {
+    "type": "single",
+    "key": "q14a_pain_passing_stool_period",
+    "prompt": "Do you have pain when passing a stool, particularly during your period?",
+    "options": [
+      {
+        "label": "Yes",
+        "value": "yes"
+      },
+      {
+        "label": "No",
+        "value": "no"
+      }
+    ],
+    "progress": true,
+    "nextIf": {
+      "yes": "q14b_pain_passing_stool_usual",
+      "no": "q15a_bowel_spasms_period"
+    }
+  },
+  {
+    "type": "single",
+    "key": "q14b_pain_passing_stool_usual",
+    "prompt": "If yes: How would you rate your usual pain when passing a stool? (0-10)",
+    "options": [
+      {
+        "label": "0 - No pain",
+        "value": "0"
+      },
+      {
+        "label": "1",
+        "value": "1"
+      },
+      {
+        "label": "2",
+        "value": "2"
+      },
+      {
+        "label": "3",
+        "value": "3"
+      },
+      {
+        "label": "4",
+        "value": "4"
+      },
+      {
+        "label": "5",
+        "value": "5"
+      },
+      {
+        "label": "6",
+        "value": "6"
+      },
+      {
+        "label": "7",
+        "value": "7"
+      },
+      {
+        "label": "8",
+        "value": "8"
+      },
+      {
+        "label": "9",
+        "value": "9"
+      },
+      {
+        "label": "10 - Worst pain",
+        "value": "10"
+      }
+    ],
+    "progress": false
+  },
+  {
+    "type": "single",
+    "key": "q14c_pain_passing_stool_worst",
+    "prompt": "If yes: How would you rate your pain at its worst when passing a stool? (0-10)",
+    "options": [
+      {
+        "label": "0 - No pain",
+        "value": "0"
+      },
+      {
+        "label": "1",
+        "value": "1"
+      },
+      {
+        "label": "2",
+        "value": "2"
+      },
+      {
+        "label": "3",
+        "value": "3"
+      },
+      {
+        "label": "4",
+        "value": "4"
+      },
+      {
+        "label": "5",
+        "value": "5"
+      },
+      {
+        "label": "6",
+        "value": "6"
+      },
+      {
+        "label": "7",
+        "value": "7"
+      },
+      {
+        "label": "8",
+        "value": "8"
+      },
+      {
+        "label": "9",
+        "value": "9"
+      },
+      {
+        "label": "10 - Worst pain",
+        "value": "10"
+      }
+    ],
+    "progress": false
+  },
+  {
+    "type": "single",
+    "key": "q15a_bowel_spasms_period",
+    "prompt": "Do you have spasms, cramps, or bowel pain before a bowel movement, particularly during your period?",
+    "options": [
+      {
+        "label": "Yes",
+        "value": "yes"
+      },
+      {
+        "label": "No",
+        "value": "no"
+      }
+    ],
+    "progress": true,
+    "nextIf": {
+      "yes": "q15b_bowel_spasms_usual",
+      "no": "q16a_diarrhoea_constipation_period"
+    }
+  },
+  {
+    "type": "single",
+    "key": "q15b_bowel_spasms_usual",
+    "prompt": "If yes: How would you rate your usual pain from these bowel spasms/cramps? (0-10)",
+    "options": [
+      {
+        "label": "0 - No pain",
+        "value": "0"
+      },
+      {
+        "label": "1",
+        "value": "1"
+      },
+      {
+        "label": "2",
+        "value": "2"
+      },
+      {
+        "label": "3",
+        "value": "3"
+      },
+      {
+        "label": "4",
+        "value": "4"
+      },
+      {
+        "label": "5",
+        "value": "5"
+      },
+      {
+        "label": "6",
+        "value": "6"
+      },
+      {
+        "label": "7",
+        "value": "7"
+      },
+      {
+        "label": "8",
+        "value": "8"
+      },
+      {
+        "label": "9",
+        "value": "9"
+      },
+      {
+        "label": "10 - Worst pain",
+        "value": "10"
+      }
+    ],
+    "progress": false
+  },
+  {
+    "type": "single",
+    "key": "q15c_bowel_spasms_worst",
+    "prompt": "If yes: How would you rate your pain at its worst from these bowel spasms/cramps? (0-10)",
+    "options": [
+      {
+        "label": "0 - No pain",
+        "value": "0"
+      },
+      {
+        "label": "1",
+        "value": "1"
+      },
+      {
+        "label": "2",
+        "value": "2"
+      },
+      {
+        "label": "3",
+        "value": "3"
+      },
+      {
+        "label": "4",
+        "value": "4"
+      },
+      {
+        "label": "5",
+        "value": "5"
+      },
+      {
+        "label": "6",
+        "value": "6"
+      },
+      {
+        "label": "7",
+        "value": "7"
+      },
+      {
+        "label": "8",
+        "value": "8"
+      },
+      {
+        "label": "9",
+        "value": "9"
+      },
+      {
+        "label": "10 - Worst pain",
+        "value": "10"
+      }
+    ],
+    "progress": false
+  },
+  {
+    "type": "single",
+    "key": "q16a_diarrhoea_constipation_period",
+    "prompt": "Do you have diarrhoea and/or constipation, particularly during your period?",
+    "options": [
+      {
+        "label": "Yes",
+        "value": "yes"
+      },
+      {
+        "label": "No",
+        "value": "no"
+      }
+    ],
+    "progress": true,
+    "nextIf": {
+      "yes": "q16b_diarrhoea_constipation_usual",
+      "no": "q17a_urination_difficulty_period"
+    }
+  },
+  {
+    "type": "single",
+    "key": "q16b_diarrhoea_constipation_usual",
+    "prompt": "If yes: How would you rate your usual discomfort or pain from this? (0-10)",
+    "options": [
+      {
+        "label": "0 - No discomfort/pain",
+        "value": "0"
+      },
+      {
+        "label": "1",
+        "value": "1"
+      },
+      {
+        "label": "2",
+        "value": "2"
+      },
+      {
+        "label": "3",
+        "value": "3"
+      },
+      {
+        "label": "4",
+        "value": "4"
+      },
+      {
+        "label": "5",
+        "value": "5"
+      },
+      {
+        "label": "6",
+        "value": "6"
+      },
+      {
+        "label": "7",
+        "value": "7"
+      },
+      {
+        "label": "8",
+        "value": "8"
+      },
+      {
+        "label": "9",
+        "value": "9"
+      },
+      {
+        "label": "10 - Worst discomfort/pain imaginable",
+        "value": "10"
+      }
+    ],
+    "progress": false
+  },
+  {
+    "type": "single",
+    "key": "q16c_diarrhoea_constipation_worst",
+    "prompt": "If yes: How would you rate your discomfort or pain at its worst? (0-10)",
+    "options": [
+      {
+        "label": "0 - No discomfort/pain",
+        "value": "0"
+      },
+      {
+        "label": "1",
+        "value": "1"
+      },
+      {
+        "label": "2",
+        "value": "2"
+      },
+      {
+        "label": "3",
+        "value": "3"
+      },
+      {
+        "label": "4",
+        "value": "4"
+      },
+      {
+        "label": "5",
+        "value": "5"
+      },
+      {
+        "label": "6",
+        "value": "6"
+      },
+      {
+        "label": "7",
+        "value": "7"
+      },
+      {
+        "label": "8",
+        "value": "8"
+      },
+      {
+        "label": "9",
+        "value": "9"
+      },
+      {
+        "label": "10 - Worst discomfort/pain imaginable",
+        "value": "10"
+      }
+    ],
+    "progress": false
+  },
+  {
+    "type": "text",
+    "key": "bot_checkpoint_1",
+    "bot": [
+      "You’re doing well — keep going!"
+    ]
+  },
+  {
+    "type": "single",
+    "key": "q17a_urination_difficulty_period",
+    "prompt": "Do you have difficulty and/or pain when urinating, particularly during your period?",
+    "options": [
+      {
+        "label": "Yes",
+        "value": "yes"
+      },
+      {
+        "label": "No",
+        "value": "no"
+      }
+    ],
+    "progress": true,
+    "nextIf": {
+      "yes": "q17b_urination_difficulty_usual",
+      "no": "q18a_bladder_pain_period"
+    }
+  },
+  {
+    "type": "single",
+    "key": "q17b_urination_difficulty_usual",
+    "prompt": "If yes: How would you rate your usual pain or discomfort when urinating? (0-10)",
+    "options": [
+      {
+        "label": "0 - No discomfort",
+        "value": "0"
+      },
+      {
+        "label": "1",
+        "value": "1"
+      },
+      {
+        "label": "2",
+        "value": "2"
+      },
+      {
+        "label": "3",
+        "value": "3"
+      },
+      {
+        "label": "4",
+        "value": "4"
+      },
+      {
+        "label": "5",
+        "value": "5"
+      },
+      {
+        "label": "6",
+        "value": "6"
+      },
+      {
+        "label": "7",
+        "value": "7"
+      },
+      {
+        "label": "8",
+        "value": "8"
+      },
+      {
+        "label": "9",
+        "value": "9"
+      },
+      {
+        "label": "10 - Worst discomfort/pain imaginable",
+        "value": "10"
+      }
+    ],
+    "progress": false
+  },
+  {
+    "type": "single",
+    "key": "q17c_urination_difficulty_worst",
+    "prompt": "If yes: How would you rate your pain or discomfort at its worst when urinating? (0-10)",
+    "options": [
+      {
+        "label": "0 - No discomfort",
+        "value": "0"
+      },
+      {
+        "label": "1",
+        "value": "1"
+      },
+      {
+        "label": "2",
+        "value": "2"
+      },
+      {
+        "label": "3",
+        "value": "3"
+      },
+      {
+        "label": "4",
+        "value": "4"
+      },
+      {
+        "label": "5",
+        "value": "5"
+      },
+      {
+        "label": "6",
+        "value": "6"
+      },
+      {
+        "label": "7",
+        "value": "7"
+      },
+      {
+        "label": "8",
+        "value": "8"
+      },
+      {
+        "label": "9",
+        "value": "9"
+      },
+      {
+        "label": "10 - Worst discomfort/pain imaginable",
+        "value": "10"
+      }
+    ],
+    "progress": false
+  },
+  {
+    "type": "single",
+    "key": "q18a_bladder_pain_period",
+    "prompt": "Do you have pain in the bladder when you want to urinate or when holding back, particularly during your period?",
+    "options": [
+      {
+        "label": "Yes",
+        "value": "yes"
+      },
+      {
+        "label": "No",
+        "value": "no"
+      }
+    ],
+    "progress": true,
+    "nextIf": {
+      "yes": "q18b_bladder_pain_usual",
+      "no": "q19a_sciatica_period"
+    }
+  },
+  {
+    "type": "single",
+    "key": "q18b_bladder_pain_usual",
+    "prompt": "If yes: How would you rate your usual bladder pain or discomfort? (0-10)",
+    "options": [
+      {
+        "label": "0 - No discomfort/pain",
+        "value": "0"
+      },
+      {
+        "label": "1",
+        "value": "1"
+      },
+      {
+        "label": "2",
+        "value": "2"
+      },
+      {
+        "label": "3",
+        "value": "3"
+      },
+      {
+        "label": "4",
+        "value": "4"
+      },
+      {
+        "label": "5",
+        "value": "5"
+      },
+      {
+        "label": "6",
+        "value": "6"
+      },
+      {
+        "label": "7",
+        "value": "7"
+      },
+      {
+        "label": "8",
+        "value": "8"
+      },
+      {
+        "label": "9",
+        "value": "9"
+      },
+      {
+        "label": "10 - Worst discomfort/pain imaginable",
+        "value": "10"
+      }
+    ],
+    "progress": false
+  },
+  {
+    "type": "single",
+    "key": "q18c_bladder_pain_worst",
+    "prompt": "If yes: How would you rate your bladder pain or discomfort at its worst? (0-10)",
+    "options": [
+      {
+        "label": "0 - No discomfort/pain",
+        "value": "0"
+      },
+      {
+        "label": "1",
+        "value": "1"
+      },
+      {
+        "label": "2",
+        "value": "2"
+      },
+      {
+        "label": "3",
+        "value": "3"
+      },
+      {
+        "label": "4",
+        "value": "4"
+      },
+      {
+        "label": "5",
+        "value": "5"
+      },
+      {
+        "label": "6",
+        "value": "6"
+      },
+      {
+        "label": "7",
+        "value": "7"
+      },
+      {
+        "label": "8",
+        "value": "8"
+      },
+      {
+        "label": "9",
+        "value": "9"
+      },
+      {
+        "label": "10 - Worst discomfort/pain imaginable",
+        "value": "10"
+      }
+    ],
+    "progress": false
+  },
+  {
+    "type": "single",
+    "key": "q19a_sciatica_period",
+    "prompt": "Do you have sciatica (pain radiating along the sciatic nerve), particularly during your period?",
+    "options": [
+      {
+        "label": "Yes",
+        "value": "yes"
+      },
+      {
+        "label": "No",
+        "value": "no"
+      }
+    ],
+    "progress": true,
+    "nextIf": {
+      "yes": "q19b_sciatica_usual",
+      "no": "q20a_right_shoulder_pain_period"
+    }
+  },
+  {
+    "type": "single",
+    "key": "q19b_sciatica_usual",
+    "prompt": "If yes: How would you rate your usual pain or discomfort from sciatica? (0-10)",
+    "options": [
+      {
+        "label": "0 - No discomfort/pain",
+        "value": "0"
+      },
+      {
+        "label": "1",
+        "value": "1"
+      },
+      {
+        "label": "2",
+        "value": "2"
+      },
+      {
+        "label": "3",
+        "value": "3"
+      },
+      {
+        "label": "4",
+        "value": "4"
+      },
+      {
+        "label": "5",
+        "value": "5"
+      },
+      {
+        "label": "6",
+        "value": "6"
+      },
+      {
+        "label": "7",
+        "value": "7"
+      },
+      {
+        "label": "8",
+        "value": "8"
+      },
+      {
+        "label": "9",
+        "value": "9"
+      },
+      {
+        "label": "10 - Worst discomfort/pain imaginable",
+        "value": "10"
+      }
+    ],
+    "progress": false
+  },
+  {
+    "type": "single",
+    "key": "q19c_sciatica_worst",
+    "prompt": "If yes: How would you rate your pain or discomfort at its worst from sciatica? (0-10)",
+    "options": [
+      {
+        "label": "0 - No discomfort/pain",
+        "value": "0"
+      },
+      {
+        "label": "1",
+        "value": "1"
+      },
+      {
+        "label": "2",
+        "value": "2"
+      },
+      {
+        "label": "3",
+        "value": "3"
+      },
+      {
+        "label": "4",
+        "value": "4"
+      },
+      {
+        "label": "5",
+        "value": "5"
+      },
+      {
+        "label": "6",
+        "value": "6"
+      },
+      {
+        "label": "7",
+        "value": "7"
+      },
+      {
+        "label": "8",
+        "value": "8"
+      },
+      {
+        "label": "9",
+        "value": "9"
+      },
+      {
+        "label": "10 - Worst discomfort/pain imaginable",
+        "value": "10"
+      }
+    ],
+    "progress": false
+  },
+  {
+    "type": "single",
+    "key": "q20a_right_shoulder_pain_period",
+    "prompt": "Do you have pain in the right shoulder or under the right rib cage, particularly during your period?",
+    "options": [
+      {
+        "label": "Yes",
+        "value": "yes"
+      },
+      {
+        "label": "No",
+        "value": "no"
+      }
+    ],
+    "progress": true,
+    "nextIf": {
+      "yes": "q20b_right_shoulder_pain_usual",
+      "no": "q21a_difficulty_pregnancy"
+    }
+  },
+  {
+    "type": "single",
+    "key": "q20b_right_shoulder_pain_usual",
+    "prompt": "If yes: How would you rate your usual pain in this area? (0-10)",
+    "options": [
+      {
+        "label": "0 - No pain",
+        "value": "0"
+      },
+      {
+        "label": "1",
+        "value": "1"
+      },
+      {
+        "label": "2",
+        "value": "2"
+      },
+      {
+        "label": "3",
+        "value": "3"
+      },
+      {
+        "label": "4",
+        "value": "4"
+      },
+      {
+        "label": "5",
+        "value": "5"
+      },
+      {
+        "label": "6",
+        "value": "6"
+      },
+      {
+        "label": "7",
+        "value": "7"
+      },
+      {
+        "label": "8",
+        "value": "8"
+      },
+      {
+        "label": "9",
+        "value": "9"
+      },
+      {
+        "label": "10 - Worst pain",
+        "value": "10"
+      }
+    ],
+    "progress": false
+  },
+  {
+    "type": "single",
+    "key": "q20c_right_shoulder_pain_worst",
+    "prompt": "If yes: How would you rate your pain at its worst in this area? (0-10)",
+    "options": [
+      {
+        "label": "0 - No pain",
+        "value": "0"
+      },
+      {
+        "label": "1",
+        "value": "1"
+      },
+      {
+        "label": "2",
+        "value": "2"
+      },
+      {
+        "label": "3",
+        "value": "3"
+      },
+      {
+        "label": "4",
+        "value": "4"
+      },
+      {
+        "label": "5",
+        "value": "5"
+      },
+      {
+        "label": "6",
+        "value": "6"
+      },
+      {
+        "label": "7",
+        "value": "7"
+      },
+      {
+        "label": "8",
+        "value": "8"
+      },
+      {
+        "label": "9",
+        "value": "9"
+      },
+      {
+        "label": "10 - Worst pain",
+        "value": "10"
+      }
+    ],
+    "progress": false
+  },
+  {
+    "type": "single",
+    "key": "q21a_difficulty_pregnancy",
+    "prompt": "Have you had difficulty becoming pregnant, or failure to conceive despite trying for several months or years?",
+    "options": [
+      {
+        "label": "Yes",
+        "value": "yes"
+      },
+      {
+        "label": "No",
+        "value": "no"
+      }
     ],
     "progress": true
   },
   {
-    "type": "single",
-    "key": "q18_absence_freq",
-    "prompt": "Missed work or school due to pain:",
-    "options": [
-      { "label": "Never", "value": "never" },
-      { "label": "Sometimes", "value": "sometimes" },
-      { "label": "Often", "value": "often" },
-      { "label": "Always", "value": "always" }
-    ],
-    "progress": true
-  },
-  {
-    "type": "single",
-    "key": "q19_activities_limit_freq",
-    "prompt": "Daily activities limited by pain:",
-    "options": [
-      { "label": "Never", "value": "never" },
-      { "label": "Sometimes", "value": "sometimes" },
-      { "label": "Often", "value": "often" },
-      { "label": "Always", "value": "always" }
-    ],
-    "progress": true
-  },
-  {
-    "type": "single",
-    "key": "q20_sex_life_impact",
-    "prompt": "Pain affecting sexual life:",
-    "options": [
-      { "label": "Never", "value": "never" },
-      { "label": "Sometimes", "value": "sometimes" },
-      { "label": "Often", "value": "often" },
-      { "label": "Always", "value": "always" }
-    ],
-    "progress": true
-  },
-  {
-    "type": "single",
-    "key": "q21_social_family_impact",
-    "prompt": "Pain affecting social/family life:",
-    "options": [
-      { "label": "Never", "value": "never" },
-      { "label": "Sometimes", "value": "sometimes" },
-      { "label": "Often", "value": "often" },
-      { "label": "Always", "value": "always" }
-    ],
-    "progress": true
-  },
-
-  { "type": "text", "key": "outro", "bot": ["Excellent work — Part 1 complete!"] }
+    "type": "text",
+    "key": "outro",
+    "bot": [
+      "Excellent work — Part 1 complete!"
+    ]
+  }
 ]
-

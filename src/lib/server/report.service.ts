@@ -1,13 +1,19 @@
 // src/lib/server/report.service.ts
 import { supa } from '$lib/server/supabase';
 import { buildPart1Lines, buildPart2Lines, buildPart3Lines, hasAny } from '$lib/assessment/summary';
-import { computeEndopainGlobalScore, computePcsYesCount, computePvvqTotal } from '$lib/assessment/scoring';
+import {
+  computeEndopainGlobalScore,
+  computePcsYesCount,
+  computePvvqTotal,
+  PART1_MAX_SCORE
+} from '$lib/assessment/scoring';
 import { PCS_ITEMS, PVVQ_ORDER } from '$lib/assessment/labels';
 import { renderSummaryPdf } from '$lib/pdf/report';
 import type { Language } from '$lib/i18n/types';
 import { getReportLocale } from '$lib/assessment/report-i18n';
 
 const BUCKET = 'pdf-results';
+const PART1_LINES_PER_PAGE = 25;
 
 type SessionRow = {
   id: string;
@@ -114,10 +120,18 @@ export async function buildAndUploadReport(
   // Part 1
   const p1Lines = buildPart1Lines(answers, language);
   const p1Score = computeEndopainGlobalScore(answers);
-  pages.push({
-    title: locale.partTitles.part1,
-    lines: p1Lines,
-    scoring: locale.scoring.part1(p1Score)
+  const p1Chunks = chunkLines(p1Lines, PART1_LINES_PER_PAGE);
+  p1Chunks.forEach((chunk, idx) => {
+    const isLast = idx === p1Chunks.length - 1;
+    const title =
+      p1Chunks.length > 1
+        ? `${locale.partTitles.part1} (${idx + 1}/${p1Chunks.length})`
+        : locale.partTitles.part1;
+    pages.push({
+      title,
+      lines: chunk,
+      scoring: isLast ? locale.scoring.part1(p1Score, PART1_MAX_SCORE) : undefined
+    });
   });
 
   // Part 2 if any answers exist
@@ -205,4 +219,13 @@ export async function markSessionEndedByToken(token: string, options: { secret?:
     await markSessionEnded(session.id);
   }
   return true;
+}
+
+function chunkLines<T>(items: T[], size: number): T[][] {
+  if (size <= 0) return [items];
+  const chunks: T[][] = [];
+  for (let i = 0; i < items.length; i += size) {
+    chunks.push(items.slice(i, i + size));
+  }
+  return chunks.length ? chunks : [[]];
 }

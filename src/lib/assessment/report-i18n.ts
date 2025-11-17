@@ -1,8 +1,5 @@
 import type { Language } from '$lib/i18n/types';
-import { LABELS, PCS_ITEMS, PVVQ_LABELS } from './labels';
-import type { LabelKey, LikertValue } from './types';
-
-type LikertTranslations = Record<LikertValue, string>;
+import { PCS_ITEMS, PVVQ_LABELS } from './labels';
 
 type ReportLocale = {
   summaryTitle: string;
@@ -19,18 +16,16 @@ type ReportLocale = {
     unsure: string;
     na: string;
   };
-  likert: LikertTranslations;
   partTitles: {
     part1: string;
     part2: string;
     part3: string;
   };
   part3Interpretation: string;
-  part1Labels: Record<LabelKey, string>;
   pcsLabels: Record<string, string>;
   pvvqLabels: Record<string, string>;
   scoring: {
-    part1: (score: number) => string;
+    part1: (score: number, max: number) => string;
     part2: (count: number, yesWord: string) => string;
     part3: (total: number) => string;
   };
@@ -40,21 +35,6 @@ type ReportLocale = {
 const PCS_LABELS_EN = Object.fromEntries(PCS_ITEMS) as Record<string, string>;
 const PVVQ_LABELS_EN = PVVQ_LABELS;
 
-const HR_PART1_LABELS: Record<LabelKey, string> = {
-  q1: 'Spontana bol u zdjelici',
-  q3: 'Menstrualna bol',
-  q5: 'Bol tijekom spolnog odnosa',
-  q7: 'Bol nakon spolnog odnosa',
-  q9: 'Bol pri pražnjenju crijeva tijekom menstruacije',
-  q11: 'Bol pri pražnjenju crijeva izvan menstruacije',
-  q13: 'Bol pri mokrenju',
-  q15: 'Bol u lumbalnom (donjem) dijelu leđa',
-  q17: 'Analgetici za bol u zdjelici (prošli mjesec)',
-  q18: 'Izostanci s posla ili škole zbog boli',
-  q19: 'Dnevne aktivnosti ograničene zbog boli',
-  q20: 'Bol koja utječe na seksualni život',
-  q21: 'Bol koja utječe na društveni/obiteljski život'
-};
 
 const HR_PCS_LABELS: Record<string, string> = {
   q22_pain_worse_standing: 'Bol se pogoršava pri dugotrajnom stajanju ili hodanju',
@@ -87,21 +67,6 @@ const HR_PVVQ_LABELS: Record<string, string> = {
   q46_reduced_self_esteem: 'Smanjeno samopoštovanje/samopouzdanje'
 };
 
-const SK_PART1_LABELS: Record<LabelKey, string> = {
-  q1: 'Spontánna bol panvy',
-  q3: 'Menštruačná bol',
-  q5: 'Bolesť počas pohlavného styku',
-  q7: 'Bolesť po pohlavnom styku',
-  q9: 'Bolesť pri vyprázdňovaní čriev počas menštruácie',
-  q11: 'Bolesť pri vyprázdňovaní čriev mimo menštruácie',
-  q13: 'Bolesť pri močení',
-  q15: 'Bolesť v driekovej (krížovej) oblasti',
-  q17: 'Analgetiká na bolesť panvy (posledný mesiac)',
-  q18: 'Absencie v práci alebo škole kvôli bolesti',
-  q19: 'Každodenné aktivity obmedzené bolesťou',
-  q20: 'Bolesť ovplyvňujúca sexuálny život',
-  q21: 'Bolesť ovplyvňujúca spoločenský/rodinný život'
-};
 
 const SK_PCS_LABELS: Record<string, string> = {
   q22_pain_worse_standing: 'Bolesť sa zhoršuje pri dlhom státí alebo chôdzi',
@@ -134,36 +99,6 @@ const SK_PVVQ_LABELS: Record<string, string> = {
   q46_reduced_self_esteem: 'Znížené sebavedomie/sebaúcta'
 };
 
-const RU_PART1_LABELS: Record<LabelKey, string> = {
-  q1: 'Спонтанная тазовая боль',
-  q3: 'Менструальная боль',
-  q5: 'Боль во время полового акта',
-  q7: 'Боль после полового акта',
-  q9: 'Боль при дефекации во время менструации',
-  q11: 'Боль при дефекации вне менструации',
-  q13: 'Боль при мочеиспускании',
-  q15: 'Боль в пояснице',
-  q17: 'Обезболивающие от тазовой боли (за последний месяц)',
-  q18: 'Пропуски работы или учёбы из-за боли',
-  q19: 'Боль ограничивает повседневную активность',
-  q20: 'Боль влияет на половую жизнь',
-  q21: 'Боль влияет на социальную/семейную жизнь'
-};
-const KZ_PART1_LABELS: Record<LabelKey, string> = {
-  q1: 'Өздігінен пайда болатын жамбас ауыруы',
-  q3: 'Етеккір кезіндегі ауырсыну',
-  q5: 'Жыныстық қатынас кезіндегі ауырсыну',
-  q7: 'Жыныстық қатынастан кейінгі ауырсыну',
-  q9: 'Етеккір кезінде дәреттену кезіндегі ауырсыну',
-  q11: 'Етеккірден тыс дәреттену кезіндегі ауырсыну',
-  q13: 'Зәр шығару кезіндегі ауырсыну',
-  q15: 'Бел аймағындағы ауырсыну',
-  q17: 'Жамбас ауырсынуына арналған ауырсынуды басатын дәрілер (соңғы ай)',
-  q18: 'Ауырсынуға байланысты жұмысқа/оқуға бармау',
-  q19: 'Ауырсыну күнделікті белсенділікті шектейді',
-  q20: 'Ауырсыну жыныстық өмірге әсер етеді',
-  q21: 'Ауырсыну әлеуметтік/отбасылық өмірге әсер етеді'
-};
 
 const RU_PCS_LABELS: Record<string, string> = {
   q22_pain_worse_standing: 'Боль усиливается при длительном стоянии/ходьбе',
@@ -225,40 +160,10 @@ const KZ_PVVQ_LABELS: Record<string, string> = {
   q46_reduced_self_esteem: 'Өзін-өзі бағалау/сенімнің төмендеуі'
 };
 
-const LIKERT_EN: LikertTranslations = {
-  never: 'Never',
-  sometimes: 'Sometimes',
-  often: 'Often',
-  always: 'Always'
-};
 
-const LIKERT_RU: LikertTranslations = {
-  never: 'Никогда',
-  sometimes: 'Иногда',
-  often: 'Часто',
-  always: 'Всегда'
-};
 
-const LIKERT_KZ: LikertTranslations = {
-  never: 'Ешқашан',
-  sometimes: 'Кейде',
-  often: 'Жиі',
-  always: 'Әрқашан'
-};
 
-const LIKERT_HR: LikertTranslations = {
-  never: 'Nikada',
-  sometimes: 'Ponekad',
-  often: 'Često',
-  always: 'Uvijek'
-};
 
-const LIKERT_SK: LikertTranslations = {
-  never: 'Nikdy',
-  sometimes: 'Niekedy',
-  often: 'Často',
-  always: 'Vždy'
-};
 
 const LOCALES: Record<Language, ReportLocale> = {
   en: {
@@ -276,7 +181,6 @@ const LOCALES: Record<Language, ReportLocale> = {
       unsure: 'Unsure',
       na: 'N/A'
     },
-    likert: LIKERT_EN,
     partTitles: {
       part1: 'Part 1. ENDOPAIN-4D',
       part2: 'Part 2. PCS Screening (5 items)',
@@ -284,11 +188,10 @@ const LOCALES: Record<Language, ReportLocale> = {
     },
     part3Interpretation:
       'Lower totals indicate better quality of life. PVVQ (20 items) total is interpreted as: 20 – best quality of life; 21–40 – mild impairment; 41–60 – moderate impairment; 61–80 – severe impairment; 81–100 – very severe impairment.',
-    part1Labels: LABELS,
     pcsLabels: PCS_LABELS_EN,
     pvvqLabels: PVVQ_LABELS_EN,
     scoring: {
-      part1: (score) => `Physician scoring (ENDOPAIN-4D Global Score, 0-100): ${score}/100`,
+      part1: (score, max) => `ENDOPAIN-4D Part 1 total score: ${score} / ${max}`,
       part2: (count, yesWord) =>
         `Physician scoring (PCS positive if >=2 ${yesWord}): ${count} ${yesWord}`,
       part3: (total) => `Physician scoring (PVVQ Total, 20-100): ${total}`
@@ -309,7 +212,6 @@ const LOCALES: Record<Language, ReportLocale> = {
       unsure: 'Не уверен(а)',
       na: 'Нет данных'
     },
-    likert: LIKERT_RU,
     partTitles: {
       part1: 'Часть 1. ENDOPAIN-4D',
       part2: 'Часть 2. Скрининг PCS (5 вопросов)',
@@ -317,11 +219,10 @@ const LOCALES: Record<Language, ReportLocale> = {
     },
     part3Interpretation:
       'Чем ниже суммарный балл, тем лучше качество жизни пациента. Суммарный балл по 20 вопросам PVVQ интерпретируется так: 20 — наивысшее качество жизни; 21–40 — лёгкое ухудшение качества жизни; 41–60 — умеренное ухудшение качества жизни; 61–80 — тяжёлое ухудшение качества жизни; 81–100 — грубое нарушение качества жизни.',
-    part1Labels: RU_PART1_LABELS,
     pcsLabels: RU_PCS_LABELS,
     pvvqLabels: RU_PVVQ_LABELS,
     scoring: {
-      part1: (score) => `Врачебная оценка (ENDOPAIN-4D, общий балл 0-100): ${score}/100`,
+      part1: (score, max) => `Суммарный балл ENDOPAIN-4D, часть 1: ${score} / ${max}`,
       part2: (count, yesWord) =>
         `Врачебная оценка (PCS положительный при 2 или более ответах "${yesWord}"): ${count} ${yesWord}`,
       part3: (total) => `Врачебная оценка (PVVQ, суммарный балл 20-100): ${total}`
@@ -342,7 +243,6 @@ const LOCALES: Record<Language, ReportLocale> = {
       unsure: 'Нақты емес',
       na: 'Қолданылмайды'
     },
-    likert: LIKERT_KZ,
     partTitles: {
       part1: '1-бөлім. ENDOPAIN-4D',
       part2: '2-бөлім. PCS скринингі (5 сұрақ)',
@@ -350,11 +250,10 @@ const LOCALES: Record<Language, ReportLocale> = {
     },
     part3Interpretation:
       'Ұпай неғұрлым төмен болса, өмір сапасы соғұрлым жоғары. PVVQ (20 сұрақ) бойынша жалпы ұпай былай түсіндіріледі: 20 – ең жоғары өмір сапасы; 21–40 – жеңіл төмендеу; 41–60 – орташа төмендеу; 61–80 – айқын төмендеу; 81–100 – өте қатты төмендеу.',
-    part1Labels: KZ_PART1_LABELS,
     pcsLabels: KZ_PCS_LABELS,
     pvvqLabels: KZ_PVVQ_LABELS,
     scoring: {
-      part1: (score) => `Дәрігерлік баға (ENDOPAIN-4D, 0-100): ${score}/100`,
+      part1: (score, max) => `ENDOPAIN-4D 1-бөлімінің жалпы балы: ${score} / ${max}`,
       part2: (count, yesWord) =>
         `Дәрігерлік баға (PCS оң деп саналады, егер ${yesWord} жауаптары ≥2 болса): ${count} ${yesWord}`,
       part3: (total) => `Дәрігерлік баға (PVVQ, 20-100): ${total}`
@@ -375,7 +274,6 @@ const LOCALES: Record<Language, ReportLocale> = {
       unsure: 'Nisam sigurna',
       na: 'N/P'
     },
-    likert: LIKERT_HR,
     partTitles: {
       part1: 'Dio 1. ENDOPAIN-4D',
       part2: 'Dio 2. PCS probir (5 pitanja)',
@@ -383,11 +281,10 @@ const LOCALES: Record<Language, ReportLocale> = {
     },
     part3Interpretation:
       'Niži ukupni rezultat znači bolju kvalitetu života. Zbroj PVVQ (20 stavki) tumači se ovako: 20 – najbolja kvaliteta života; 21–40 – blago narušena; 41–60 – umjereno narušena; 61–80 – teško narušena; 81–100 – izrazito teško narušena.',
-    part1Labels: HR_PART1_LABELS,
     pcsLabels: HR_PCS_LABELS,
     pvvqLabels: HR_PVVQ_LABELS,
     scoring: {
-      part1: (score) => `Rezultat (ENDOPAIN-4D, raspon 0-100): ${score}/100`,
+      part1: (score, max) => `ENDOPAIN-4D, dio 1 – ukupni rezultat: ${score} / ${max}`,
       part2: (count, yesWord) =>
         `Rezultat (PCS probir; pozitivan je ako su najmanje 2 odgovora "${yesWord}"): ${count} ${yesWord}`,
       part3: (total) => `Rezultat (PVVQ, raspon 20-100): ${total}`
@@ -408,7 +305,6 @@ const LOCALES: Record<Language, ReportLocale> = {
       unsure: 'Neisté',
       na: 'N/A'
     },
-    likert: LIKERT_SK,
     partTitles: {
       part1: 'Časť 1. ENDOPAIN-4D',
       part2: 'Časť 2. Skríning PCS (5 otázok)',
@@ -416,11 +312,10 @@ const LOCALES: Record<Language, ReportLocale> = {
     },
     part3Interpretation:
       'Nižší celkový výsledok znamená lepšiu kvalitu života. Súčet PVVQ (20 položiek) interpretujeme takto: 20 – najlepšia kvalita života; 21–40 – mierne zhoršená; 41–60 – stredne zhoršená; 61–80 – výrazne zhoršená; 81–100 – závažné zhoršenie.',
-    part1Labels: SK_PART1_LABELS,
     pcsLabels: SK_PCS_LABELS,
     pvvqLabels: SK_PVVQ_LABELS,
     scoring: {
-      part1: (score) => `Skóre (ENDOPAIN-4D, rozsah 0-100): ${score}/100`,
+      part1: (score, max) => `ENDOPAIN-4D, časť 1 – celkové skóre: ${score} / ${max}`,
       part2: (count, yesWord) =>
         `Skóre (skríning PCS; pozitívny pri aspoň 2 odpovediach "${yesWord}"): ${count} ${yesWord}`,
       part3: (total) => `Skóre (PVVQ, rozsah 20-100): ${total}`

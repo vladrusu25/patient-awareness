@@ -1,4 +1,4 @@
-export const translationsSk = {
+﻿export const translationsSk = {
   common: {
     brand: 'Smart Health',
     privacyTagline: 'súkromné podľa návrhu',
@@ -513,7 +513,7 @@ export const translationsSk = {
         fit: 'Trendová línia'
       },
       axes: {
-        x: 'Celkové skóre ENDOPAIN-4D (0–100)',
+        x: 'Celkové skóre ENDOPAIN-4D (0–310)',
         y: 'Celkové skóre PVVQ (20–100)'
       },
       tooltip: '{{label}}: Endopain {{x}}, PVVQ {{y}}',
@@ -639,18 +639,12 @@ export const translationsSk = {
     },
     scores: {
       endopain: {
-        label: 'ENDOPAIN Global',
-        help: '0–100 (nižšie je lepšie)'
+        label: "ENDOPAIN-4D celkové skóre",
+        help: "0-310 (nižšie je lepšie)"
       },
       pvvq: {
-        label: 'PVVQ celkom',
-        help: '20–100 (nižšie je lepšie)'
-      },
-      pcsYes: {
-        label: 'Počet odpovedí „Áno“ pre PCS',
-        help: 'Pozitívne, ak sú aspoň 2 odpovede „Áno“',
-        positive: 'Pozitívny skríning',
-        below: 'Pod prahom'
+        label: "Súčet PVVQ",
+        help: "20-100 (nižšie je lepšie)"
       }
     },
     delta: {
@@ -672,3 +666,5 @@ export const translationsSk = {
     }
   }
 } as const;
+
+

@@ -1,6 +1,7 @@
 // src/lib/assessment/summary.ts
 import type { AnswerMap } from './types';
-import { PAIRS, LIKERT_KEYS, PCS_ITEMS, PVVQ_ORDER } from './labels';
+import { PCS_ITEMS, PVVQ_ORDER } from './labels';
+import { PART1_SECTIONS, Part1Group, Part1SubEntry } from './part1';
 import type { Language } from '$lib/i18n/types';
 import { getReportLocale } from './report-i18n';
 
@@ -11,33 +12,29 @@ export function buildPart1Lines(answers: AnswerMap, lang: Language = 'en'): stri
   const out: string[] = [];
   const locale = getReportLocale(lang);
 
-  for (const [ynKey, intKey, labelKey] of PAIRS) {
-    const yn = (answers[ynKey] ?? '').toString().toLowerCase();
-    const label = locale.part1Labels[labelKey] ?? EN_LOCALE.part1Labels[labelKey];
-
-    if (yn === 'yes') {
-      const intensityRaw = (answers[intKey] ?? '').toString().trim();
-      const intensity = intensityRaw ? `${intensityRaw}/10` : locale.bool.na;
-      out.push(`${label}: ${locale.bool.yes} - ${intensity}`);
-    } else if (yn === 'no') {
-      out.push(`${label}: ${locale.bool.no}`);
-    } else {
-      out.push(`${label}: ${locale.bool.na}`);
+  let isFirstSection = true;
+  for (const section of PART1_SECTIONS) {
+    if (!isFirstSection) {
+      out.push('');
     }
-  }
+    isFirstSection = false;
 
-  for (const [key, lk] of LIKERT_KEYS) {
-    const label = locale.part1Labels[lk] ?? EN_LOCALE.part1Labels[lk];
-    const rawValue = (answers[key] ?? '').toString().trim().toLowerCase();
+    out.push(`**${section.id}. ${section.title}**`);
 
-    let pretty = locale.bool.na;
-    if (rawValue === 'never' || rawValue === 'sometimes' || rawValue === 'often' || rawValue === 'always') {
-      pretty = locale.likert[rawValue as keyof typeof locale.likert];
-    } else if (rawValue) {
-      pretty = rawValue[0].toUpperCase() + rawValue.slice(1);
+    let sectionNote: string | null = null;
+    if (section.statusKey) {
+      const statusValue = formatYesNo(answers[section.statusKey], locale);
+      if (statusValue && statusValue !== locale.bool.na) {
+        sectionNote = `${section.statusLabel ?? 'Status'}: ${statusValue}`;
+      }
     }
 
-    out.push(`${label}: ${pretty}`);
+    let isFirstGroup = true;
+    for (const group of section.groups) {
+      renderGroup(out, group, answers, locale, isFirstGroup ? sectionNote : null);
+      isFirstGroup = false;
+      sectionNote = null;
+    }
   }
 
   return out;
@@ -78,4 +75,83 @@ export function buildPart3Lines(answers: AnswerMap, lang: Language = 'en'): stri
 /** Convenience helper to know if a part has any answers */
 export function hasAny(answers: AnswerMap, keys: string[]): boolean {
   return keys.some((k) => answers[k] !== undefined && answers[k] !== null);
+}
+
+function renderGroup(
+  out: string[],
+  group: Part1Group,
+  answers: AnswerMap,
+  locale: ReturnType<typeof getReportLocale>,
+  extraNote?: string | null
+) {
+  const [primary, ...children] = group.entries;
+  const primaryRaw = answers[primary.key];
+  const primaryDisplay = formatEntryValue(primary, primaryRaw, locale);
+  let line = `${primary.code}. ${primary.label}: ${primaryDisplay}`;
+
+  const notes: string[] = [];
+  if (group.noteKey) {
+    const rawNote = answers[group.noteKey];
+    const text =
+      typeof group.noteFormatter === 'function'
+        ? group.noteFormatter(rawNote == null ? null : String(rawNote))
+        : null;
+    if (text) {
+      notes.push(text);
+    }
+  }
+  if (extraNote) {
+    notes.push(extraNote);
+  }
+  if (notes.length) {
+    line += ` (${notes.join('; ')})`;
+  }
+
+  const parentAffirmative = isAffirmative(primaryRaw);
+  if (!parentAffirmative && children.length) {
+    out.push(line);
+    return;
+  }
+
+  out.push(line);
+
+  for (const entry of children) {
+    const value = formatEntryValue(entry, answers[entry.key], locale);
+    out.push(`${entry.code}. ${entry.label}: ${value}`);
+  }
+}
+
+function isAffirmative(raw: unknown): boolean {
+  if (typeof raw !== 'string') return false;
+  const value = raw.trim().toLowerCase();
+  return value === 'yes';
+}
+
+function formatEntryValue(
+  entry: Part1SubEntry,
+  raw: unknown,
+  locale: ReturnType<typeof getReportLocale>
+): string {
+  return entry.type === 'scale' ? formatScale(raw, locale) : formatYesNo(raw, locale);
+}
+
+function formatYesNo(raw: unknown, locale: ReturnType<typeof getReportLocale>): string {
+  if (raw === undefined || raw === null) return locale.bool.na;
+  const value = String(raw).trim().toLowerCase();
+  if (value === 'yes') return locale.bool.yes;
+  if (value === 'no') return locale.bool.no;
+  if (value === 'unsure') return locale.bool.unsure;
+  if (value) return value[0].toUpperCase() + value.slice(1);
+  return locale.bool.na;
+}
+
+function formatScale(raw: unknown, locale: ReturnType<typeof getReportLocale>): string {
+  if (raw === undefined || raw === null) return locale.bool.na;
+  const numeric = Number(raw);
+  if (!Number.isNaN(numeric)) {
+    const clamped = Math.max(0, Math.min(10, numeric));
+    return `${clamped}/10`;
+  }
+  const text = String(raw).trim();
+  return text ? text : locale.bool.na;
 }

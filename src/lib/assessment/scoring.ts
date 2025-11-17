@@ -1,18 +1,25 @@
 // src/lib/assessment/scoring.ts
 import type { AnswerMap } from './types';
-import { PAIRS, PCS_ITEMS, PVVQ_ORDER } from './labels';
+import { PCS_ITEMS, PVVQ_ORDER } from './labels';
+import { PART1_SCALE_KEYS } from './part1';
 
-/** Part 1: ENDOPAIN-4D Global score (sum of intensities of "yes") */
+const FERTILITY_KEY = 'q21a_difficulty_pregnancy';
+export const PART1_MAX_SCORE = PART1_SCALE_KEYS.length * 10 + 10;
+
+/** Part 1: sum of every 0-10 intensity answer */
 export function computeEndopainGlobalScore(answers: AnswerMap): number {
   let sum = 0;
-  for (const [ynKey, intensityKey] of PAIRS) {
-    const yn = String(answers[ynKey] ?? '');
-    if (yn === 'yes') {
-      const n = Number(answers[intensityKey]);
-      if (!Number.isNaN(n)) sum += Math.min(10, Math.max(0, n));
+  for (const key of PART1_SCALE_KEYS) {
+    const n = Number(answers[key]);
+    if (!Number.isNaN(n)) {
+      sum += Math.min(10, Math.max(0, n));
     }
   }
-  return sum; // 0..80; we show `${sum}/100`
+  const fertility = String(answers[FERTILITY_KEY] ?? '').toLowerCase();
+  if (fertility === 'yes') {
+    sum += 10;
+  }
+  return sum;
 }
 
 /** Part 2: number of YES (PCS positive if ≥ 2 Yes) */

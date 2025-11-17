@@ -825,7 +825,7 @@ export const translations: Record<string, Node> = {
         fit: { en: 'Trend line', ru: 'Линия тренда' }
       },
       axes: {
-        x: { en: 'ENDOPAIN-4D Global Score (0–100)', ru: 'Общий балл ENDOPAIN-4D (0–100)' },
+        x: { en: 'ENDOPAIN-4D Global Score (0–310)', ru: 'Общий балл ENDOPAIN-4D (0–310)' },
         y: { en: 'PVVQ Total Score (20–100)', ru: 'Суммарный балл PVVQ (20–100)' }
       },
       tooltip: { en: '{{label}}: Endopain {{x}}, PVVQ {{y}}', ru: '{{label}}: Endopain {{x}}, PVVQ {{y}}' },
@@ -1039,18 +1039,12 @@ export const translations: Record<string, Node> = {
     },
     scores: {
       endopain: {
-        label: { en: 'ENDOPAIN Global', ru: 'ENDOPAIN Global' },
-        help: { en: '0-100 (lower is better)', ru: '0-100 (ниже — лучше)' }
+        label: { en: 'ENDOPAIN-4D Total', ru: 'Суммарный ENDOPAIN-4D' },
+        help: { en: '0-310 (lower is better)', ru: '0-310 (ниже — лучше)' }
       },
       pvvq: {
         label: { en: 'PVVQ Total', ru: 'PVVQ Total' },
         help: { en: '20-100 (lower is better)', ru: '20-100 (ниже — лучше)' }
-      },
-      pcsYes: {
-        label: { en: 'PCS Yes Count', ru: 'Количество ответов «Да» PCS' },
-        help: { en: 'Positive if ≥ 2 Yes', ru: 'Положительно при ≥ 2 ответах «Да»' },
-        positive: { en: 'Positive screen', ru: 'Положительный скрининг' },
-        below: { en: 'Below threshold', ru: 'Ниже порога' }
       }
     },
     delta: {
@@ -1072,5 +1066,13 @@ export const translations: Record<string, Node> = {
     }
   }
 };
+
+
+
+
+
+
+
+
 
 

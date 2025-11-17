@@ -2,7 +2,6 @@
 // Compose a linear step list from the 3 parts based on existing answers and patient context.
 
 import part1 from '$lib/data/endopain.part1.v1.json';
-import part2 from '$lib/data/pcs.part2.v1.json';
 import part3 from '$lib/data/pvvq.part3.v1.json';
 
 export type BotStep = { type: 'text'; key: string; bot: string[] };
@@ -25,7 +24,6 @@ export type InputStep = {
 };
 export type Step = BotStep | ChoiceStep | InputStep;
 
-const P2_FIRST = 'q22_pain_worse_standing';
 const P3_FIRST = 'q27_lower_abdominal_pain';
 const END = '__END__';
 
@@ -35,7 +33,6 @@ function keysOf(steps: Array<{ key?: string }>): Set<string> {
   return s;
 }
 
-const P2_KEYS = keysOf(part2 as Step[]);
 const P3_KEYS = keysOf(part3 as Step[]);
 
 export type ComposeContext = {
@@ -127,55 +124,30 @@ export function composeSteps(
   const part1Steps = part1 as Step[];
   out.push(...part1Steps);
 
-  const enc2: BotStep = {
+  const enc3: BotStep = {
     type: 'text',
-    key: 'bot_enc_part2',
-    bot: ['Nice progress - Part 2 is just 5 quick questions that help identify pelvic vein involvement.']
+    key: 'bot_enc_part3',
+    bot: ['Great work - Part 3 (PVVQ) takes about 2-3 minutes and really strengthens your report.']
   };
-  const gate2: ChoiceStep = {
+  const gate3: ChoiceStep = {
     type: 'single',
-    key: 'c1_continue_part2',
-    prompt: 'Would you like to continue and see if pelvic congestion syndrome (PCS) might be affecting you?',
+    key: 'c2_continue_part3',
+    prompt: 'Would you like to continue and understand how pelvic pain is impacting your daily life (PVVQ)?',
     options: [
       { label: 'Yes', value: 'yes' },
       { label: 'No', value: 'no' }
     ],
     progress: false,
-    nextIf: { yes: P2_FIRST, no: END }
+    nextIf: { yes: P3_FIRST, no: END }
   };
 
-  out.push(enc2, gate2);
+  out.push(enc3, gate3);
 
-  const c1Answer = String(answers['c1_continue_part2'] ?? '');
-  const userHasAnyP2Answer = [...P2_KEYS].some((k) => answers[k] !== undefined);
+  const c2Answer = String(answers['c2_continue_part3'] ?? '');
+  const userHasAnyP3Answer = [...P3_KEYS].some((k) => answers[k] !== undefined);
 
-  if (c1Answer === 'yes' || userHasAnyP2Answer) {
-    out.push(...(part2 as Step[]));
-
-    const enc3: BotStep = {
-      type: 'text',
-      key: 'bot_enc_part3',
-      bot: ['Great work - Part 3 (PVVQ) takes about 2-3 minutes and really strengthens your report.']
-    };
-    const gate3: ChoiceStep = {
-      type: 'single',
-      key: 'c2_continue_part3',
-      prompt: 'Would you like to continue and understand how pelvic pain is impacting your daily life (PVVQ)?',
-      options: [
-        { label: 'Yes', value: 'yes' },
-        { label: 'No', value: 'no' }
-      ],
-      progress: false,
-      nextIf: { yes: P3_FIRST, no: END }
-    };
-    out.push(enc3, gate3);
-
-    const c2Answer = String(answers['c2_continue_part3'] ?? '');
-    const userHasAnyP3Answer = [...P3_KEYS].some((k) => answers[k] !== undefined);
-
-    if (c2Answer === 'yes' || userHasAnyP3Answer) {
-      out.push(...(part3 as Step[]));
-    }
+  if (c2Answer === 'yes' || userHasAnyP3Answer) {
+    out.push(...(part3 as Step[]));
   }
 
   out.push({

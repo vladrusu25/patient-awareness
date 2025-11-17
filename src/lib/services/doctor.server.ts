@@ -33,8 +33,6 @@ type PatientRow = {
 
 export type ScoreSummary = {
   endopain: number | null;
-  pcsYes: number | null;
-  pcsPositive: boolean | null;
   pvvq: number | null;
 };
 
@@ -89,8 +87,6 @@ function unpackScore(score: SessionRow['session_scores']): ScoreRow | null {
 function toScoreSummary(score: ScoreRow | null): ScoreSummary {
   return {
     endopain: score?.endopain_global ?? null,
-    pcsYes: score?.pcs_yes_count ?? null,
-    pcsPositive: score?.pcs_positive ?? null,
     pvvq: score?.pvvq_total ?? null
   };
 }

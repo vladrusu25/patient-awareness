@@ -16,7 +16,7 @@
     title: 'Analytics',
     datasetSessions: 'Sessions',
     datasetFit: 'Trend line',
-    axisX: 'ENDOPAIN-4D Global Score (0-100)',
+    axisX: 'ENDOPAIN-4D Global Score (0-310)',
     axisY: 'PVVQ Total Score (20-100)',
     tooltip: (label, x, y) => `${label}: Endopain ${x}, PVVQ ${y}`,
     empty: 'No data yet.'

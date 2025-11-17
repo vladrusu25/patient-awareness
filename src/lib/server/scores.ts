@@ -37,7 +37,7 @@ export async function recomputeAndUpsertScores(sessionId: string) {
   for (const r of rows ?? []) answers[r.step_key] = r.value_json;
 
   // Compute scores
-  const endopain_global = computeEndopainGlobalScore(answers); // 0..80 (you display /100)
+  const endopain_global = computeEndopainGlobalScore(answers); // 0..310 (part 1 total)
   const pcs_yes_count   = computePcsYesCount(answers);         // integer
   const pcs_positive    = pcs_yes_count >= 2;                   // boolean
   const pvvq_total      = computePvvqTotal(answers) ?? null;    // 20..100 or null
