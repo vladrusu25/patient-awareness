@@ -3,7 +3,7 @@ import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
 import type { PDFFont } from 'pdf-lib';
 import fontkit from '@pdf-lib/fontkit/dist/fontkit.umd.js';
 import { readFile } from 'fs/promises';
-import { join } from 'path';
+import { fileURLToPath } from 'url';
 import type { Language } from '$lib/i18n/types';
 import { getReportLocale } from '$lib/assessment/report-i18n';
 
@@ -15,8 +15,8 @@ type PdfPageSpec = {
 };
 
 const FONT_PATHS = {
-  regular: join(process.cwd(), 'static', 'fonts', 'NotoSans-Regular.ttf'),
-  bold: join(process.cwd(), 'static', 'fonts', 'NotoSans-Bold.ttf')
+  regular: fileURLToPath(new URL('./fonts/NotoSans-Regular.ttf', import.meta.url)),
+  bold: fileURLToPath(new URL('./fonts/NotoSans-Bold.ttf', import.meta.url))
 };
 
 let fontCache: { regular: Uint8Array; bold: Uint8Array } | null = null;
