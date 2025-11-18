@@ -16,8 +16,14 @@ const EXACT_EN_TO_RU: Record<string, string> = {
   '8': '8',
   '9': '9',
   '0 - No pain': '0 - Боли нет',
+  '0 - No discomfort': '0 - Дискомфорта нет',
+  '0 - No discomfort/pain': '0 - Нет дискомфорта/боли',
+  '0 - Not at all like that': '0 - Совсем не похоже',
   '10 - Worst pain': '10 - Сильнейшая боль',
   '10 – Worst pain': '10 - Сильнейшая боль',
+  '10 - Exactly like that': '10 - Точно так же',
+  '10 - Worst discomfort imaginable': '10 - Наихудший возможный дискомфорт',
+  '10 - Worst discomfort/pain imaginable': '10 - Наихудший возможный дискомфорт/боль',
   'Always': 'Всегда',
   'Avoidance of social events: 1-5': 'Избегаю социальных мероприятий: 1-5',
   'Avoidance of sport/exercise due to pain: 1-5': 'Избегаю спорта/упражнений из-за боли: 1-5',
@@ -41,6 +47,69 @@ const EXACT_EN_TO_RU: Record<string, string> = {
   'If yes: Intensity (0-10)': 'Если да: интенсивность (0–10)',
   'Intensity (0-10)': 'Интенсивность (0–10)',
   'Intensity (0–10)': 'Интенсивность (0–10)',
+  'How would you rate your usual pain during your period? (0-10)': 'Как бы вы оценили свою обычную боль во время менструации? (0–10)',
+  'How would you rate your pain at its worst during your period? (0-10)': 'Как бы вы оценили самую сильную боль во время менструации? (0–10)',
+  'How would you rate your usual pain between periods? (0-10)': 'Как бы вы оценили обычную боль между менструациями? (0–10)',
+  'How would you rate your pain at its worst between periods? (0-10)': 'Как бы вы оценили самую сильную боль между менструациями? (0–10)',
+  'How much does this description fit what you feel? (0-10)': 'Насколько это описание соответствует вашим ощущениям? (0–10)',
+  'How much discomfort does this cause you in your daily activities? (0-10)': 'Насколько это мешает вашим повседневным делам? (0–10)',
+  'How much discomfort does this cause you? (0-10)': 'Насколько сильный дискомфорт это вызывает? (0–10)',
+  'How would you rate your usual pain during intercourse? (0-10)': 'Как бы вы оценили обычную боль во время полового акта? (0–10)',
+  'How would you rate your pain at its worst during intercourse? (0-10)': 'Как бы вы оценили самую сильную боль во время полового акта? (0–10)',
+  'How would you rate your usual pain when passing a stool? (0-10)': 'Как бы вы оценили обычную боль при дефекации? (0–10)',
+  'How would you rate your pain at its worst when passing a stool? (0-10)': 'Как бы вы оценили самую сильную боль при дефекации? (0–10)',
+  'How would you rate your usual pain from these bowel spasms/cramps? (0-10)': 'Как бы вы оценили обычную боль от этих спазмов/судорог кишечника? (0–10)',
+  'How would you rate your pain at its worst from these bowel spasms/cramps? (0-10)': 'Как бы вы оценили самую сильную боль от этих спазмов/судорог кишечника? (0–10)',
+  'How would you rate your usual discomfort or pain from this? (0-10)': 'Как бы вы оценили обычный дискомфорт или боль от этого? (0–10)',
+  'How would you rate your discomfort or pain at its worst? (0-10)': 'Как бы вы оценили максимальный дискомфорт или боль? (0–10)',
+  'How would you rate your usual pain or discomfort when urinating? (0-10)': 'Как бы вы оценили обычную боль или дискомфорт при мочеиспускании? (0–10)',
+  'How would you rate your pain or discomfort at its worst when urinating? (0-10)': 'Как бы вы оценили максимальную боль или дискомфорт при мочеиспускании? (0–10)',
+  'How would you rate your usual bladder pain or discomfort? (0-10)': 'Как бы вы оценили обычную боль или дискомфорт в мочевом пузыре? (0–10)',
+  'How would you rate your bladder pain or discomfort at its worst? (0-10)': 'Как бы вы оценили максимальную боль или дискомфорт в мочевом пузыре? (0–10)',
+  'How would you rate your usual pain or discomfort from sciatica? (0-10)': 'Как бы вы оценили обычную боль или дискомфорт от ишиаса? (0–10)',
+  'How would you rate your pain or discomfort at its worst from sciatica? (0-10)': 'Как бы вы оценили максимальную боль или дискомфорт от ишиаса? (0–10)',
+  'How would you rate your usual pain in this area? (0-10)': 'Как бы вы оценили обычную боль в этой области? (0–10)',
+  'How would you rate your pain at its worst in this area? (0-10)': 'Как бы вы оценили максимальную боль в этой области? (0–10)',
+  'Over the past few months, have you regularly had severe, violent pain in the lower abdomen during your period?':
+    'За последние несколько месяцев у вас регулярно была сильная, резкая боль внизу живота во время менструации?',
+  'Over the past few months, have you regularly had severe, violent pain in the lower abdomen between periods?':
+    'За последние несколько месяцев у вас регулярно была сильная, резкая боль внизу живота между менструациями?',
+  'Is the pain very intense, violent, cannot be ignored, and unbearable?':
+    'Боль очень сильная, резкая, её невозможно игнорировать и терпеть?',
+  'As the years go by, is your pain getting worse?': 'С годами ваша боль усиливается?',
+  'Does the pain come a few days before your period and/or continue for a few days after your period?':
+    'Появляется ли боль за несколько дней до менструации и/или сохраняется несколько дней после неё?',
+  'Does the pain come and go suddenly, like a stabbing pain?':
+    'Появляется ли боль внезапно и исчезает, словно колющая?',
+  'Does the pain spread to your lower back?': 'Распространяется ли боль в поясницу?',
+  'Does the pain spread to your legs and hips?': 'Распространяется ли боль в ноги и тазобедренную область?',
+  'Does the pain become disabling for your everyday activities?': 'Боль мешает выполнять повседневные дела?',
+  'Does the pain prevent you from standing, walking, or moving?': 'Боль мешает стоять, ходить или двигаться?',
+  'Are you currently sexually active?': 'Вы сейчас сексуально активны?',
+  'Do you have severe, sharp, deep internal pain during sexual intercourse?':
+    'Испытываете ли вы сильную, острую, глубокую внутреннюю боль во время полового акта?',
+  'Do you feel pain in certain positions during sexual intercourse?':
+    'Чувствуете ли вы боль в определённых позах во время полового акта?',
+  'Does the pain upset, prevent, or interrupt sexual intercourse?': 'Боль мешает, прерывает или делает невозможным половой акт?',
+  'Do you have pain when passing a stool, particularly during your period?':
+    'Есть ли у вас боль при дефекации, особенно во время менструации?',
+  'Do you have spasms, cramps, or bowel pain before a bowel movement, particularly during your period?':
+    'Бывают ли у вас спазмы, судороги или боль в кишечнике перед стулом, особенно во время менструации?',
+  'Do you have diarrhoea and/or constipation, particularly during your period?':
+    'Беспокоят ли вас диарея и/или запор, особенно во время менструации?',
+  'Do you have difficulty and/or pain when urinating, particularly during your period?':
+    'Испытываете ли вы затруднение и/или боль при мочеиспускании, особенно во время менструации?',
+  'Do you have pain in the bladder when you want to urinate or when holding back, particularly during your period?':
+    'Есть ли боль в мочевом пузыре, когда хочется мочиться или приходится терпеть, особенно во время менструации?',
+  'Do you have sciatica (pain radiating along the sciatic nerve), particularly during your period?':
+    'Беспокоит ли вас ишиас (боль по ходу седалищного нерва), особенно во время менструации?',
+  'Do you have pain in the right shoulder or under the right rib cage, particularly during your period?':
+    'Есть ли боль в правом плече или под правой рёберной дугой, особенно во время менструации?',
+  'Have you had difficulty becoming pregnant, or failure to conceive despite trying for several months or years?':
+    'Испытывали ли вы трудности с беременностью или безуспешные попытки зачать ребёнка в течение нескольких месяцев или лет?',
+  'Do you currently have menstrual periods?': 'Сейчас у вас есть менструации?',
+  'Yes, I have periods': 'Да, менструации есть',
+  'No, I do not have periods': 'Нет, менструации отсутствуют',
   'It only takes a minute and helps doctors spot patterns early.': 'Это занимает всего минуту и помогает врачам заметить закономерности заранее.',
   'It takes ~2-3 minutes and really strengthens your report.': 'Это занимает около 2–3 минут и значительно усиливает ваш отчёт.',
   'Limitation of sexual life: 1-5': 'Ограничения в сексуальной жизни: 1-5',

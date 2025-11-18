@@ -29,7 +29,7 @@
   {
     "type": "single",
     "key": "q1b_severe_period_pain_usual",
-    "prompt": "If yes: How would you rate your usual pain during your period? (0-10)",
+    "prompt": "How would you rate your usual pain during your period? (0-10)",
     "options": [
       {
         "label": "0 - No pain",
@@ -81,7 +81,7 @@
   {
     "type": "single",
     "key": "q1c_severe_period_pain_worst",
-    "prompt": "If yes: How would you rate your pain at its worst during your period? (0-10)",
+    "prompt": "How would you rate your pain at its worst during your period? (0-10)",
     "options": [
       {
         "label": "0 - No pain",
@@ -173,7 +173,7 @@
   {
     "type": "single",
     "key": "q2b_between_periods_pain_usual",
-    "prompt": "If yes: How would you rate your usual pain between periods? (0-10)",
+    "prompt": "How would you rate your usual pain between periods? (0-10)",
     "options": [
       {
         "label": "0 - No pain",
@@ -225,7 +225,7 @@
   {
     "type": "single",
     "key": "q2c_between_periods_pain_worst",
-    "prompt": "If yes: How would you rate your pain at its worst between periods? (0-10)",
+    "prompt": "How would you rate your pain at its worst between periods? (0-10)",
     "options": [
       {
         "label": "0 - No pain",
@@ -297,7 +297,7 @@
   {
     "type": "single",
     "key": "q3b_pain_very_intense_rating",
-    "prompt": "If yes: How much does this description fit what you feel? (0-10)",
+    "prompt": "How much does this description fit what you feel? (0-10)",
     "options": [
       {
         "label": "0 - Not at all like that",
@@ -369,7 +369,7 @@
   {
     "type": "single",
     "key": "q4b_pain_getting_worse_rating",
-    "prompt": "If yes: How much does this description fit what you feel? (0-10)",
+    "prompt": "How much does this description fit what you feel? (0-10)",
     "options": [
       {
         "label": "0 - Not at all like that",
@@ -441,7 +441,7 @@
   {
     "type": "single",
     "key": "q5b_pain_around_period_days_rating",
-    "prompt": "If yes: How much does this description fit what you feel? (0-10)",
+    "prompt": "How much does this description fit what you feel? (0-10)",
     "options": [
       {
         "label": "0 - Not at all like that",
@@ -513,7 +513,7 @@
   {
     "type": "single",
     "key": "q6b_stabbing_pain_rating",
-    "prompt": "If yes: How much does this description fit what you feel? (0-10)",
+    "prompt": "How much does this description fit what you feel? (0-10)",
     "options": [
       {
         "label": "0 - Not at all like that",
@@ -585,7 +585,7 @@
   {
     "type": "single",
     "key": "q7b_pain_spreads_back_rating",
-    "prompt": "If yes: How much does this description fit what you feel? (0-10)",
+    "prompt": "How much does this description fit what you feel? (0-10)",
     "options": [
       {
         "label": "0 - Not at all like that",
@@ -657,7 +657,7 @@
   {
     "type": "single",
     "key": "q8b_pain_spreads_legs_hips_rating",
-    "prompt": "If yes: How much does this description fit what you feel? (0-10)",
+    "prompt": "How much does this description fit what you feel? (0-10)",
     "options": [
       {
         "label": "0 - Not at all like that",
@@ -729,7 +729,7 @@
   {
     "type": "single",
     "key": "q9b_pain_disabling_activities_discomfort",
-    "prompt": "If yes: How much discomfort does this cause you in your daily activities? (0-10)",
+    "prompt": "How much discomfort does this cause you in your daily activities? (0-10)",
     "options": [
       {
         "label": "0 - No discomfort",
@@ -801,7 +801,7 @@
   {
     "type": "single",
     "key": "q10b_pain_prevents_moving_discomfort",
-    "prompt": "If yes: How much discomfort does this cause you? (0-10)",
+    "prompt": "How much discomfort does this cause you? (0-10)",
     "options": [
       {
         "label": "0 - No discomfort",
@@ -893,7 +893,7 @@
   {
     "type": "single",
     "key": "q11b_deep_intercourse_pain_usual",
-    "prompt": "If yes: How would you rate your usual pain during intercourse? (0-10)",
+    "prompt": "How would you rate your usual pain during intercourse? (0-10)",
     "options": [
       {
         "label": "0 - No pain",
@@ -945,7 +945,7 @@
   {
     "type": "single",
     "key": "q11c_deep_intercourse_pain_worst",
-    "prompt": "If yes: How would you rate your pain at its worst during intercourse? (0-10)",
+    "prompt": "How would you rate your pain at its worst during intercourse? (0-10)",
     "options": [
       {
         "label": "0 - No pain",
@@ -1017,7 +1017,7 @@
   {
     "type": "single",
     "key": "q12b_position_dependent_pain_rating",
-    "prompt": "If yes: How much does this description fit what you feel? (0-10)",
+    "prompt": "How much does this description fit what you feel? (0-10)",
     "options": [
       {
         "label": "0 - Not at all like that",
@@ -1089,7 +1089,7 @@
   {
     "type": "single",
     "key": "q13b_intercourse_upsetting_discomfort",
-    "prompt": "If yes: How much discomfort does this cause you? (0-10)",
+    "prompt": "How much discomfort does this cause you? (0-10)",
     "options": [
       {
         "label": "0 - No discomfort",
@@ -1161,7 +1161,7 @@
   {
     "type": "single",
     "key": "q14b_pain_passing_stool_usual",
-    "prompt": "If yes: How would you rate your usual pain when passing a stool? (0-10)",
+    "prompt": "How would you rate your usual pain when passing a stool? (0-10)",
     "options": [
       {
         "label": "0 - No pain",
@@ -1213,7 +1213,7 @@
   {
     "type": "single",
     "key": "q14c_pain_passing_stool_worst",
-    "prompt": "If yes: How would you rate your pain at its worst when passing a stool? (0-10)",
+    "prompt": "How would you rate your pain at its worst when passing a stool? (0-10)",
     "options": [
       {
         "label": "0 - No pain",
@@ -1285,7 +1285,7 @@
   {
     "type": "single",
     "key": "q15b_bowel_spasms_usual",
-    "prompt": "If yes: How would you rate your usual pain from these bowel spasms/cramps? (0-10)",
+    "prompt": "How would you rate your usual pain from these bowel spasms/cramps? (0-10)",
     "options": [
       {
         "label": "0 - No pain",
@@ -1337,7 +1337,7 @@
   {
     "type": "single",
     "key": "q15c_bowel_spasms_worst",
-    "prompt": "If yes: How would you rate your pain at its worst from these bowel spasms/cramps? (0-10)",
+    "prompt": "How would you rate your pain at its worst from these bowel spasms/cramps? (0-10)",
     "options": [
       {
         "label": "0 - No pain",
@@ -1409,7 +1409,7 @@
   {
     "type": "single",
     "key": "q16b_diarrhoea_constipation_usual",
-    "prompt": "If yes: How would you rate your usual discomfort or pain from this? (0-10)",
+    "prompt": "How would you rate your usual discomfort or pain from this? (0-10)",
     "options": [
       {
         "label": "0 - No discomfort/pain",
@@ -1461,7 +1461,7 @@
   {
     "type": "single",
     "key": "q16c_diarrhoea_constipation_worst",
-    "prompt": "If yes: How would you rate your discomfort or pain at its worst? (0-10)",
+    "prompt": "How would you rate your discomfort or pain at its worst? (0-10)",
     "options": [
       {
         "label": "0 - No discomfort/pain",
@@ -1540,7 +1540,7 @@
   {
     "type": "single",
     "key": "q17b_urination_difficulty_usual",
-    "prompt": "If yes: How would you rate your usual pain or discomfort when urinating? (0-10)",
+    "prompt": "How would you rate your usual pain or discomfort when urinating? (0-10)",
     "options": [
       {
         "label": "0 - No discomfort",
@@ -1592,7 +1592,7 @@
   {
     "type": "single",
     "key": "q17c_urination_difficulty_worst",
-    "prompt": "If yes: How would you rate your pain or discomfort at its worst when urinating? (0-10)",
+    "prompt": "How would you rate your pain or discomfort at its worst when urinating? (0-10)",
     "options": [
       {
         "label": "0 - No discomfort",
@@ -1664,7 +1664,7 @@
   {
     "type": "single",
     "key": "q18b_bladder_pain_usual",
-    "prompt": "If yes: How would you rate your usual bladder pain or discomfort? (0-10)",
+    "prompt": "How would you rate your usual bladder pain or discomfort? (0-10)",
     "options": [
       {
         "label": "0 - No discomfort/pain",
@@ -1716,7 +1716,7 @@
   {
     "type": "single",
     "key": "q18c_bladder_pain_worst",
-    "prompt": "If yes: How would you rate your bladder pain or discomfort at its worst? (0-10)",
+    "prompt": "How would you rate your bladder pain or discomfort at its worst? (0-10)",
     "options": [
       {
         "label": "0 - No discomfort/pain",
@@ -1788,7 +1788,7 @@
   {
     "type": "single",
     "key": "q19b_sciatica_usual",
-    "prompt": "If yes: How would you rate your usual pain or discomfort from sciatica? (0-10)",
+    "prompt": "How would you rate your usual pain or discomfort from sciatica? (0-10)",
     "options": [
       {
         "label": "0 - No discomfort/pain",
@@ -1840,7 +1840,7 @@
   {
     "type": "single",
     "key": "q19c_sciatica_worst",
-    "prompt": "If yes: How would you rate your pain or discomfort at its worst from sciatica? (0-10)",
+    "prompt": "How would you rate your pain or discomfort at its worst from sciatica? (0-10)",
     "options": [
       {
         "label": "0 - No discomfort/pain",
@@ -1912,7 +1912,7 @@
   {
     "type": "single",
     "key": "q20b_right_shoulder_pain_usual",
-    "prompt": "If yes: How would you rate your usual pain in this area? (0-10)",
+    "prompt": "How would you rate your usual pain in this area? (0-10)",
     "options": [
       {
         "label": "0 - No pain",
@@ -1964,7 +1964,7 @@
   {
     "type": "single",
     "key": "q20c_right_shoulder_pain_worst",
-    "prompt": "If yes: How would you rate your pain at its worst in this area? (0-10)",
+    "prompt": "How would you rate your pain at its worst in this area? (0-10)",
     "options": [
       {
         "label": "0 - No pain",

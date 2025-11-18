@@ -4,6 +4,7 @@ import { PCS_ITEMS, PVVQ_ORDER } from './labels';
 import { PART1_SECTIONS, Part1Group, Part1SubEntry } from './part1';
 import type { Language } from '$lib/i18n/types';
 import { getReportLocale } from './report-i18n';
+import { translateReportText } from './report-texts';
 
 const EN_LOCALE = getReportLocale('en');
 
@@ -11,6 +12,7 @@ const EN_LOCALE = getReportLocale('en');
 export function buildPart1Lines(answers: AnswerMap, lang: Language = 'en'): string[] {
   const out: string[] = [];
   const locale = getReportLocale(lang);
+  const translate = (value: string) => translateReportText(value, lang);
 
   let isFirstSection = true;
   for (const section of PART1_SECTIONS) {
@@ -19,19 +21,20 @@ export function buildPart1Lines(answers: AnswerMap, lang: Language = 'en'): stri
     }
     isFirstSection = false;
 
-    out.push(`**${section.id}. ${section.title}**`);
+    out.push(`**${section.id}. ${translate(section.title)}**`);
 
     let sectionNote: string | null = null;
     if (section.statusKey) {
       const statusValue = formatYesNo(answers[section.statusKey], locale);
       if (statusValue && statusValue !== locale.bool.na) {
-        sectionNote = `${section.statusLabel ?? 'Status'}: ${statusValue}`;
+        const label = section.statusLabel ?? 'Status';
+        sectionNote = `${translate(label)}: ${statusValue}`;
       }
     }
 
     let isFirstGroup = true;
     for (const group of section.groups) {
-      renderGroup(out, group, answers, locale, isFirstGroup ? sectionNote : null);
+      renderGroup(out, group, answers, locale, translate, isFirstGroup ? sectionNote : null);
       isFirstGroup = false;
       sectionNote = null;
     }
@@ -82,12 +85,13 @@ function renderGroup(
   group: Part1Group,
   answers: AnswerMap,
   locale: ReturnType<typeof getReportLocale>,
+  translate: (text: string) => string,
   extraNote?: string | null
 ) {
   const [primary, ...children] = group.entries;
   const primaryRaw = answers[primary.key];
   const primaryDisplay = formatEntryValue(primary, primaryRaw, locale);
-  let line = `${primary.code}. ${primary.label}: ${primaryDisplay}`;
+  let line = `${primary.code}. ${translate(primary.label)}: ${primaryDisplay}`;
 
   const notes: string[] = [];
   if (group.noteKey) {
@@ -97,7 +101,7 @@ function renderGroup(
         ? group.noteFormatter(rawNote == null ? null : String(rawNote))
         : null;
     if (text) {
-      notes.push(text);
+      notes.push(translate(text));
     }
   }
   if (extraNote) {
@@ -117,7 +121,7 @@ function renderGroup(
 
   for (const entry of children) {
     const value = formatEntryValue(entry, answers[entry.key], locale);
-    out.push(`${entry.code}. ${entry.label}: ${value}`);
+    out.push(`${entry.code}. ${translate(entry.label)}: ${value}`);
   }
 }
 
