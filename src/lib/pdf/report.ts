@@ -1,11 +1,12 @@
 // src/lib/pdf/report.ts
+import { Buffer } from 'node:buffer';
 import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
 import type { PDFFont } from 'pdf-lib';
 import fontkit from '@pdf-lib/fontkit/dist/fontkit.umd.js';
-import { readFile } from 'fs/promises';
-import { fileURLToPath } from 'url';
 import type { Language } from '$lib/i18n/types';
 import { getReportLocale } from '$lib/assessment/report-i18n';
+import regularFontInline from './fonts/NotoSans-Regular.ttf?inline';
+import boldFontInline from './fonts/NotoSans-Bold.ttf?inline';
 
 type PdfPageSpec = {
   title: string;        // e.g., "Part 1. ENDOPAIN-4D"
@@ -14,22 +15,19 @@ type PdfPageSpec = {
   intro?: string[];     // optional description paragraphs shown before lines
 };
 
-const FONT_PATHS = {
-  regular: fileURLToPath(new URL('./fonts/NotoSans-Regular.ttf', import.meta.url)),
-  bold: fileURLToPath(new URL('./fonts/NotoSans-Bold.ttf', import.meta.url))
+const decodeFont = (dataUri: string) => {
+  const base64 = dataUri.includes(',') ? dataUri.split(',').pop() ?? '' : dataUri;
+  const buffer = Buffer.from(base64, 'base64');
+  return new Uint8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength);
 };
 
 let fontCache: { regular: Uint8Array; bold: Uint8Array } | null = null;
 
 async function loadFontData() {
   if (fontCache) return fontCache;
-  const [regular, bold] = await Promise.all([
-    readFile(FONT_PATHS.regular),
-    readFile(FONT_PATHS.bold)
-  ]);
   fontCache = {
-    regular: new Uint8Array(regular),
-    bold: new Uint8Array(bold)
+    regular: decodeFont(regularFontInline),
+    bold: decodeFont(boldFontInline)
   };
   return fontCache;
 }
